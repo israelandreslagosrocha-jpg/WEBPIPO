@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinta Conectada | Encuentra a tu tatuador ideal en La Araucanía</title>
+    <meta name="description" content="Conecta con los mejores tatuadores y estudios profesionales en la región de La Araucanía. Explora portafolios, filtra por estilo, ubicación y agenda tu cita.">
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Leaflet.js CSS and JS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app-container">
+        <!-- GLOBAL HEADER -->
+        <header class="main-header">
+            <div class="header-logo" id="btn-logo-home">
+                <div class="logo-circle">
+                    <img src="assets/logo_pipo.png" alt="Tinta Conectada Logo" class="logo-img">
+                </div>
+                <span class="logo-text">TINTA <span class="logo-accent">CONECTADA</span></span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active" data-target="home-view">Explorar</a>
+                <a href="#" class="nav-link" id="nav-btn-artists">Tatuadores</a>
+                <a href="#" class="nav-link">Estudios</a>
+                <a href="#" class="nav-link">Inspiración</a>
+                <a href="#" class="nav-link">Cómo funciona</a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="btn btn-outline" id="btn-soy-tatuador">Soy tatuador/a</button>
+                <!-- Hamburger menu/Filter toggle on header -->
+                <button class="btn-icon" id="btn-menu-toggle" aria-label="Abrir Menú">
+                    <i data-lucide="menu"></i>
+                </button>
+                <button class="btn-icon" id="btn-global-filter" aria-label="Filtros Rápidos">
+                    <i data-lucide="sliders-horizontal"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            
+            <!-- VIEW 1: HOME VIEW -->
+            <section id="home-view" class="view-panel active">
+                <div class="home-layout">
+                    
+                    <!-- SIDEBAR FILTERS (Left) -->
+                    <aside class="sidebar-filters" id="sidebar-filters">
+                        <div class="sidebar-header">
+                            <h3>FILTRAR BÚSQUEDA</h3>
+                            <button class="btn-close-sidebar" id="btn-close-sidebar">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i data-lucide="map-pin"></i> Ubicación</label>
+                            <div class="custom-select-wrapper">
+                                <select id="filter-location" class="custom-select">
+                                    <option value="all">Todas las ubicaciones</option>
+                                    <option value="Temuco" selected>Temuco, La Araucanía</option>
+                                    <option value="Padre Las Casas">Padre Las Casas</option>
+                                    <option value="Villarrica">Villarrica</option>
+                                    <option value="Teodoro Schmidt">Teodoro Schmidt</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i data-lucide="sparkles"></i> Estilo de tatuaje</label>
+                            <div class="style-buttons-grid">
+                                <button class="btn-style" data-style="Blackwork"><i data-lucide="shapes"></i> Blackwork</button>
+                                <button class="btn-style" data-style="Realismo"><i data-lucide="eye"></i> Realismo</button>
+                                <button class="btn-style" data-style="Fine Line"><i data-lucide="activity"></i> Fine Line</button>
+                                <button class="btn-style" data-style="Anime"><i data-lucide="smile"></i> Anime</button>
+                                <button class="btn-style" data-style="Acuarela"><i data-lucide="droplet"></i> Acuarela</button>
+                                <button class="btn-style" data-style="Neotradicional"><i data-lucide="flower"></i> Neotradicional</button>
+                                <button class="btn-style" data-style="Minimalista"><i data-lucide="minus"></i> Minimalista</button>
+                                <button class="btn-style btn-more-styles" id="btn-more-styles-trigger">
+                                    <i data-lucide="ellipsis"></i> Más estilos
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i data-lucide="briefcase"></i> Experiencia</label>
+                            <div class="experience-buttons-row">
+                                <button class="btn-experience" data-exp="0-2">0-2 años</button>
+                                <button class="btn-experience" data-exp="3-5">3-5 años</button>
+                                <button class="btn-experience" data-exp="5-10">5-10 años</button>
+                                <button class="btn-experience" data-exp="10+">10+ años</button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <span class="label-with-info">
+                                    <i data-lucide="dollar-sign"></i> Precio referencial
+                                    <span class="info-tooltip-trigger" title="Valores promedio orientativos"><i data-lucide="info" class="icon-info"></i></span>
+                                </span>
+                            </label>
+                            <div class="price-grid">
+                                <button class="btn-price" data-price="Accesible">
+                                    <span class="price-currency">$</span>
+                                    <span class="price-label">Accesible</span>
+                                </button>
+                                <button class="btn-price" data-price="Intermedio">
+                                    <span class="price-currency">$$</span>
+                                    <span class="price-label">Intermedio</span>
+                                </button>
+                                <button class="btn-price" data-price="Premium">
+                                    <span class="price-currency">$$$</span>
+                                    <span class="price-label">Premium</span>
+                                </button>
+                                <button class="btn-price" data-price="Especialista">
+                                    <span class="price-currency">$$$$</span>
+                                    <span class="price-label">Especialista</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i data-lucide="calendar"></i> Disponibilidad</label>
+                            <div class="availability-options">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="avail-week" name="availability" value="week">
+                                    <span class="checkmark"></span>
+                                    Disponible esta semana
+                                </label>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="avail-month" name="availability" value="month">
+                                    <span class="checkmark"></span>
+                                    Disponible este mes
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-actions">
+                            <button class="btn btn-primary btn-block" id="btn-apply-filters">Aplicar filtros</button>
+                            <button class="btn btn-link btn-block" id="btn-clear-filters">Limpiar filtros</button>
+                        </div>
+                    </aside>
+
+                    <!-- HOME MAIN COLUMN (Right) -->
+                    <div class="home-main-content">
+                        
+                        <!-- HERO SECTION -->
+                        <section class="hero-section">
+                            <div class="hero-bg-art">
+                                <img src="assets/bg_illustration.png" alt="Tattoo Art Background" class="bg-illustration-img">
+                            </div>
+                            <div class="hero-content">
+                                <h1 class="hero-title">Encuentra a tu <br>tatuador <span class="highlight">ideal</span></h1>
+                                <p class="hero-subtitle">Conecta con tatuadores y estudios profesionales en La Araucanía</p>
+                                
+                                <!-- Search bar -->
+                                <div class="search-bar">
+                                    <div class="search-input-container">
+                                        <i data-lucide="search" class="search-icon"></i>
+                                        <input type="text" id="search-input" placeholder="Buscar por estilo, tatuador, estudio o ciudad...">
+                                    </div>
+                                    <button class="btn btn-primary btn-search" id="btn-search-trigger">Buscar</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- CATEGORIES CAROUSEL -->
+                        <section class="categories-section">
+                            <div class="categories-carousel-container">
+                                <div class="categories-scroll" id="categories-scroll">
+                                    <button class="btn-category active" data-category="Todos">
+                                        <div class="category-icon-wrapper"><i data-lucide="layout-grid"></i></div>
+                                        <span>Todos</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Blackwork">
+                                        <div class="category-icon-wrapper"><i data-lucide="shapes"></i></div>
+                                        <span>Blackwork</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Fine Line">
+                                        <div class="category-icon-wrapper"><i data-lucide="activity"></i></div>
+                                        <span>Fine Line</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Realismo">
+                                        <div class="category-icon-wrapper"><i data-lucide="eye"></i></div>
+                                        <span>Realismo</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Anime">
+                                        <div class="category-icon-wrapper"><i data-lucide="smile"></i></div>
+                                        <span>Anime</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Acuarela">
+                                        <div class="category-icon-wrapper"><i data-lucide="droplet"></i></div>
+                                        <span>Acuarela</span>
+                                    </button>
+                                    <button class="btn-category" data-category="Minimalista">
+                                        <div class="category-icon-wrapper"><i data-lucide="minus"></i></div>
+                                        <span>Minimalista</span>
+                                    </button>
+                                    <button class="btn-category" id="btn-more-categories">
+                                        <div class="category-icon-wrapper"><i data-lucide="ellipsis"></i></div>
+                                        <span>Ver más</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- INTERACTIVE MAP WIDGET -->
+                        <section class="map-section">
+                            <div class="map-container-wrapper">
+                                <div id="interactive-map"></div>
+                                <button class="btn btn-map-overlay" id="btn-toggle-map-expand">
+                                    <i data-lucide="map"></i> Ver en mapa
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- FEATURED ARTISTS SECTION -->
+                        <section class="featured-section">
+                            <div class="featured-header">
+                                <h2 class="section-title">Tatuadores destacados en <span class="location-text">La Araucanía</span></h2>
+                                <a href="#" class="view-all-link" id="btn-view-all-artists">Ver todos <i data-lucide="arrow-right"></i></a>
+                            </div>
+                            
+                            <!-- Artist Grid -->
+                            <div class="artist-grid" id="artist-grid">
+                                <!-- Card 1: Studio Tatto Pipo -->
+                                <article class="artist-card" data-id="pipo" data-location="Teodoro Schmidt" data-styles="['Fine Line', 'Blackwork']" data-exp="5" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/tattoo_flower.png" alt="Tatuaje de Studio Tatto Pipo" class="card-tattoo-img">
+                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
+                                            <i data-lucide="heart" class="icon-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Studio tatto pipo</h3>
+                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="artist-tags">
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag tag-count">+2</span>
+                                        </div>
+                                        
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">5+ años tatuando</span>
+                                            <span class="meta-price"><span class="price-highlight">$$</span> Intermedio</span>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Card 2: Ink Lara -->
+                                <article class="artist-card" data-id="lara" data-location="Padre Las Casas" data-styles="['Realismo', 'Black & Grey']" data-exp="8" data-price="Premium">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/tattoo_lion.png" alt="Tatuaje de Ink Lara" class="card-tattoo-img">
+                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
+                                            <i data-lucide="heart" class="icon-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/logo_pipo.png" alt="Ink Lara Avatar" style="filter: hue-rotate(90deg);">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Ink Lara</h3>
+                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Padre Las Casas</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="artist-tags">
+                                            <span class="tag">Realismo</span>
+                                            <span class="tag">Black & Grey</span>
+                                            <span class="tag tag-count">+1</span>
+                                        </div>
+                                        
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">8 años tatuando</span>
+                                            <span class="meta-price"><span class="price-highlight">$$$</span> Premium</span>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Card 3: Kame Tattoo -->
+                                <article class="artist-card" data-id="kame" data-location="Temuco" data-styles="['Anime', 'Color']" data-exp="3" data-price="Accesible">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/tattoo_anime.png" alt="Tatuaje de Kame Tattoo" class="card-tattoo-img">
+                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
+                                            <i data-lucide="heart" class="icon-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/logo_pipo.png" alt="Kame Tattoo Avatar" style="filter: hue-rotate(180deg);">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Kame Tattoo</h3>
+                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="artist-tags">
+                                            <span class="tag">Anime</span>
+                                            <span class="tag">Color</span>
+                                            <span class="tag tag-count">+3</span>
+                                        </div>
+                                        
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3 años tatuando</span>
+                                            <span class="meta-price"><span class="price-highlight">$</span> Accesible</span>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Card 4: Sombra Negra -->
+                                <article class="artist-card" data-id="sombra" data-location="Villarrica" data-styles="['Blackwork', 'Geometría']" data-exp="10" data-price="Premium">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/tattoo_mandala.png" alt="Tatuaje de Sombra Negra" class="card-tattoo-img">
+                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
+                                            <i data-lucide="heart" class="icon-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/logo_pipo.png" alt="Sombra Negra Avatar" style="filter: hue-rotate(270deg);">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Sombra Negra</h3>
+                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Villarrica</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Geometría</span>
+                                            <span class="tag tag-count">+1</span>
+                                        </div>
+                                        
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">10+ años tatuando</span>
+                                            <span class="meta-price"><span class="price-highlight">$$$</span> Premium</span>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </section>
+
+                        <!-- TRUST FEATURES BAR -->
+                        <section class="features-bar">
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                                <div class="feature-text">
+                                    <h4>Tatuadores verificados</h4>
+                                    <p>Perfiles revisados para tu seguridad</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="calendar-days"></i></div>
+                                <div class="feature-text">
+                                    <h4>Agenda tu cita</h4>
+                                    <p>Contacta directamente con el tatuador</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="message-square-quote"></i></div>
+                                <div class="feature-text">
+                                    <h4>Presupuesto referencial</h4>
+                                    <p>Valores orientativos, cotización personalizada</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="map-pin"></i></div>
+                                <div class="feature-text">
+                                    <h4>Tatuadores locales</h4>
+                                    <p>Apoya el talento de La Araucanía</p>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: ARTIST DETAIL VIEW (Studio Tatto Pipo) -->
+            <section id="artist-view" class="view-panel">
+                <div class="artist-detail-layout">
+                    
+                    <!-- LEFT COLUMN: Profile Info Card -->
+                    <aside class="artist-profile-sidebar">
+                        <button class="btn-back-home" id="btn-back-home">
+                            <i data-lucide="arrow-left"></i> Volver a Explorar
+                        </button>
+                        
+                        <div class="artist-card-detailed">
+                            <div class="profile-avatar-wrapper">
+                                <div class="avatar-border">
+                                    <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Logo" class="profile-avatar-img">
+                                </div>
+                            </div>
+                            
+                            <h2 class="profile-name">Studio tatto pipo</h2>
+                            <p class="profile-location"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                            
+                            <!-- Instagram CTA -->
+                            <a href="https://instagram.com" target="_blank" class="btn btn-instagram" rel="noopener noreferrer">
+                                <i data-lucide="instagram"></i>
+                            </a>
+                            
+                            <!-- Visual status indicators -->
+                            <div class="visual-indicators">
+                                <span class="indicator-dot active"></span>
+                                <span class="indicator-dot active" style="opacity: 0.5;"></span>
+                                <span class="indicator-bar"></span>
+                            </div>
+                            
+                            <!-- Profile Sections (matches exact text "Hacerca de" in Image 5) -->
+                            <div class="profile-about-section">
+                                <h3 class="about-heading" id="trigger-info-drawer">Hacerca de</h3>
+                                <p class="about-text">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.</p>
+                            </div>
+                        </div>
+                    </aside>
+                    
+                    <!-- RIGHT COLUMN: Portfolio, Carousel and Gallery -->
+                    <div class="artist-portfolio-content">
+                        
+                        <!-- Header inside Detail View -->
+                        <div class="portfolio-header">
+                            <h2 class="section-title">Galería de Trabajos</h2>
+                            <button class="btn-icon-purple" id="btn-profile-filters" aria-label="Filtrar Diseños">
+                                <i data-lucide="sliders-horizontal"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- 3D CAROUSEL SECTION -->
+                        <section class="carousel-3d-section">
+                            <div class="carousel-3d-container" id="carousel-3d">
+                                <!-- Carousel items -->
+                                <div class="carousel-3d-item prev">
+                                    <img src="assets/tattoo_alien.png" alt="Tatuaje Alien">
+                                </div>
+                                <div class="carousel-3d-item active">
+                                    <img src="assets/tattoo_flower.png" alt="Tatuaje Flores">
+                                </div>
+                                <div class="carousel-3d-item next">
+                                    <img src="assets/tattoo_butterfly.png" alt="Tatuaje Mariposas">
+                                </div>
+                            </div>
+                            
+                            <!-- Carousel Navigation -->
+                            <div class="carousel-controls">
+                                <button class="btn-carousel-nav prev" id="btn-carousel-prev" aria-label="Imagen anterior">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="btn-carousel-nav next" id="btn-carousel-next" aria-label="Imagen siguiente">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- GALLERY TAB NAVIGATION -->
+                        <section class="gallery-tabs-section">
+                            <div class="gallery-tabs-list">
+                                <button class="tab-link active" data-tab="tatuajes">Tatuajes</button>
+                                <button class="tab-link" data-tab="brazo">Brazo</button>
+                                <button class="tab-link" data-tab="manos">Manos</button>
+                                <button class="tab-link" data-tab="torso">Torso</button>
+                                <button class="tab-link" data-tab="piernas">Piernas</button>
+                            </div>
+                            
+                            <!-- Tab Content Grid -->
+                            <div class="tab-content active" id="tab-gallery-grid">
+                                <!-- Gallery Items (dynamically filtered/loaded by JS) -->
+                            </div>
+                        </section>
+                        
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+        
+        <!-- DRAWER 1: FILTRAR ARTISTAS POPUP (Purple panel, Image 3) -->
+        <div class="drawer-overlay" id="overlay-filter-artists">
+            <div class="drawer-panel filter-artists-panel">
+                <div class="drawer-close-btn-container">
+                    <button class="btn-close-drawer" id="btn-close-filter-artists">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                
+                <h3 class="drawer-title">Filtrar Artistas</h3>
+                
+                <div class="drawer-body">
+                    <!-- Range distance filter -->
+                    <div class="filter-group-dark">
+                        <div class="filter-label-row">
+                            <span class="label-icon-text"><i data-lucide="map-pin"></i> Distancia maxima</span>
+                            <span class="slider-value" id="val-distance">Sin límite</span>
+                        </div>
+                        <input type="range" id="input-distance" min="5" max="105" value="105" class="custom-slider">
+                    </div>
+                    
+                    <!-- Grid of purple styling toggles -->
+                    <div class="toggles-grid">
+                        <div class="toggle-card">
+                            <span class="toggle-name">PUNTILLISMO</span>
+                            <div class="toggle-icon-container">
+                                <div class="dot-matrix-icon">
+                                    <span></span><span></span><span></span>
+                                    <span></span><span></span><span></span>
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-puntillismo">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-card">
+                            <span class="toggle-name">BLACKWORK</span>
+                            <div class="toggle-icon-container">
+                                <div class="solid-circle-icon"></div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-blackwork" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-card">
+                            <span class="toggle-name">REALISMO</span>
+                            <div class="toggle-icon-container">
+                                <div class="shading-circle-icon"></div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-realismo">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-card">
+                            <span class="toggle-name">BLACK AND GREY</span>
+                            <div class="toggle-icon-container">
+                                <div class="split-circle-icon"></div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-black-grey" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-card">
+                            <span class="toggle-name">ACUARELA</span>
+                            <div class="toggle-icon-container">
+                                <div class="faded-circle-icon"></div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-acuarela">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-card">
+                            <span class="toggle-name">FINE LINE</span>
+                            <div class="toggle-icon-container">
+                                <div class="line-icon"></div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-fineline" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="drawer-footer">
+                    <button class="btn btn-white btn-block" id="btn-apply-artist-filters">Aplicar Filtros</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRAWER 2: INFO DRAWER (Purple background, Image 2) -->
+        <div class="drawer-overlay" id="overlay-artist-info">
+            <div class="drawer-panel artist-info-panel">
+                <div class="drawer-close-btn-container">
+                    <button class="btn-close-drawer" id="btn-close-artist-info" style="color: white;">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                
+                <div class="info-panel-header">
+                    <div class="info-avatar-circle">
+                        <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Logo">
+                    </div>
+                    <h3 class="info-title">Studio tatto pipo</h3>
+                </div>
+                
+                <div class="info-links-list">
+                    <button class="info-action-link active" data-section="about">
+                        información del tatuador
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button class="info-action-link" data-section="experience">
+                        años tatuando
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button class="info-action-link" data-section="inks">
+                        marcas de tintas
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Dynamic detail panel inside drawer -->
+                <div class="info-detail-content" id="info-detail-content">
+                    <div class="info-sub-section active" id="sec-about">
+                        <h4>Biografía</h4>
+                        <p>Studio Tatto Pipo es fundado por Pipo, artista visual y tatuador radicado en Teodoro Schmidt. Nos especializamos en la creación de piezas únicas, priorizando líneas limpias y la anatomía de cada cuerpo.</p>
+                        <h4>Estudio</h4>
+                        <p>Espacio higienizado bajo estrictas normas de salud, ofreciendo un ambiente cómodo y seguro.</p>
+                    </div>
+                    <div class="info-sub-section" id="sec-experience">
+                        <h4>Experiencia Profesional</h4>
+                        <p><strong>5+ Años de trayectoria profesional</strong></p>
+                        <ul>
+                            <li>2023 - Presente: Estudio propio en Teodoro Schmidt</li>
+                            <li>2021 - 2023: Artista residente en Estudios Temuco</li>
+                            <li>2020 - 2021: Prácticas en Santiago de Chile</li>
+                        </ul>
+                    </div>
+                    <div class="info-sub-section" id="sec-inks">
+                        <h4>Marcas y Materiales</h4>
+                        <p>Para garantizar los mejores resultados y la salud de tu piel, solo usamos tintas veganas de calidad premium homologadas internacionalmente:</p>
+                        <ul>
+                            <li><strong>Dynamic Ink:</strong> Negro intenso para sombras duraderas.</li>
+                            <li><strong>Eternal Ink:</strong> Pigmentos de colores brillantes y estables.</li>
+                            <li><strong>Solid Ink:</strong> Tonos intermedios ideales para rellenos sólidos.</li>
+                        </ul>
+                        <p class="ink-safety-note"><i data-lucide="shield-check"></i> Todos los materiales de contacto son 100% descartables y esterilizados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
