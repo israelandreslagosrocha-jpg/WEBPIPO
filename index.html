@@ -19,7 +19,7 @@
 </head>
 <body>
     <!-- App Container -->
-    <div id="app-container">
+    <div id="app-container" class="landing-active">
         <!-- GLOBAL HEADER -->
         <header class="main-header">
             <div class="header-logo" id="btn-logo-home">
@@ -30,15 +30,16 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="#" class="nav-link active" data-target="home-view">Explorar</a>
-                <a href="#" class="nav-link" id="nav-btn-artists">Tatuadores</a>
-                <a href="#" class="nav-link">Estudios</a>
-                <a href="#" class="nav-link">Inspiración</a>
-                <a href="#" class="nav-link">Cómo funciona</a>
+                <a href="#" class="nav-link" id="nav-btn-home" data-target="home-view">HOME</a>
+                <a href="#" class="nav-link" id="nav-btn-artistas">ARTISTAS</a>
+                <a href="#" class="nav-link" id="nav-btn-sabias-que">SABIAS QUE</a>
+                <a href="#" class="nav-link" id="nav-btn-destacados">DESTACADOS</a>
+                <a href="#" class="nav-link" id="nav-btn-historia">HISTORIA</a>
             </nav>
             
             <div class="header-actions">
-                <button class="btn btn-outline" id="btn-soy-tatuador">Soy tatuador/a</button>
+                <button class="btn btn-outline" id="btn-soy-tatuador" data-target="dashboard-tatuador-view">Soy tatuador/a</button>
+                <button class="btn btn-outline btn-admin-nav" id="btn-admin-panel" data-target="dashboard-admin-view"><i data-lucide="shield"></i> Admin</button>
                 <!-- Hamburger menu/Filter toggle on header -->
                 <button class="btn-icon" id="btn-menu-toggle" aria-label="Abrir Menú">
                     <i data-lucide="menu"></i>
@@ -51,192 +52,161 @@
 
         <!-- MAIN CONTENT AREA -->
         <main class="main-content">
-            
-            <!-- VIEW 1: HOME VIEW -->
-            <section id="home-view" class="view-panel active">
-                <div class="home-layout">
-                    
-                    <!-- SIDEBAR FILTERS (Left) -->
-                    <aside class="sidebar-filters" id="sidebar-filters">
-                        <div class="sidebar-header">
-                            <h3>FILTRAR BÚSQUEDA</h3>
-                            <button class="btn-close-sidebar" id="btn-close-sidebar">
-                                <i data-lucide="x"></i>
+            <!-- VIEW 0: LANDING VIEW (INICIO EXCLUSIVO) -->
+            <section id="landing-view" class="view-panel active">
+                <canvas id="landing-particles"></canvas>
+                <!-- Background ambient fluid video -->
+                <video autoplay loop muted playsinline class="landing-bg-video">
+                    <source src="https://res.cloudinary.com/dhgifjpkh/video/upload/v1782507607/UX_CO%CC%81MO_DEBE_SENTIRSE_cada_compa%CC%81s_COMPA%CC%81S_texto_libre_aqui%CC%81..._comportamiento_click_escribes_directo_no_modales_no_friccio%CC%81n_REGLA_DE_ORO_debe_sentirse_como_escribir_en_un_cuade_cxuyvr.mp4" type="video/mp4">
+                </video>
+                <!-- SVG container for tattoo drawing animation -->
+                <svg id="landing-drawing-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div class="landing-bg-overlay"></div>
+                
+                <div class="landing-hero">
+                    <div class="landing-content">
+                        <div class="landing-logo-container">
+                            <img src="assets/logo_tinta_conectada.png" alt="Tinta Conectada" class="landing-logo-fallback">
+                            <div class="landing-logo-mask-container">
+                                <video autoplay loop muted playsinline class="landing-logo-video">
+                                    <source src="https://assets.mixkit.co/videos/preview/mixkit-purple-and-gold-ink-swirling-in-water-34433-large.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                        
+                        <p class="landing-tagline">El portal de arte corporal y enlace con tatuadores profesionales en La Araucanía</p>
+                        
+                        <!-- Single magnetic enter button -->
+                        <div class="magnetic-button-wrapper">
+                            <button class="btn-magnetic-cta" id="btn-landing-enter-magnetic">
+                                <span class="btn-cta-text">BUSCAR ARTISTA &rarr;</span>
                             </button>
                         </div>
-                        
-                        <div class="filter-group">
-                            <label class="filter-label"><i data-lucide="map-pin"></i> Ubicación</label>
-                            <div class="custom-select-wrapper">
-                                <select id="filter-location" class="custom-select">
-                                    <option value="all">Todas las ubicaciones</option>
-                                    <option value="Temuco" selected>Temuco, La Araucanía</option>
-                                    <option value="Padre Las Casas">Padre Las Casas</option>
-                                    <option value="Villarrica">Villarrica</option>
-                                    <option value="Teodoro Schmidt">Teodoro Schmidt</option>
-                                </select>
-                            </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom minimalist links -->
+                <div class="landing-footer-links">
+                    <a href="#" id="btn-landing-artist" class="landing-sec-link"><i data-lucide="star"></i> Portal de Tatuadores</a>
+                    <span class="divider">|</span>
+                    <a href="#" id="btn-landing-admin" class="landing-sec-link"><i data-lucide="shield"></i> Admin Demo</a>
+                </div>
+            </section>
+                  <!-- VIEW 1: HOME VIEW -->
+            <section id="home-view" class="view-panel">
+                <div class="home-layout">
+                    
+                    <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
+                    <div class="floating-sidebar-menu">
+                        <div class="sidebar-item item-logo" id="sidebar-btn-logo" title="Inicio">𝕿</div>
+                        <div class="sidebar-item active" id="sidebar-btn-home" title="Tatuadores">
+                            <img src="assets/tattoo_machine_cursor.png" alt="Tatuadores" class="sidebar-machine-icon">
                         </div>
-                        
-                        <div class="filter-group">
-                            <label class="filter-label"><i data-lucide="sparkles"></i> Estilo de tatuaje</label>
-                            <div class="style-buttons-grid">
-                                <button class="btn-style" data-style="Blackwork"><i data-lucide="shapes"></i> Blackwork</button>
-                                <button class="btn-style" data-style="Realismo"><i data-lucide="eye"></i> Realismo</button>
-                                <button class="btn-style" data-style="Fine Line"><i data-lucide="activity"></i> Fine Line</button>
-                                <button class="btn-style" data-style="Anime"><i data-lucide="smile"></i> Anime</button>
-                                <button class="btn-style" data-style="Acuarela"><i data-lucide="droplet"></i> Acuarela</button>
-                                <button class="btn-style" data-style="Neotradicional"><i data-lucide="flower"></i> Neotradicional</button>
-                                <button class="btn-style" data-style="Minimalista"><i data-lucide="minus"></i> Minimalista</button>
-                                <button class="btn-style btn-more-styles" id="btn-more-styles-trigger">
-                                    <i data-lucide="ellipsis"></i> Más estilos
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label class="filter-label"><i data-lucide="briefcase"></i> Experiencia</label>
-                            <div class="experience-buttons-row">
-                                <button class="btn-experience" data-exp="0-2">0-2 años</button>
-                                <button class="btn-experience" data-exp="3-5">3-5 años</button>
-                                <button class="btn-experience" data-exp="5-10">5-10 años</button>
-                                <button class="btn-experience" data-exp="10+">10+ años</button>
-                            </div>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label class="filter-label">
-                                <span class="label-with-info">
-                                    <i data-lucide="dollar-sign"></i> Precio referencial
-                                    <span class="info-tooltip-trigger" title="Valores promedio orientativos"><i data-lucide="info" class="icon-info"></i></span>
-                                </span>
-                            </label>
-                            <div class="price-grid">
-                                <button class="btn-price" data-price="Accesible">
-                                    <span class="price-currency">$</span>
-                                    <span class="price-label">Accesible</span>
-                                </button>
-                                <button class="btn-price" data-price="Intermedio">
-                                    <span class="price-currency">$$</span>
-                                    <span class="price-label">Intermedio</span>
-                                </button>
-                                <button class="btn-price" data-price="Premium">
-                                    <span class="price-currency">$$$</span>
-                                    <span class="price-label">Premium</span>
-                                </button>
-                                <button class="btn-price" data-price="Especialista">
-                                    <span class="price-currency">$$$$</span>
-                                    <span class="price-label">Especialista</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label class="filter-label"><i data-lucide="calendar"></i> Disponibilidad</label>
-                            <div class="availability-options">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="avail-week" name="availability" value="week">
-                                    <span class="checkmark"></span>
-                                    Disponible esta semana
-                                </label>
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="avail-month" name="availability" value="month">
-                                    <span class="checkmark"></span>
-                                    Disponible este mes
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="sidebar-actions">
-                            <button class="btn btn-primary btn-block" id="btn-apply-filters">Aplicar filtros</button>
-                            <button class="btn btn-link btn-block" id="btn-clear-filters">Limpiar filtros</button>
-                        </div>
-                    </aside>
+                        <div class="sidebar-item" id="sidebar-btn-sabias-que-side" title="¿Sabías Que?">¿</div>
+                        <div class="sidebar-item" id="sidebar-btn-historia-side" title="Historia del Tatuaje">𝕳</div>
+                        <div class="sidebar-item" id="sidebar-btn-guardados" title="Tatuadores Guardados"><i data-lucide="bookmark"></i></div>
+                    </div>
 
-                    <!-- HOME MAIN COLUMN (Right) -->
-                    <div class="home-main-content">
-                        
-                        <!-- HERO SECTION -->
-                        <section class="hero-section">
-                            <div class="hero-bg-art">
-                                <img src="assets/bg_illustration.png" alt="Tattoo Art Background" class="bg-illustration-img">
-                            </div>
-                            <div class="hero-content">
-                                <h1 class="hero-title">Encuentra a tu <br>tatuador <span class="highlight">ideal</span></h1>
-                                <p class="hero-subtitle">Conecta con tatuadores y estudios profesionales en La Araucanía</p>
-                                
-                                <!-- Search bar -->
-                                <div class="search-bar">
-                                    <div class="search-input-container">
-                                        <i data-lucide="search" class="search-icon"></i>
-                                        <input type="text" id="search-input" placeholder="Buscar por estilo, tatuador, estudio o ciudad...">
+                    <!-- MIDDLE COLUMN: Content Grid -->
+                    <div class="home-center-panel">
+                        <!-- HOW IT WORKS SECTION (Neobrutalist Cards) -->
+                        <div class="how-it-works-sec-new">
+                            <h3 class="how-it-works-title-new">¿CÓMO FUNCIONA?</h3>
+                            <div class="how-it-works-steps-new">
+                                <div class="step-card step-card-busca">
+                                    <div class="step-icon-wrapper step-icon-yellow">
+                                        <i data-lucide="search"></i>
                                     </div>
-                                    <button class="btn btn-primary btn-search" id="btn-search-trigger">Buscar</button>
+                                    <span class="step-number-title">1. BUSCA</span>
+                                    <p class="step-desc-text">Filtra por estilo y distancia</p>
+                                </div>
+                                <div class="step-card step-card-elige">
+                                    <div class="step-icon-wrapper step-icon-pink">
+                                        <i data-lucide="heart"></i>
+                                    </div>
+                                    <span class="step-number-title">2. ELIGE</span>
+                                    <p class="step-desc-text">Revisa portafolios y elige a tu artista ideal</p>
+                                </div>
+                                <div class="step-card step-card-reserva">
+                                    <div class="step-icon-wrapper step-icon-purple">
+                                        <i data-lucide="calendar"></i>
+                                    </div>
+                                    <span class="step-number-title">3. RESERVA</span>
+                                    <p class="step-desc-text">Agenda directamente con tu tatuador</p>
                                 </div>
                             </div>
-                        </section>
+                        </div>
 
-                        <!-- CATEGORIES CAROUSEL -->
-                        <section class="categories-section">
-                            <div class="categories-carousel-container">
-                                <div class="categories-scroll" id="categories-scroll">
-                                    <button class="btn-category active" data-category="Todos">
-                                        <div class="category-icon-wrapper"><i data-lucide="layout-grid"></i></div>
-                                        <span>Todos</span>
+                        <!-- MAIN NEOBRUTALIST CARD: TATUADORES -->
+                        <div class="tatuadores-main-card">
+                            <div class="tatuadores-card-header">
+                                <!-- Styles Pills (Left) -->
+                                <div class="style-pills-row">
+                                    <button class="style-pill active" data-style="Todos">
+                                        <span class="style-pill-color" style="background-color: #cccccc;"></span>
+                                        Todos
                                     </button>
-                                    <button class="btn-category" data-category="Blackwork">
-                                        <div class="category-icon-wrapper"><i data-lucide="shapes"></i></div>
-                                        <span>Blackwork</span>
+                                    <button class="style-pill" data-style="Realismo">
+                                        <span class="style-pill-color" style="background: linear-gradient(135deg, #333 0%, #aaa 100%);"></span>
+                                        REALISMO
                                     </button>
-                                    <button class="btn-category" data-category="Fine Line">
-                                        <div class="category-icon-wrapper"><i data-lucide="activity"></i></div>
-                                        <span>Fine Line</span>
+                                    <button class="style-pill" data-style="Acuarela">
+                                        <span class="style-pill-color" style="background: linear-gradient(135deg, #ff4a5a 0%, #7b4ad8 100%);"></span>
+                                        FULL COLOR
                                     </button>
-                                    <button class="btn-category" data-category="Realismo">
-                                        <div class="category-icon-wrapper"><i data-lucide="eye"></i></div>
-                                        <span>Realismo</span>
+                                    <button class="style-pill" data-style="Black & Grey">
+                                        <span class="style-pill-color" style="background: repeating-linear-gradient(45deg, #000, #000 2px, #fff 2px, #fff 4px);"></span>
+                                        Black and Gray
                                     </button>
-                                    <button class="btn-category" data-category="Anime">
-                                        <div class="category-icon-wrapper"><i data-lucide="smile"></i></div>
-                                        <span>Anime</span>
+                                    <button class="style-pill" data-style="Fine Line">
+                                        <span class="style-pill-color" style="border: 2px solid #FFC82C; background: transparent; display: block; border-radius: 50%; width: 12px; height: 12px;"></span>
+                                        FINE LINE
                                     </button>
-                                    <button class="btn-category" data-category="Acuarela">
-                                        <div class="category-icon-wrapper"><i data-lucide="droplet"></i></div>
-                                        <span>Acuarela</span>
+                                    <button class="style-pill" data-style="Blackwork">
+                                        <span class="style-pill-color" style="background-color: #000000;"></span>
+                                        Black work
                                     </button>
-                                    <button class="btn-category" data-category="Minimalista">
-                                        <div class="category-icon-wrapper"><i data-lucide="minus"></i></div>
-                                        <span>Minimalista</span>
-                                    </button>
-                                    <button class="btn-category" id="btn-more-categories">
-                                        <div class="category-icon-wrapper"><i data-lucide="ellipsis"></i></div>
-                                        <span>Ver más</span>
+                                    <button class="style-pill" data-style="Puntillismo">
+                                        <span class="style-pill-color" style="background-image: radial-gradient(#000 20%, transparent 20%); background-size: 4px 4px; display: block; width: 12px; height: 12px; border-radius: 50%;"></span>
+                                        PUNTILLISMO
                                     </button>
                                 </div>
+                                <!-- Title (Right) -->
+                                <h2 class="tatuadores-gothic-title">Tatuadores</h2>
                             </div>
-                        </section>
 
-                        <!-- INTERACTIVE MAP WIDGET -->
-                        <section class="map-section">
-                            <div class="map-container-wrapper">
-                                <div id="interactive-map"></div>
-                                <button class="btn btn-map-overlay" id="btn-toggle-map-expand">
-                                    <i data-lucide="map"></i> Ver en mapa
-                                </button>
-                            </div>
-                        </section>
+                            <!-- Search & Dropdown Filters Row -->
+                            <div class="tatuadores-filters-row">
+                                <div class="select-filter-wrapper">
+                                    <select id="filter-location-select" class="neobrutalist-select">
+                                        <option value="Todos">Ubicación (Todas)</option>
+                                        <option value="Temuco">Temuco</option>
+                                        <option value="Padre Las Casas">Padre Las Casas</option>
+                                        <option value="Villarrica">Villarrica</option>
+                                        <option value="Teodoro Schmidt">Teodoro Schmidt</option>
+                                    </select>
+                                    <span class="select-arrow-red"></span>
+                                </div>
 
-                        <!-- FEATURED ARTISTS SECTION -->
-                        <section class="featured-section">
-                            <div class="featured-header">
-                                <h2 class="section-title">Tatuadores destacados en <span class="location-text">La Araucanía</span></h2>
-                                <a href="#" class="view-all-link" id="btn-view-all-artists">Ver todos <i data-lucide="arrow-right"></i></a>
+                                <div class="select-filter-wrapper">
+                                    <select id="filter-radius-select" class="neobrutalist-select">
+                                        <option value="150">Radio (Sin límite)</option>
+                                        <option value="20">20 km</option>
+                                        <option value="50">50 km</option>
+                                        <option value="100">100 km</option>
+                                    </select>
+                                    <span class="select-arrow-red"></span>
+                                </div>
+
+                                <div class="search-icon-wrapper-new">
+                                    <i data-lucide="search"></i>
+                                </div>
                             </div>
-                            
+
                             <!-- Artist Grid -->
                             <div class="artist-grid" id="artist-grid">
-                                <!-- Card 1: Studio Tatto Pipo -->
-                                <article class="artist-card" data-id="pipo" data-location="Teodoro Schmidt" data-styles="['Fine Line', 'Blackwork']" data-exp="5" data-price="Intermedio">
+                                <!-- Studio Tatto Pipo -->
+                                <article class="artist-card active" data-id="pipo" data-location="Teodoro Schmidt" data-styles="['Fine Line', 'Blackwork']">
                                     <div class="card-image-wrapper">
                                         <img src="assets/tattoo_flower.png" alt="Tatuaje de Studio Tatto Pipo" class="card-tattoo-img">
                                         <button class="btn-favorite" aria-label="Agregar a favoritos">
@@ -253,22 +223,15 @@
                                                 <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
                                             </div>
                                         </div>
-                                        
                                         <div class="artist-tags">
                                             <span class="tag">Fine Line</span>
                                             <span class="tag">Blackwork</span>
-                                            <span class="tag tag-count">+2</span>
-                                        </div>
-                                        
-                                        <div class="artist-meta">
-                                            <span class="meta-exp">5+ años tatuando</span>
-                                            <span class="meta-price"><span class="price-highlight">$$</span> Intermedio</span>
                                         </div>
                                     </div>
                                 </article>
 
-                                <!-- Card 2: Ink Lara -->
-                                <article class="artist-card" data-id="lara" data-location="Padre Las Casas" data-styles="['Realismo', 'Black & Grey']" data-exp="8" data-price="Premium">
+                                <!-- Ink Lara -->
+                                <article class="artist-card" data-id="lara" data-location="Padre Las Casas" data-styles="['Realismo', 'Black & Grey']">
                                     <div class="card-image-wrapper">
                                         <img src="assets/tattoo_lion.png" alt="Tatuaje de Ink Lara" class="card-tattoo-img">
                                         <button class="btn-favorite" aria-label="Agregar a favoritos">
@@ -285,22 +248,15 @@
                                                 <span class="artist-loc"><i data-lucide="map-pin"></i> Padre Las Casas</span>
                                             </div>
                                         </div>
-                                        
                                         <div class="artist-tags">
                                             <span class="tag">Realismo</span>
                                             <span class="tag">Black & Grey</span>
-                                            <span class="tag tag-count">+1</span>
-                                        </div>
-                                        
-                                        <div class="artist-meta">
-                                            <span class="meta-exp">8 años tatuando</span>
-                                            <span class="meta-price"><span class="price-highlight">$$$</span> Premium</span>
                                         </div>
                                     </div>
                                 </article>
 
-                                <!-- Card 3: Kame Tattoo -->
-                                <article class="artist-card" data-id="kame" data-location="Temuco" data-styles="['Anime', 'Color']" data-exp="3" data-price="Accesible">
+                                <!-- Kame Tattoo -->
+                                <article class="artist-card" data-id="kame" data-location="Temuco" data-styles="['Acuarela', 'Fine Line']">
                                     <div class="card-image-wrapper">
                                         <img src="assets/tattoo_anime.png" alt="Tatuaje de Kame Tattoo" class="card-tattoo-img">
                                         <button class="btn-favorite" aria-label="Agregar a favoritos">
@@ -317,22 +273,15 @@
                                                 <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
                                             </div>
                                         </div>
-                                        
                                         <div class="artist-tags">
-                                            <span class="tag">Anime</span>
-                                            <span class="tag">Color</span>
-                                            <span class="tag tag-count">+3</span>
-                                        </div>
-                                        
-                                        <div class="artist-meta">
-                                            <span class="meta-exp">3 años tatuando</span>
-                                            <span class="meta-price"><span class="price-highlight">$</span> Accesible</span>
+                                            <span class="tag">Acuarela</span>
+                                            <span class="tag">Fine Line</span>
                                         </div>
                                     </div>
                                 </article>
 
-                                <!-- Card 4: Sombra Negra -->
-                                <article class="artist-card" data-id="sombra" data-location="Villarrica" data-styles="['Blackwork', 'Geometría']" data-exp="10" data-price="Premium">
+                                <!-- Sombra Negra -->
+                                <article class="artist-card" data-id="sombra" data-location="Villarrica" data-styles="['Blackwork', 'Puntillismo']">
                                     <div class="card-image-wrapper">
                                         <img src="assets/tattoo_mandala.png" alt="Tatuaje de Sombra Negra" class="card-tattoo-img">
                                         <button class="btn-favorite" aria-label="Agregar a favoritos">
@@ -349,55 +298,82 @@
                                                 <span class="artist-loc"><i data-lucide="map-pin"></i> Villarrica</span>
                                             </div>
                                         </div>
-                                        
                                         <div class="artist-tags">
                                             <span class="tag">Blackwork</span>
-                                            <span class="tag">Geometría</span>
-                                            <span class="tag tag-count">+1</span>
-                                        </div>
-                                        
-                                        <div class="artist-meta">
-                                            <span class="meta-exp">10+ años tatuando</span>
-                                            <span class="meta-price"><span class="price-highlight">$$$</span> Premium</span>
+                                            <span class="tag">Puntillismo</span>
                                         </div>
                                     </div>
                                 </article>
                             </div>
-                        </section>
 
-                        <!-- TRUST FEATURES BAR -->
-                        <section class="features-bar">
-                            <div class="feature-item">
-                                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
-                                <div class="feature-text">
-                                    <h4>Tatuadores verificados</h4>
-                                    <p>Perfiles revisados para tu seguridad</p>
-                                </div>
+                            <!-- View all link -->
+                            <div class="view-all-artists-row">
+                                <a href="#" id="btn-view-all-artists-bottom" class="btn-view-all-bottom-new">ver todos los artistas.</a>
                             </div>
-                            <div class="feature-item">
-                                <div class="feature-icon"><i data-lucide="calendar-days"></i></div>
-                                <div class="feature-text">
-                                    <h4>Agenda tu cita</h4>
-                                    <p>Contacta directamente con el tatuador</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon"><i data-lucide="message-square-quote"></i></div>
-                                <div class="feature-text">
-                                    <h4>Presupuesto referencial</h4>
-                                    <p>Valores orientativos, cotización personalizada</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon"><i data-lucide="map-pin"></i></div>
-                                <div class="feature-text">
-                                    <h4>Tatuadores locales</h4>
-                                    <p>Apoya el talento de La Araucanía</p>
-                                </div>
-                            </div>
-                        </section>
+                        </div>
 
+                        <!-- SABÍAS QUE? BALLOON / GLOBE (Below Menu) -->
+                        <div class="trivia-balloon-card">
+                            <div class="balloon-icon-wrapper">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <div class="balloon-content">
+                                <strong>¿Sabías que?</strong>
+                                <span id="home-trivia-snippet">Ötzi, la momia humana más antigua conocida (3300 a.C.), tiene 61 tatuajes en su cuerpo que coinciden con puntos de acupuntura terapéutica...</span>
+                                <a href="#" id="btn-home-trivia-ver-mas" class="balloon-ver-mas">Ver más &rarr;</a>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- RIGHT COLUMN: Selected Artist Quick Sheet (Ficha) -->
+                    <div class="home-right-panel" id="artist-quick-sheet">
+                        <div class="ficha-card">
+                            <!-- Large Cover/Avatar Image -->
+                            <div class="ficha-cover-wrapper">
+                                <img src="assets/logo_pipo.png" id="ficha-artist-avatar" alt="Artist Avatar" class="ficha-avatar-img">
+                                <div class="ficha-status-dots">
+                                    <span class="status-dot"></span>
+                                    <span class="status-dot"></span>
+                                    <span class="status-dot"></span>
+                                </div>
+                            </div>
+
+                            <!-- Info details -->
+                            <div class="ficha-info-details">
+                                <h3 class="ficha-artist-name" id="ficha-artist-name">Studio tatto pipo</h3>
+                                <p class="ficha-artist-loc" id="ficha-artist-location"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                                
+                                <div class="ficha-biography">
+                                    <h4>Biografía</h4>
+                                    <p id="ficha-artist-bio">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la región de La Araucanía.</p>
+                                </div>
+
+                                <div class="ficha-bottom-row">
+                                    <!-- Instagram button -->
+                                    <a href="https://instagram.com" target="_blank" id="ficha-artist-instagram" class="btn-instagram-new" rel="noopener noreferrer">
+                                        <i data-lucide="instagram"></i>
+                                    </a>
+                                    
+                                    <!-- View Full Profile Button -->
+                                    <button class="btn btn-outline btn-ficha-portfolio" id="btn-ficha-view-portfolio">
+                                        Ver Galería 3D &rarr;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Map inside the Ficha -->
+                            <div class="ficha-map-wrapper">
+                                <div id="interactive-map" style="width: 100%; height: 180px; border-radius: 12px; z-index: 1;"></div>
+                            </div>
+                            
+                            <!-- Toggle arrows inside ficha -->
+                            <div class="ficha-controls">
+                                <button class="btn-ficha-toggle" id="btn-ficha-toggle-prev" title="Anterior"><i data-lucide="chevron-left"></i></button>
+                                <button class="btn-ficha-toggle" id="btn-ficha-toggle-next" title="Siguiente"><i data-lucide="chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -480,20 +456,639 @@
 
                         <!-- GALLERY TAB NAVIGATION -->
                         <section class="gallery-tabs-section">
-                            <div class="gallery-tabs-list">
-                                <button class="tab-link active" data-tab="tatuajes">Tatuajes</button>
-                                <button class="tab-link" data-tab="brazo">Brazo</button>
-                                <button class="tab-link" data-tab="manos">Manos</button>
-                                <button class="tab-link" data-tab="torso">Torso</button>
-                                <button class="tab-link" data-tab="piernas">Piernas</button>
+                            <div class="portfolio-filter-row">
+                                <span class="filter-row-label">Zonas del cuerpo:</span>
+                                <div class="gallery-tabs-list body-zones-list">
+                                    <button class="tab-link active" data-tab="all-zones">Todos</button>
+                                    <button class="tab-link" data-tab="cara">Cara</button>
+                                    <button class="tab-link" data-tab="cuello">Cuello</button>
+                                    <button class="tab-link" data-tab="torso">Torso</button>
+                                    <button class="tab-link" data-tab="brazo">Brazos</button>
+                                    <button class="tab-link" data-tab="manos">Manos</button>
+                                    <button class="tab-link" data-tab="piernas">Piernas</button>
+                                </div>
+                            </div>
+                            
+                            <div class="portfolio-filter-row" style="margin-top: 12px;">
+                                <span class="filter-row-label">Estilos:</span>
+                                <div class="gallery-style-list style-filters-list">
+                                    <button class="style-tab-link active" data-style="all-styles">Todos</button>
+                                    <button class="style-tab-link" data-style="Puntillismo">Puntillismo</button>
+                                    <button class="style-tab-link" data-style="Realismo">Realismo</button>
+                                    <button class="style-tab-link" data-style="Blackwork">Blackwork</button>
+                                    <button class="style-tab-link" data-style="Black & Grey">Black & Grey</button>
+                                    <button class="style-tab-link" data-style="Acuarela">Acuarela</button>
+                                    <button class="style-tab-link" data-style="Fine Line">Fine Line</button>
+                                </div>
                             </div>
                             
                             <!-- Tab Content Grid -->
-                            <div class="tab-content active" id="tab-gallery-grid">
+                            <div class="tab-content active" id="tab-gallery-grid" style="margin-top: 20px;">
                                 <!-- Gallery Items (dynamically filtered/loaded by JS) -->
                             </div>
                         </section>
                         
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: SABÍAS QUE VIEW (Trivia Editorial) -->
+            <section id="sabias-que-view" class="view-panel">
+                <div class="sabias-que-layout">
+                    <!-- Title banner -->
+                    <div class="editorial-header-card">
+                        <div class="editorial-badge">¿SABÍAS QUE?</div>
+                        <h1 class="editorial-title">DATOS INSÓLITOS Y CURIOSIDADES DEL TATUAJE</h1>
+                        <p class="editorial-subtitle">Un recorrido por los secretos más fascinantes de este arte milenario en la piel.</p>
+                    </div>
+
+                    <!-- Editorial grid -->
+                    <div class="editorial-grid">
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper yellow">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <h3 class="editorial-card-title">1. El origen de la palabra</h3>
+                            <p class="editorial-card-text">La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar" o "golpear dos veces" (en referencia al sonido rítmico de las herramientas tradicionales de golpeteo). El explorador James Cook la introdujo en el idioma inglés como "tattoo" en el siglo XVIII después de sus expediciones a la Polinesia.</p>
+                        </div>
+
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper red">
+                                <i data-lucide="history"></i>
+                            </div>
+                            <h3 class="editorial-card-title">2. La momia de Ötzi y la acupuntura antigua</h3>
+                            <p class="editorial-card-text">Ötzi, la momia humana natural más antigua descubierta (cerca del 3300 a.C. en los Alpes), cuenta con 61 tatuajes en su cuerpo. Se trata de grupos de líneas y cruces situados en articulaciones y la espalda baja, coincidiendo exactamente con puntos de acupuntura terapéutica moderna, sugiriendo un uso medicinal más que estético.</p>
+                        </div>
+
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper purple">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <h3 class="editorial-card-title">3. Tintas modernas y veganismo</h3>
+                            <p class="editorial-card-text">En el pasado, muchas tintas utilizaban aglutinantes de origen animal, como gelatina o glicerina, o pigmentos basados en carbón de huesos quemados. Actualmente, la gran mayoría de los artistas de vanguardia emplean tintas 100% veganas y cruelty-free, elaboradas a base de glicerina vegetal y pigmentos minerales de alta pureza.</p>
+                        </div>
+
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper blue">
+                                <i data-lucide="hourglass"></i>
+                            </div>
+                            <h3 class="editorial-card-title">4. ¿Por qué el tatuaje es permanente?</h3>
+                            <p class="editorial-card-text">La tinta no se inyecta en la capa externa de la piel (epidermis), sino en la dermis intermedia, cuyas células son sumamente estables. Cuando las agujas depositan la tinta, el cuerpo activa glóbulos blancos (macrófagos) que engullen el pigmento para intentar removerlo, pero al no poder destruirlo, quedan suspendidos en la dermis con el color intacto.</p>
+                        </div>
+
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper green">
+                                <i data-lucide="map-pin"></i>
+                            </div>
+                            <h3 class="editorial-card-title">5. El registro arqueológico chileno</h3>
+                            <p class="editorial-card-text">En el norte de Chile se conserva la evidencia física de tatuajes más antigua de toda América: la momia del cementerio El Morro en Arica (cultura Chinchorro, aprox. 2500 a.C.), que presenta un sutil tatuaje en forma de puntos alineados que forman un bigote falso en el labio superior de un hombre adulto.</p>
+                        </div>
+
+                        <div class="editorial-card-new">
+                            <div class="editorial-card-icon-wrapper orange">
+                                <i data-lucide="zap"></i>
+                            </div>
+                            <h3 class="editorial-card-title">6. La invención de la máquina eléctrica</h3>
+                            <p class="editorial-card-text">En 1891, el artista neoyorquino Samuel O'Reilly patentó la primera máquina de tatuar eléctrica. Para lograrlo, modificó un invento previo de Thomas Edison: la pluma rotativa para calcar documentos de oficina, agregándole un sistema de bobinas y un tubo portaagujas para inyectar tinta velozmente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom back button -->
+                    <div class="editorial-footer-row">
+                        <button class="btn btn-outline btn-editorial-back" id="btn-editorial-back-home">
+                            &larr; Volver al Portal de Búsqueda
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: HISTORY VIEW -->
+            <section id="history-view" class="view-panel">
+                <div class="history-layout">
+                    <!-- Tab Navigation for History -->
+                    <div class="history-tabs">
+                        <button class="btn-history-tab active" data-history-tab="history-world">Tatuaje en el Mundo</button>
+                        <button class="btn-history-tab" data-history-tab="history-chile">Tatuaje Chileno</button>
+                    </div>
+
+                    <!-- World History Timeline -->
+                    <div class="history-tab-content active" id="history-sec-history-world">
+                        <h2 class="section-title">El Tatuaje en el Mundo</h2>
+                        <p class="section-subtitle">Una mirada histórica a la evolución del arte corporal global</p>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">3000 a.C.</div>
+                                <div class="timeline-content">
+                                    <h3>Egipto Antiguo</h3>
+                                    <p>El tatuaje era practicado principalmente por mujeres, asociado con la fertilidad, protección contra enfermedades y devoción religiosa a deidades como Hathor.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">1000 a.C.</div>
+                                <div class="timeline-content">
+                                    <h3>Cultura Polinesia (Samoa, Maorí)</h3>
+                                    <p>El "Tatau" o "Tā moko" era un ritual social sagrado que indicaba estatus, genealogía y valor. Cada marca contaba la historia personal y familiar del portador.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">Siglo XVII - XIX</div>
+                                <div class="timeline-content">
+                                    <h3>Irezumi en Japón</h3>
+                                    <p>El tatuaje tradicional japonés evoluciona como un arte pictórico de cuerpo completo basado en grabados xilográficos (Ukiyo-e). A pesar de prohibiciones temporales, se consolidó como una de las técnicas más valoradas del mundo.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">Siglo XX - Hoy</div>
+                                <div class="timeline-content">
+                                    <h3>El Nacimiento del Tatuaje Moderno</h3>
+                                    <p>Con la invención de la máquina de tatuar eléctrica por Samuel O'Reilly en 1891 y la popularización en subculturas, el tatuaje transiciona desde el estilo marinero clásico (Old School) hasta el arte fino y el hiperrealismo contemporáneo.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chilean History -->
+                    <div class="history-tab-content" id="history-sec-history-chile">
+                        <h2 class="section-title">El Tatuaje Chileno</h2>
+                        <p class="section-subtitle">Orígenes y consagración del tatuaje en nuestro territorio</p>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">Ancestral</div>
+                                <div class="timeline-content">
+                                    <h3>Pintura Corporal Selk'nam</h3>
+                                    <p>En el extremo sur de Chile, el pueblo Selk'nam practicaba complejos diseños de pintura corporal durante la ceremonia del Hain, representando espíritus ancestrales y roles sociales con pigmentos naturales.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">1990s</div>
+                                <div class="timeline-content">
+                                    <h3>Los Inicios del Tatuaje Urbano</h3>
+                                    <p>Con el fin de la dictadura y la apertura cultural, los primeros estudios profesionales abren en Santiago y Valparaíso. Artistas autodidactas construían sus propias máquinas y conseguían tintas del extranjero de forma artesanal.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-date">2010s</div>
+                                <div class="timeline-content">
+                                    <h3>Profesionalización e Identidad Local</h3>
+                                    <p>Se consolidan convenciones nacionales y el tatuaje gana masividad. En La Araucanía, los artistas locales empiezan a incorporar iconografía mapuche, fauna andina y estilos de autor en trazo fino (Fine Line).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: ADMIN DASHBOARD VIEW -->
+            <section id="dashboard-admin-view" class="view-panel">
+                <div class="dashboard-layout">
+                    <!-- Admin Sidebar -->
+                    <aside class="db-sidebar">
+                        <div class="db-user-info">
+                            <div class="db-avatar" style="background-color: #5d32a8;"><i data-lucide="shield" style="color: #fff; width: 24px; height: 24px;"></i></div>
+                            <div class="db-user-details">
+                                <h3>Administrador</h3>
+                                <span>Plataforma General</span>
+                            </div>
+                        </div>
+                        <nav class="db-nav">
+                            <a href="#" class="db-nav-link active" data-db-tab="admin-overview"><i data-lucide="bar-chart-3"></i> Resumen</a>
+                            <a href="#" class="db-nav-link" data-db-tab="admin-artists"><i data-lucide="users"></i> Gestionar Artistas</a>
+                            <a href="#" class="db-nav-link" data-db-tab="admin-pricing"><i data-lucide="credit-card"></i> Configurar Tarifas</a>
+                        </nav>
+                    </aside>
+
+                    <!-- Admin Main Content -->
+                    <div class="db-main-content">
+                        <!-- Overview Tab -->
+                        <div class="db-tab-panel active" id="admin-overview">
+                            <h2 class="db-title">Panel de Control General</h2>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-icon" style="background-color: rgba(123, 74, 216, 0.15); color: #7b4ad8;"><i data-lucide="users"></i></div>
+                                    <div class="metric-data">
+                                        <span class="metric-value" id="admin-stat-artists">4</span>
+                                        <span class="metric-label">Tatuadores Registrados</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-icon" style="background-color: rgba(56, 161, 105, 0.15); color: #38a169;"><i data-lucide="dollar-sign"></i></div>
+                                    <div class="metric-data">
+                                        <span class="metric-value">$89.970</span>
+                                        <span class="metric-label">Ingresos Mensuales</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-icon" style="background-color: rgba(221, 107, 32, 0.15); color: #dd6b20;"><i data-lucide="user-check"></i></div>
+                                    <div class="metric-data">
+                                        <span class="metric-value" id="admin-stat-pending">0</span>
+                                        <span class="metric-label">Pendientes de Verificación</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="admin-recent-activity">
+                                <h3>Actividad Reciente de la Plataforma</h3>
+                                <div class="activity-list">
+                                    <div class="activity-item">
+                                        <div class="activity-bullet"></div>
+                                        <p>El artista <strong>Studio Tatto Pipo</strong> ha actualizado su portafolio con 1 nuevo diseño.</p>
+                                        <span class="activity-time">Hace 10 min</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-bullet"></div>
+                                        <p>Nueva suscripción activa: <strong>Ink Lara</strong> se suscribió al Plan Premium.</p>
+                                        <span class="activity-time">Hace 2 horas</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-bullet"></div>
+                                        <p>Usuario anónimo cotizó servicio con <strong>Sombra Negra</strong>.</p>
+                                        <span class="activity-time">Hace 1 día</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Manage Artists Tab -->
+                        <div class="db-tab-panel" id="admin-artists">
+                            <div class="db-panel-header">
+                                <h2 class="db-title">Gestionar Artistas y Estudios</h2>
+                                <button class="btn btn-primary btn-sm" id="btn-admin-add-artist"><i data-lucide="plus"></i> Invitar Artista</button>
+                            </div>
+                            
+                            <div class="db-table-wrapper">
+                                <table class="db-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Artista</th>
+                                            <th>Ubicación</th>
+                                            <th>Suscripción</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-artists-table-body">
+                                        <!-- Populated dynamically by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Config Pricing Tab -->
+                        <div class="db-tab-panel" id="admin-pricing">
+                            <h2 class="db-title">Configuración de Planes de Suscripción</h2>
+                            <p class="db-subtitle">Administra los precios y características de los planes de la plataforma</p>
+                            
+                            <div class="plans-editor-grid">
+                                <div class="plan-edit-card">
+                                    <h3>Plan Básico</h3>
+                                    <div class="input-group">
+                                        <label>Precio Mensual ($CLP)</label>
+                                        <input type="number" value="14990" class="form-control" id="pricing-basic-val">
+                                    </div>
+                                    <div class="plan-features-list">
+                                        <label><input type="checkbox" checked disabled> Perfil en Buscador</label>
+                                        <label><input type="checkbox" checked disabled> Portafolio (Máx 10 fotos)</label>
+                                        <label><input type="checkbox" disabled> Posicionamiento Destacado</label>
+                                        <label><input type="checkbox" disabled> Mapa Interactivo Detallado</label>
+                                    </div>
+                                    <button class="btn btn-primary btn-block btn-save-plan">Guardar Cambios</button>
+                                </div>
+                                <div class="plan-edit-card premium">
+                                    <h3>Plan Premium</h3>
+                                    <div class="input-group">
+                                        <label>Precio Mensual ($CLP)</label>
+                                        <input type="number" value="29990" class="form-control" id="pricing-premium-val">
+                                    </div>
+                                    <div class="plan-features-list">
+                                        <label><input type="checkbox" checked disabled> Perfil en Buscador</label>
+                                        <label><input type="checkbox" checked disabled> Portafolio Ilimitado</label>
+                                        <label><input type="checkbox" checked disabled> Posicionamiento Destacado</label>
+                                        <label><input type="checkbox" checked disabled> Mapa Interactivo Detallado</label>
+                                    </div>
+                                    <button class="btn btn-primary btn-block btn-save-plan">Guardar Cambios</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: TATUADOR DASHBOARD VIEW -->
+            <section id="dashboard-tatuador-view" class="view-panel">
+                <!-- PANEL 1: ONBOARDING / PAYMENT -->
+                <div id="tatuador-onboarding-panel" class="onboarding-container">
+                    <div class="onboarding-steps">
+                        <div class="onboarding-step active" id="onb-step-1">1. Elegir Plan</div>
+                        <div class="onboarding-step" id="onb-step-2">2. Pago Seguro</div>
+                        <div class="onboarding-step" id="onb-step-3">3. Perfil del Estudio</div>
+                    </div>
+
+                    <!-- Step 1: Select Plan -->
+                    <div class="onboarding-content-step active" id="onb-view-1">
+                        <h2 class="text-center">¡Únete a la Red de Tatuadores de La Araucanía!</h2>
+                        <p class="text-center text-muted">Aumenta tu visibilidad, muestra tus diseños y recibe reservas directas.</p>
+                        
+                        <div class="plans-container">
+                            <div class="plan-card">
+                                <div class="plan-header">
+                                    <h3>Plan Explorador (Básico)</h3>
+                                    <span class="plan-price">$14.990 <small>/mes</small></span>
+                                </div>
+                                <ul class="plan-features">
+                                    <li><i data-lucide="check" class="text-success"></i> Perfil público en el buscador</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Portafolio de 10 tatuajes</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Formulario de contacto directo</li>
+                                    <li><i data-lucide="x" class="text-danger"></i> Sello de verificación destacado</li>
+                                    <li><i data-lucide="x" class="text-danger"></i> Ubicación destacada en mapa</li>
+                                </ul>
+                                <button class="btn btn-outline btn-block btn-select-plan" data-plan="basic">Seleccionar Plan</button>
+                            </div>
+                            
+                            <div class="plan-card featured">
+                                <div class="plan-badge">RECOMENDADO</div>
+                                <div class="plan-header">
+                                    <h3>Plan Máster (Premium)</h3>
+                                    <span class="plan-price">$29.990 <small>/mes</small></span>
+                                </div>
+                                <ul class="plan-features">
+                                    <li><i data-lucide="check" class="text-success"></i> Perfil público destacado</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Portafolio ILIMITADO</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Formulario de contacto y WhatsApp</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Sello de verificación dorada</li>
+                                    <li><i data-lucide="check" class="text-success"></i> Pin destacado en el mapa dinámico</li>
+                                </ul>
+                                <button class="btn btn-primary btn-block btn-select-plan" data-plan="premium">Contratar Premium</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment Gateway Mock -->
+                    <div class="onboarding-content-step" id="onb-view-2">
+                        <div class="payment-mock-container">
+                            <div class="payment-summary">
+                                <h3>Resumen de la Suscripción</h3>
+                                <div class="summary-row">
+                                    <span id="payment-plan-name">Plan Premium (Tinta Conectada)</span>
+                                    <strong id="payment-plan-price">$29.990/mes</strong>
+                                </div>
+                                <p class="text-muted small">El cobro se realizará mensualmente. Puedes cancelar cuando quieras en tu panel.</p>
+                            </div>
+                            
+                            <div class="credit-card-form">
+                                <h3>Información de Pago</h3>
+                                <div class="input-group">
+                                    <label>Nombre en la tarjeta</label>
+                                    <input type="text" placeholder="Ej. Juan Pérez" class="form-control" id="pay-card-name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Número de Tarjeta</label>
+                                    <div class="card-number-wrapper">
+                                        <i data-lucide="credit-card"></i>
+                                        <input type="text" placeholder="4556 7812 3456 7890" class="form-control" id="pay-card-number" maxlength="19" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label>Fecha de Expiración</label>
+                                        <input type="text" placeholder="MM/AA" class="form-control" id="pay-card-expiry" maxlength="5" required>
+                                    </div>
+                                    <div class="input-group flex-1">
+                                        <label>CVC (CVV)</label>
+                                        <input type="password" placeholder="123" class="form-control" id="pay-card-cvc" maxlength="4" required>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary btn-block" id="btn-submit-payment"><i data-lucide="lock"></i> Realizar Pago Seguro</button>
+                                <button class="btn btn-link btn-block" id="btn-cancel-payment">Volver a los planes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Fast Registration Form -->
+                    <div class="onboarding-content-step" id="onb-view-3">
+                        <div class="register-form-container">
+                            <h2>¡Pago Exitoso! Crea tu Perfil</h2>
+                            <p class="text-muted">Completa los datos de tu estudio para que aparezcan en el buscador público.</p>
+                            
+                            <div class="register-form">
+                                <div class="input-group">
+                                    <label>Nombre del Estudio o Nombre Artístico</label>
+                                    <input type="text" placeholder="Ej. Tatuajes Don Pipo" class="form-control" id="reg-art-name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Ciudad de Residencia</label>
+                                    <select class="form-control" id="reg-art-location">
+                                        <option value="Temuco">Temuco</option>
+                                        <option value="Padre Las Casas">Padre Las Casas</option>
+                                        <option value="Villarrica">Villarrica</option>
+                                        <option value="Teodoro Schmidt">Teodoro Schmidt</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Años Tatuando (Experiencia)</label>
+                                    <input type="number" min="0" placeholder="Ej. 5" class="form-control" id="reg-art-exp" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Biografía Corta</label>
+                                    <textarea placeholder="Cuéntale a tus clientes sobre tu estilo y técnicas..." class="form-control" id="reg-art-bio" rows="3"></textarea>
+                                </div>
+                                
+                                <button class="btn btn-primary btn-block" id="btn-submit-register">Crear Perfil e Ingresar al Panel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL 2: ACTIVE SUBSCRIBED TATUADOR WORKSPACE -->
+                <div id="tatuador-workspace-panel" class="dashboard-layout" style="display: none;">
+                    <!-- Artist Workspace Sidebar -->
+                    <aside class="db-sidebar">
+                        <div class="db-user-info">
+                            <div class="db-avatar" id="workspace-sidebar-avatar"><img src="assets/logo_pipo.png" alt="Tatuador Avatar"></div>
+                            <div class="db-user-details">
+                                <h3 id="workspace-sidebar-name">Studio Tatto Pipo</h3>
+                                <span class="badge badge-premium" id="workspace-sidebar-plan">Plan Premium</span>
+                            </div>
+                        </div>
+                        <nav class="db-nav">
+                            <a href="#" class="db-nav-link active" data-db-tab="tatuador-profile"><i data-lucide="user-cog"></i> Editar Perfil</a>
+                            <a href="#" class="db-nav-link" data-db-tab="tatuador-portfolio"><i data-lucide="image-plus"></i> Subir Diseños</a>
+                            <a href="#" class="db-nav-link" data-db-tab="tatuador-appointments"><i data-lucide="calendar-check"></i> Citas de Clientes</a>
+                            <a href="#" class="db-nav-link" data-db-tab="tatuador-stats"><i data-lucide="trending-up"></i> Estadísticas</a>
+                        </nav>
+                        <div class="db-sidebar-footer">
+                            <button class="btn btn-outline btn-block btn-sm" id="btn-tatuador-logout" style="border-color: rgba(255,255,255,0.15); color: #fff;">Cerrar Sesión</button>
+                        </div>
+                    </aside>
+
+                    <!-- Artist Workspace Main Content -->
+                    <div class="db-main-content">
+                        <!-- Profile Editor Tab -->
+                        <div class="db-tab-panel active" id="tatuador-profile">
+                            <h2 class="db-title">Editar Perfil del Estudio</h2>
+                            <p class="db-subtitle">Esta información es la que verán los clientes en la búsqueda pública</p>
+                            
+                            <form id="form-tatuador-profile-edit" class="tatuador-form">
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label>Nombre Artístico / Estudio</label>
+                                        <input type="text" class="form-control" id="edit-art-name" value="Studio tatto pipo">
+                                    </div>
+                                    <div class="input-group flex-1">
+                                        <label>Ubicación (Comuna)</label>
+                                        <select class="form-control" id="edit-art-location">
+                                            <option value="Temuco">Temuco</option>
+                                            <option value="Padre Las Casas">Padre Las Casas</option>
+                                            <option value="Villarrica">Villarrica</option>
+                                            <option value="Teodoro Schmidt" selected>Teodoro Schmidt</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label>Años de Experiencia</label>
+                                        <input type="number" class="form-control" id="edit-art-exp" value="5">
+                                    </div>
+                                    <div class="input-group flex-1">
+                                        <label>Nivel de Precios</label>
+                                        <select class="form-control" id="edit-art-price">
+                                            <option value="Accesible">Accesible ($)</option>
+                                            <option value="Intermedio" selected>Intermedio ($$)</option>
+                                            <option value="Premium">Premium ($$$)</option>
+                                            <option value="Especialista">Especialista ($$$$)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Biografía</label>
+                                    <textarea class="form-control" id="edit-art-bio" rows="3">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.</textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label>Marcas de Tintas (Separadas por comas)</label>
+                                        <input type="text" class="form-control" id="edit-art-inks" value="Dynamic Ink, Eternal Ink, Solid Ink">
+                                    </div>
+                                    <div class="input-group flex-1">
+                                        <label>Marcas de Agujas (Separadas por comas)</label>
+                                        <input type="text" class="form-control" id="edit-art-needles" value="Kwadron Cartridges, Cheyenne Safety Cartridges">
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" id="btn-save-profile"><i data-lucide="save"></i> Guardar Cambios</button>
+                            </form>
+                        </div>
+
+                        <!-- Portfolio Editor Tab -->
+                        <div class="db-tab-panel" id="tatuador-portfolio">
+                            <h2 class="db-title">Subir Nuevos Tatuajes y Diseños</h2>
+                            <p class="db-subtitle">Agrega trabajos a tu portafolio y clasifícalos por estilo y zona corporal para que los clientes te encuentren fácilmente.</p>
+                            
+                            <div class="portfolio-uploader-layout">
+                                <!-- Upload form -->
+                                <div class="upload-sidebar-card">
+                                    <div class="upload-drag-area" id="upload-drag-area">
+                                        <i data-lucide="image" class="upload-icon"></i>
+                                        <p>Arrastra tu imagen aquí o</p>
+                                        <button class="btn btn-secondary btn-sm" type="button" id="btn-select-file">Examinar Archivos</button>
+                                        <input type="file" id="input-portfolio-file" style="display: none;" accept="image/*">
+                                        <span class="file-name-indicator" id="file-name-indicator" style="margin-top: 8px; font-size: 0.85rem; color: #a0aec0;"></span>
+                                    </div>
+                                    
+                                    <div class="input-group">
+                                        <label>Título del Tatuaje</label>
+                                        <input type="text" placeholder="Ej. Rosa geométrica brazo" class="form-control" id="new-tattoo-title">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="input-group flex-1">
+                                            <label>Estilo</label>
+                                            <select class="form-control" id="new-tattoo-style">
+                                                <option value="Fine Line">Fine Line</option>
+                                                <option value="Blackwork">Blackwork</option>
+                                                <option value="Realismo">Realismo</option>
+                                                <option value="Black & Grey">Black & Grey</option>
+                                                <option value="Acuarela">Acuarela</option>
+                                                <option value="Anime">Anime</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group flex-1">
+                                            <label>Zona del Cuerpo</label>
+                                            <select class="form-control" id="new-tattoo-zone">
+                                                <option value="brazo">Brazos</option>
+                                                <option value="manos">Manos</option>
+                                                <option value="torso">Torso</option>
+                                                <option value="piernas">Piernas</option>
+                                                <option value="cuello">Cuello</option>
+                                                <option value="cara">Cara</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-block" id="btn-add-to-portfolio"><i data-lucide="plus"></i> Subir a Portafolio</button>
+                                </div>
+                                
+                                <!-- Portfolio Preview / Existing items -->
+                                <div class="uploaded-gallery-container">
+                                    <h3>Tus Diseños Subidos</h3>
+                                    <div class="uploaded-grid" id="workspace-portfolio-grid">
+                                        <!-- Rendered dynamically by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appointments List Tab -->
+                        <div class="db-tab-panel" id="tatuador-appointments">
+                            <h2 class="db-title">Gestión de Citas y Cotizaciones</h2>
+                            <p class="db-subtitle">Administra los mensajes y solicitudes que los clientes te envían a través de la plataforma</p>
+                            
+                            <div class="appointments-list" id="workspace-appointments-list">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Stats Tab -->
+                        <div class="db-tab-panel" id="tatuador-stats">
+                            <h2 class="db-title">Rendimiento de tu Perfil</h2>
+                            <p class="db-subtitle">Estadísticas y visitas en tiempo real durante los últimos 30 días</p>
+                            
+                            <div class="stats-cards-grid">
+                                <div class="stat-box">
+                                    <span class="stat-number">1.240</span>
+                                    <span class="stat-label"><i data-lucide="eye"></i> Impresiones en búsqueda</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number">340</span>
+                                    <span class="stat-label"><i data-lucide="mouse-pointer"></i> Clics en tu perfil</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number">18</span>
+                                    <span class="stat-label"><i data-lucide="message-square"></i> Mensajes/Citas recibidas</span>
+                                </div>
+                            </div>
+
+                            <div class="chart-mock">
+                                <h3>Visitas Diarias (Simulado)</h3>
+                                <div class="bar-chart-container">
+                                    <!-- Simple flexbar representation of a chart -->
+                                    <div class="bar-item" style="height: 30%;" data-val="12"><span>Lun</span></div>
+                                    <div class="bar-item" style="height: 45%;" data-val="18"><span>Mar</span></div>
+                                    <div class="bar-item" style="height: 60%;" data-val="24"><span>Mié</span></div>
+                                    <div class="bar-item" style="height: 50%;" data-val="20"><span>Jue</span></div>
+                                    <div class="bar-item" style="height: 85%;" data-val="34"><span>Vie</span></div>
+                                    <div class="bar-item" style="height: 100%;" data-val="40"><span>Sáb</span></div>
+                                    <div class="bar-item" style="height: 70%;" data-val="28"><span>Dom</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -627,7 +1222,11 @@
                         <i data-lucide="chevron-right"></i>
                     </button>
                     <button class="info-action-link" data-section="inks">
-                        marcas de tintas
+                        marcas de insumos
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button class="info-action-link" data-section="map">
+                        ubicación en mapa
                         <i data-lucide="chevron-right"></i>
                     </button>
                 </div>
@@ -636,13 +1235,13 @@
                 <div class="info-detail-content" id="info-detail-content">
                     <div class="info-sub-section active" id="sec-about">
                         <h4>Biografía</h4>
-                        <p>Studio Tatto Pipo es fundado por Pipo, artista visual y tatuador radicado en Teodoro Schmidt. Nos especializamos en la creación de piezas únicas, priorizando líneas limpias y la anatomía de cada cuerpo.</p>
+                        <p id="profile-bio-text">Studio Tatto Pipo es fundado por Pipo, artista visual y tatuador radicado en Teodoro Schmidt. Nos especializamos en la creación de piezas únicas, priorizando líneas limpias y la anatomía de cada cuerpo.</p>
                         <h4>Estudio</h4>
                         <p>Espacio higienizado bajo estrictas normas de salud, ofreciendo un ambiente cómodo y seguro.</p>
                     </div>
                     <div class="info-sub-section" id="sec-experience">
                         <h4>Experiencia Profesional</h4>
-                        <p><strong>5+ Años de trayectoria profesional</strong></p>
+                        <p><strong id="profile-exp-text">5+ Años de trayectoria profesional</strong></p>
                         <ul>
                             <li>2023 - Presente: Estudio propio en Teodoro Schmidt</li>
                             <li>2021 - 2023: Artista residente en Estudios Temuco</li>
@@ -650,19 +1249,45 @@
                         </ul>
                     </div>
                     <div class="info-sub-section" id="sec-inks">
-                        <h4>Marcas y Materiales</h4>
-                        <p>Para garantizar los mejores resultados y la salud de tu piel, solo usamos tintas veganas de calidad premium homologadas internacionalmente:</p>
-                        <ul>
+                        <h4>Marcas de Insumos</h4>
+                        <p>Para garantizar los mejores resultados y la salud de tu piel, solo usamos insumos de calidad premium homologados internacionalmente:</p>
+                        
+                        <h5>Marcas de Tintas (Veganas)</h5>
+                        <ul id="profile-inks-list">
                             <li><strong>Dynamic Ink:</strong> Negro intenso para sombras duraderas.</li>
                             <li><strong>Eternal Ink:</strong> Pigmentos de colores brillantes y estables.</li>
-                            <li><strong>Solid Ink:</strong> Tonos intermedios ideales para rellenos sólidos.</li>
+                            <li><strong>Solid Ink:</strong> Tonos de color de alta calidad.</li>
                         </ul>
+
+                        <h5>Marcas de Agujas y Cartuchos</h5>
+                        <ul id="profile-needles-list">
+                            <li><strong>Kwadron Cartridges:</strong> Agujas de acero quirúrgico súper afiladas y de alta precisión.</li>
+                            <li><strong>Cheyenne Safety Cartridges:</strong> Sistema de membrana de seguridad para máxima higiene.</li>
+                        </ul>
+                        
                         <p class="ink-safety-note"><i data-lucide="shield-check"></i> Todos los materiales de contacto son 100% descartables y esterilizados.</p>
+                    </div>
+                    <div class="info-sub-section" id="sec-map">
+                        <h4>Ubicación del Tatuador</h4>
+                        <p>Encuentra el estudio de <span id="profile-map-artist-name">Studio tatto pipo</span> en el mapa:</p>
+                        <div id="artist-profile-map" style="width: 100%; height: 220px; border-radius: var(--border-radius-sm); margin-top: 12px; z-index: 1;"></div>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
+    <!-- PAGE TRANSITION WIPE OVERLAY -->
+    <div class="page-transition-overlay">
+        <div class="transition-wipe-bar"></div>
+        <span class="logo-text-transition">TINTA <span style="color: #7A00C2;">CONECTADA</span></span>
+    </div>
+    
+    <!-- CUSTOM CURSOR -->
+    <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+    <div class="custom-cursor-ring" id="custom-cursor-ring"></div>
+    
+    <!-- App Logic -->
+    <script src="app.js"></script>
 </body>
 </html>

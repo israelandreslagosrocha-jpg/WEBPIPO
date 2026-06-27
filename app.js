@@ -3,47 +3,122 @@
  * High-fidelity Single Page Application (SPA) Interactions
  */
 
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // ==========================================================================
+
+    // 1. STATE & STATIC DATABASE CONFIGURATIONS
+
+    // ==========================================================================
+
+
     // Initialize Lucide Icons
     lucide.createIcons();
 
     // App state
     const state = {
-        currentView: 'home-view',
+        currentView: 'landing-view', // Starts on the exclusive landing page!
         favorites: new Set(),
         activeFilters: {
-            location: 'all',
+            userCoords: null,
             styles: new Set(),
-            experience: 'all',
-            price: 'all',
             availability: new Set(),
             category: 'Todos',
-            distance: 105
+            distance: 150,
+            onlyFavorites: false
         },
         carouselIndex: 1, // Start at active image
-        // Portfolio pictures mapping for Studio Tatto Pipo
-        portfolio: {
-            tatuajes: [
-                { src: 'assets/tattoo_flower.png', title: 'Diseño Botánico Fine Line' },
-                { src: 'assets/tattoo_butterfly.png', title: 'Composición de Mariposas' },
-                { src: 'assets/tattoo_alien.png', title: 'Ilustración Alien Sketch' },
-                { src: 'assets/tattoo_mandala.png', title: 'Geométrico Mandala' }
-            ],
-            brazo: [
-                { src: 'assets/tattoo_flower.png', title: 'Diseño Botánico Fine Line' },
-                { src: 'assets/tattoo_butterfly.png', title: 'Composición de Mariposas' }
-            ],
-            manos: [
-                { src: 'assets/tattoo_mandala.png', title: 'Geométrico Mandala' }
-            ],
-            torso: [
-                { src: 'assets/tattoo_lion.png', title: 'León Realista' }
-            ],
-            piernas: [
-                { src: 'assets/tattoo_anime.png', title: 'Anime Goku Color' }
-            ]
+        
+        // Dynamic filters for artist profile portfolio
+        activeProfileZone: 'all-zones',
+        activeProfileStyle: 'all-styles',
+
+        // Body zone and style classifications for artist portfolio
+        portfolioItems: [
+            { src: 'assets/tattoo_flower.png', title: 'Diseño Botánico Hojas', style: 'Fine Line', zone: 'brazo' },
+            { src: 'assets/tattoo_butterfly.png', title: 'Composición de Mariposas', style: 'Fine Line', zone: 'brazo' },
+            { src: 'assets/tattoo_alien.png', title: 'Ilustración Alien Sketch', style: 'Blackwork', zone: 'piernas' },
+            { src: 'assets/tattoo_mandala.png', title: 'Geométrico Mandala', style: 'Black & Grey', zone: 'manos' },
+            { src: 'assets/tattoo_lion.png', title: 'León Realista', style: 'Realismo', zone: 'torso' },
+            { src: 'assets/tattoo_anime.png', title: 'Anime Goku Color', style: 'Acuarela', zone: 'piernas' }
+        ],
+
+        // Admin dynamic state
+        suspendedArtists: new Set(),
+        artistsData: [
+            { id: 'pipo', name: 'Studio tatto pipo', location: 'Teodoro Schmidt', plan: 'Premium', status: 'Verificado' },
+            { id: 'lara', name: 'Ink Lara', location: 'Padre Las Casas', plan: 'Premium', status: 'Pendiente' },
+            { id: 'kame', name: 'Kame Tattoo', location: 'Temuco', plan: 'Básico', status: 'Verificado' },
+            { id: 'sombra', name: 'Sombra Negra', location: 'Villarrica', plan: 'Premium', status: 'Verificado' }
+        ],
+
+        // Tatuador dashboard dynamic state
+        selectedSubscriptionPlan: null,
+        isTatuadorSubscribed: false,
+        tatuadorProfile: {
+            name: 'Studio tatto pipo',
+            location: 'Teodoro Schmidt',
+            experience: 5,
+            price: 'Intermedio',
+            bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.',
+            inks: ['Dynamic Ink', 'Eternal Ink', 'Solid Ink'],
+            needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges']
+        },
+        tatuadorAppointments: [
+            { id: 1, clientName: 'Carolina Soto', email: 'caro.soto@gmail.com', phone: '+56 9 8877 6655', style: 'Fine Line', date: '2026-06-25', message: 'Hola, me gustaría cotizar una flor fina de unos 10cm en el antebrazo. Quedo atenta, gracias!', status: 'pending' },
+            { id: 2, clientName: 'Andrés Morales', email: 'andres.m@yahoo.com', phone: '+56 9 5544 3322', style: 'Blackwork', date: '2026-06-28', message: 'Estimado, busco turno para un diseño geométrico de mandala en la muñeca. Saludos.', status: 'approved' }
+        ]
+    };
+
+    
+
+    // Artist details database for the Quick Ficha ( Araucanía region )
+    const artistsDetails = {
+        'pipo': {
+            name: 'Studio tatto pipo',
+            location: 'Teodoro Schmidt',
+            bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la Araucanía.',
+            instagram: 'https://instagram.com/studiotattopipo',
+            avatar: 'assets/logo_pipo.png',
+            coords: [-39.2045, -73.0538]
+        },
+        'lara': {
+            name: 'Ink Lara',
+            location: 'Padre Las Casas',
+            bio: 'Especialista en realismo en sombras y retratos hiperrealistas. Amplia experiencia en coberturas (cover-up) complejas y piezas de gran formato.',
+            instagram: 'https://instagram.com/inklara',
+            avatar: 'assets/logo_pipo.png',
+            avatarFilter: 'hue-rotate(90deg)',
+            coords: [-38.7500, -72.6300]
+        },
+        'kame': {
+            name: 'Kame Tattoo',
+            location: 'Temuco',
+            bio: 'Ilustradora y tatuadora dedicada al estilo anime, acuarela y full color vibrante. Diseños personalizados inspirados en cultura pop y videojuegos.',
+            instagram: 'https://instagram.com/kametattoo',
+            avatar: 'assets/logo_pipo.png',
+            avatarFilter: 'hue-rotate(180deg)',
+            coords: [-38.7200, -72.5800]
+        },
+        'sombra': {
+            name: 'Sombra Negra',
+            location: 'Villarrica',
+            bio: 'Estudio enfocado en el blackwork extremo, puntillismo y geometría sagrada. Diseños oscuros y composiciones fluidas adaptadas a la anatomía corporal.',
+            instagram: 'https://instagram.com/sombranegratattoo',
+            avatar: 'assets/logo_pipo.png',
+            avatarFilter: 'hue-rotate(270deg)',
+            coords: [-39.2783, -72.2272]
         }
     };
+
+    
+
+    // ==========================================================================
+
+    // 2. DOM ELEMENTS CACHE
+
+    // ==========================================================================
 
     // DOM ELEMENTS
     const viewPanels = document.querySelectorAll('.view-panel');
@@ -62,22 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseFilterArtists = document.getElementById('btn-close-filter-artists');
     const btnCloseArtistInfo = document.getElementById('btn-close-artist-info');
     const btnApplyArtistFilters = document.getElementById('btn-apply-artist-filters');
-    const triggerInfoDrawer = document.getElementById('trigger-info-drawer');
-    const inputDistance = document.getElementById('input-distance');
-    const valDistance = document.getElementById('val-distance');
-    
-    // Sidebar Filters
-    const sidebarFilters = document.getElementById('sidebar-filters');
-    const btnMenuToggle = document.getElementById('btn-menu-toggle');
-    const btnCloseSidebar = document.getElementById('btn-close-sidebar');
-    const filterLocation = document.getElementById('filter-location');
-    const btnStyles = document.querySelectorAll('.btn-style:not(.btn-more-styles)');
-    const btnExperiences = document.querySelectorAll('.btn-experience');
-    const btnPrices = document.querySelectorAll('.btn-price');
-    const checkAvailWeek = document.getElementById('avail-week');
-    const checkAvailMonth = document.getElementById('avail-month');
-    const btnApplyFilters = document.getElementById('btn-apply-filters');
-    const btnClearFilters = document.getElementById('btn-clear-filters');
+     const triggerInfoDrawer = document.getElementById('trigger-info-drawer');
+     const inputDistance = document.getElementById('input-distance');
+     const valDistance = document.getElementById('val-distance');
+     const btnRequestLocation = document.getElementById('btn-request-location');
+     const locationStatus = document.getElementById('location-status');
+     
+     // Sidebar Filters
+     const sidebarFilters = document.getElementById('sidebar-filters');
+     const btnMenuToggle = document.getElementById('btn-menu-toggle');
+     const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+     const btnStyles = document.querySelectorAll('.btn-style');
+     const checkAvailWeek = document.getElementById('avail-week');
+     const checkAvailMonth = document.getElementById('avail-month');
+     const btnApplyFilters = document.getElementById('btn-apply-filters');
+     const btnClearFilters = document.getElementById('btn-clear-filters');
     
     // Categories Carousel
     const btnCategories = document.querySelectorAll('.btn-category');
@@ -104,9 +178,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 1. VIEW NAVIGATION (SPA SWITCHES)
     // ==========================================================================
+
+    
+
+    // ==========================================================================
+
+    // 3. SPA ROUTING & NAVIGATION SWITCHES
+
+    // ==========================================================================
+
+    let artistProfileMapInstance = null;
+    let resumeLandingParticles = () => {};
+
     function switchView(targetViewId) {
+        const overlay = document.querySelector('.page-transition-overlay');
+        
+        if (overlay) {
+            overlay.classList.add('animating');
+            
+            // Swap view content at the transition midpoint (350ms)
+            setTimeout(() => {
+                executeSwitchView(targetViewId);
+            }, 350);
+            
+            // Fade out overlay after transition completes (750ms)
+            setTimeout(() => {
+                overlay.classList.remove('animating');
+            }, 750);
+        } else {
+            // Fallback if overlay element is not found
+            executeSwitchView(targetViewId);
+        }
+    }
+
+    function executeSwitchView(targetViewId) {
         state.currentView = targetViewId;
         
+        const appContainer = document.getElementById('app-container');
+        if (targetViewId === 'landing-view') {
+            appContainer.classList.add('landing-active');
+            resumeLandingParticles();
+        } else {
+            appContainer.classList.remove('landing-active');
+        }
+
         // Hide all views with class transitions
         viewPanels.forEach(panel => {
             panel.classList.remove('active');
@@ -128,17 +243,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
+        // Sync yellow sidebar active state
+        document.querySelectorAll('.floating-sidebar-menu .sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        if (targetViewId === 'home-view') {
+            const homeItem = document.getElementById('sidebar-btn-home');
+            if (homeItem) homeItem.classList.add('active');
+        } else if (targetViewId === 'sabias-que-view') {
+            const triviaItem = document.getElementById('sidebar-btn-sabias-que-side');
+            if (triviaItem) triviaItem.classList.add('active');
+        } else if (targetViewId === 'history-view') {
+            const historyItem = document.getElementById('sidebar-btn-historia-side');
+            if (historyItem) historyItem.classList.add('active');
+        }
+        
         // If switching to home view, refresh map rendering
         if (targetViewId === 'home-view' && mapInstance) {
             setTimeout(() => {
                 mapInstance.invalidateSize();
-            }, 400);
+            }, 100);
         }
         
         // If switching to artist view, render default tab
         if (targetViewId === 'artist-view') {
-            renderGalleryTab('tatuajes');
+            state.activeProfileZone = 'all-zones';
+            state.activeProfileStyle = 'all-styles';
+            
+            document.querySelectorAll('.body-zones-list .tab-link').forEach(btn => {
+                if (btn.getAttribute('data-tab') === 'all-zones') btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            document.querySelectorAll('.style-filters-list .style-tab-link').forEach(btn => {
+                if (btn.getAttribute('data-style') === 'all-styles') btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            renderFilteredProfileGallery();
             setupCarousel3D();
+            
+            initArtistProfileMap();
+        }
+
+        // Refresh admin dashboard
+        if (targetViewId === 'dashboard-admin-view') {
+            renderAdminArtistsTable();
+            refreshAdminStats();
+        }
+
+        // Refresh tatuador portal
+        if (targetViewId === 'dashboard-tatuador-view') {
+            refreshTatuadorWorkspace();
         }
     }
 
@@ -151,184 +306,411 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    btnLogoHome.addEventListener('click', () => switchView('home-view'));
-    btnBackHome.addEventListener('click', () => switchView('home-view'));
-    btnArtistsNav.addEventListener('click', (e) => {
-        e.preventDefault();
-        switchView('home-view');
-        // Scroll to artist grid
-        document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-    });
-    btnViewAllArtists.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Clear style filters to show all
-        clearAllFilters();
-        document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-    });
+    if (btnLogoHome) {
+        btnLogoHome.addEventListener('click', () => switchView('home-view'));
+    }
+    if (btnBackHome) {
+        btnBackHome.addEventListener('click', () => switchView('home-view'));
+    }
+    
 
-    // Handle artist card click to navigate to Pipo's profile
-    artistCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            // Check if user clicked the favorite heart button
-            if (e.target.closest('.btn-favorite')) {
-                return;
-            }
-            
-            const artistId = card.getAttribute('data-id');
-            // For this premium prototype, all cards can navigate to Pipo's detail profile
-            // to show off the custom carousel 3D, tabs, info panel, etc.
-            switchView('artist-view');
-            
-            // Customize details based on card clicked (e.g. title, avatar)
-            if (artistId !== 'pipo') {
-                const name = card.querySelector('.artist-name').textContent;
-                const loc = card.querySelector('.artist-loc').textContent.trim();
-                const avatarSrc = card.querySelector('.artist-avatar-circle img').src;
-                
-                document.querySelector('.profile-name').textContent = name;
-                document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> ${loc}`;
-                document.querySelector('.profile-avatar-img').src = avatarSrc;
-                document.querySelector('.info-title').textContent = name;
-                document.querySelector('.info-avatar-circle img').src = avatarSrc;
-                lucide.createIcons();
+    
+
+    // ==========================================================================
+
+    // 4. MAIN LANDING PAGE CTAs & GLOBAL NAV LINK REGISTRIES
+
+    // ==========================================================================
+
+    // Landing view CTAs
+    const btnLandingEnter = document.getElementById('btn-landing-enter-magnetic');
+    if (btnLandingEnter) {
+        btnLandingEnter.addEventListener('click', () => switchView('home-view'));
+    }
+    const btnLandingArtist = document.getElementById('btn-landing-artist');
+    if (btnLandingArtist) {
+        btnLandingArtist.addEventListener('click', () => switchView('dashboard-tatuador-view'));
+    }
+    const btnLandingAdmin = document.getElementById('btn-landing-admin');
+    if (btnLandingAdmin) {
+        btnLandingAdmin.addEventListener('click', () => switchView('dashboard-admin-view'));
+    }
+
+    // Header buttons (Soy tatuador and Admin)
+    const btnSoyTatuador = document.getElementById('btn-soy-tatuador');
+    if (btnSoyTatuador) {
+        btnSoyTatuador.addEventListener('click', () => switchView('dashboard-tatuador-view'));
+    }
+    const btnAdminPanel = document.getElementById('btn-admin-panel');
+    if (btnAdminPanel) {
+        btnAdminPanel.addEventListener('click', () => switchView('dashboard-admin-view'));
+    }
+
+
+    // Custom Navigation Event Listeners
+    const navBtnArtistas = document.getElementById('nav-btn-artistas');
+    if (navBtnArtistas) {
+        navBtnArtistas.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('home-view');
+            setTimeout(() => {
+                const grid = document.getElementById('artist-grid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+        });
+    }
+
+    const navBtnDestacados = document.getElementById('nav-btn-destacados');
+    if (navBtnDestacados) {
+        navBtnDestacados.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('home-view');
+            setTimeout(() => {
+                const grid = document.getElementById('artist-grid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+        });
+    }
+
+    const navBtnSabiasQue = document.getElementById('nav-btn-sabias-que');
+    if (navBtnSabiasQue) {
+        navBtnSabiasQue.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('sabias-que-view');
+        });
+    }
+
+    const navBtnHistoria = document.getElementById('nav-btn-historia');
+    if (navBtnHistoria) {
+        navBtnHistoria.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('history-view');
+            const worldTabBtn = document.querySelector('[data-history-tab="history-world"]');
+            if (worldTabBtn) worldTabBtn.click();
+        });
+    }
+
+    const btnViewAllArtistsBottom = document.getElementById('btn-view-all-artists-bottom');
+    if (btnViewAllArtistsBottom) {
+        btnViewAllArtistsBottom.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearAllFilters();
+            showToast('Mostrando todos los artistas');
+        });
+    }
+
+    // Yellow Sidebar Click Handlers
+    const sidebarLogo = document.getElementById('sidebar-btn-logo');
+    if (sidebarLogo) {
+        sidebarLogo.addEventListener('click', () => switchView('landing-view'));
+    }
+
+    const sidebarHome = document.getElementById('sidebar-btn-home');
+    if (sidebarHome) {
+        sidebarHome.addEventListener('click', () => switchView('home-view'));
+    }
+
+    const sidebarSabiasQue = document.getElementById('sidebar-btn-sabias-que-side');
+    if (sidebarSabiasQue) {
+        sidebarSabiasQue.addEventListener('click', () => switchView('sabias-que-view'));
+    }
+
+    const sidebarHistoria = document.getElementById('sidebar-btn-historia-side');
+    if (sidebarHistoria) {
+        sidebarHistoria.addEventListener('click', () => {
+            switchView('history-view');
+            const worldTabBtn = document.querySelector('[data-history-tab="history-world"]');
+            if (worldTabBtn) worldTabBtn.click();
+        });
+    }
+
+    const sidebarGuardados = document.getElementById('sidebar-btn-guardados');
+    if (sidebarGuardados) {
+        sidebarGuardados.addEventListener('click', () => {
+            state.activeFilters.onlyFavorites = !state.activeFilters.onlyFavorites;
+            if (state.activeFilters.onlyFavorites) {
+                sidebarGuardados.classList.add('active');
+                showToast('Filtrando por favoritos');
             } else {
-                // Restore default Pipo details
-                document.querySelector('.profile-name').textContent = "Studio tatto pipo";
-                document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> Teodoro Schmidt`;
-                document.querySelector('.profile-avatar-img').src = "assets/logo_pipo.png";
-                document.querySelector('.info-title').textContent = "Studio tatto pipo";
-                document.querySelector('.info-avatar-circle img').src = "assets/logo_pipo.png";
-                lucide.createIcons();
+                sidebarGuardados.classList.remove('active');
+                showToast('Mostrando todos los artistas');
             }
+            applyFilters();
+        });
+    }
+
+    // Trivia balloon "Ver más" link click
+    const btnTriviaVerMas = document.getElementById('btn-home-trivia-ver-mas');
+    if (btnTriviaVerMas) {
+        btnTriviaVerMas.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('sabias-que-view');
+        });
+    }
+
+    // Editorial back button click
+    const btnEditorialBackHome = document.getElementById('btn-editorial-back-home');
+    if (btnEditorialBackHome) {
+        btnEditorialBackHome.addEventListener('click', () => {
+            switchView('home-view');
+        });
+    }
+
+
+    
+
+    // ==========================================================================
+
+    // 5. SEARCH & INTERACTIVE FILTERS MODULE
+
+    // ==========================================================================
+
+    // Style pills row handlers
+    const stylePills = document.querySelectorAll('.style-pill');
+    stylePills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            stylePills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            
+            const selectedStyle = pill.getAttribute('data-style');
+            state.activeFilters.category = selectedStyle;
+            applyFilters();
         });
     });
 
-    // Soy tatuador alert
-    document.getElementById('btn-soy-tatuador').addEventListener('click', () => {
-        showToast('¡Pronto! Formulario de registro para artistas se abrirá en la versión final.');
-    });
+    // Location and Radius Select Dropdowns
+    const locationSelect = document.getElementById('filter-location-select');
+    const radiusSelect = document.getElementById('filter-radius-select');
+
+    if (locationSelect) {
+        locationSelect.addEventListener('change', () => {
+            const locVal = locationSelect.value;
+            const cityCoords = {
+                'Todos': [-38.7396, -72.5984],
+                'Temuco': [-38.7396, -72.5984],
+                'Padre Las Casas': [-38.7500, -72.6300],
+                'Villarrica': [-39.2783, -72.2272],
+                'Teodoro Schmidt': [-39.2045, -73.0538]
+            };
+            state.activeFilters.userCoords = cityCoords[locVal] || cityCoords['Todos'];
+            state.activeFilters.locationName = locVal;
+            applyFilters();
+        });
+    }
+
+    if (radiusSelect) {
+        radiusSelect.addEventListener('change', () => {
+            state.activeFilters.distance = parseFloat(radiusSelect.value);
+            applyFilters();
+        });
+    }
+
 
     // ==========================================================================
     // 2. INTERACTIVE SIDEBAR FILTERS (HOME VIEW)
     // ==========================================================================
     // Toggle Mobile Sidebar Drawer
-    btnMenuToggle.addEventListener('click', () => {
-        sidebarFilters.classList.add('mobile-open');
-    });
-    btnCloseSidebar.addEventListener('click', () => {
-        sidebarFilters.classList.remove('mobile-open');
-    });
+    if (btnMenuToggle && sidebarFilters) {
+        btnMenuToggle.addEventListener('click', () => {
+            sidebarFilters.classList.add('mobile-open');
+        });
+    }
+    if (btnCloseSidebar && sidebarFilters) {
+        btnCloseSidebar.addEventListener('click', () => {
+            sidebarFilters.classList.remove('mobile-open');
+        });
+    }
 
-    // Filter Logic: Location dropdown
-    filterLocation.addEventListener('change', (e) => {
-        state.activeFilters.location = e.target.value;
-    });
+    // Geolocation Request
+    if (btnRequestLocation) {
+        btnRequestLocation.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                locationStatus.textContent = "Solicitando permiso...";
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        state.activeFilters.userCoords = [lat, lng];
+                        
+                        locationStatus.innerHTML = `<span style="color: #48bb78; font-weight: 500;"><i data-lucide="check-circle" style="width:12px;height:12px;display:inline;"></i> Ubicación compartida</span>`;
+                        lucide.createIcons();
+                        
+                        // Add marker for user on interactive map
+                        if (mapInstance) {
+                            if (window.userLocationMarker) {
+                                window.userLocationMarker.setLatLng([lat, lng]);
+                            } else {
+                                const userIcon = L.divIcon({
+                                    html: '<div style="background-color: #ff4a5a; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255, 74, 90, 0.6);"></div>',
+                                    className: 'user-map-pin',
+                                    iconSize: [14, 14],
+                                    iconAnchor: [7, 7]
+                                });
+                                window.userLocationMarker = L.marker([lat, lng], { icon: userIcon }).addTo(mapInstance);
+                                window.userLocationMarker.bindPopup("<strong>Tu ubicación actual</strong>");
+                            }
+                            mapInstance.setView([lat, lng], 10);
+                        }
+                        
+                        showToast("Permiso de ubicación concedido");
+                        applyFilters();
+                    },
+                    (error) => {
+                        console.error(error);
+                        locationStatus.innerHTML = `<span style="color: #f56565;">Permiso denegado (usando centro regional Temuco)</span>`;
+                        showToast("Permiso denegado o error de ubicación");
+                    }
+                );
+            } else {
+                locationStatus.textContent = "Geolocalización no soportada por el navegador";
+            }
+        });
+    }
+
+    // Distance Slider text update and state change
+    if (inputDistance) {
+        inputDistance.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            if (valDistance) valDistance.textContent = `${val} km`;
+            state.activeFilters.distance = val;
+            applyFilters();
+        });
+    }
 
     // Style button clicks
-    btnStyles.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const style = btn.getAttribute('data-style');
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                state.activeFilters.styles.delete(style);
-            } else {
-                btn.classList.add('active');
-                state.activeFilters.styles.add(style);
-            }
+    if (btnStyles) {
+        btnStyles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const style = btn.getAttribute('data-style');
+                if (btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                    state.activeFilters.styles.delete(style);
+                } else {
+                    btn.classList.add('active');
+                    state.activeFilters.styles.add(style);
+                }
+            });
         });
-    });
-
-    // Experience button clicks (Single choice)
-    btnExperiences.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const exp = btn.getAttribute('data-exp');
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                state.activeFilters.experience = 'all';
-            } else {
-                btn.classList.remove('active');
-                btnExperiences.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.activeFilters.experience = exp;
-            }
-        });
-    });
-
-    // Price button clicks (Single choice)
-    btnPrices.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const price = btn.getAttribute('data-price');
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                state.activeFilters.price = 'all';
-            } else {
-                btnPrices.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.activeFilters.price = price;
-            }
-        });
-    });
+    }
 
     // Availability Checkboxes
-    checkAvailWeek.addEventListener('change', (e) => {
-        if (e.target.checked) state.activeFilters.availability.add('week');
-        else state.activeFilters.availability.delete('week');
-    });
-    checkAvailMonth.addEventListener('change', (e) => {
-        if (e.target.checked) state.activeFilters.availability.add('month');
-        else state.activeFilters.availability.delete('month');
-    });
+    if (checkAvailWeek) {
+        checkAvailWeek.addEventListener('change', (e) => {
+            if (e.target.checked) state.activeFilters.availability.add('week');
+            else state.activeFilters.availability.delete('week');
+        });
+    }
+    if (checkAvailMonth) {
+        checkAvailMonth.addEventListener('change', (e) => {
+            if (e.target.checked) state.activeFilters.availability.add('month');
+            else state.activeFilters.availability.delete('month');
+        });
+    }
 
     // Apply button
-    btnApplyFilters.addEventListener('click', () => {
-        applyFilters();
-        sidebarFilters.classList.remove('mobile-open'); // Close drawer on mobile
-        showToast('Filtros aplicados con éxito');
-    });
+    if (btnApplyFilters) {
+        btnApplyFilters.addEventListener('click', () => {
+            applyFilters();
+            if (sidebarFilters) sidebarFilters.classList.remove('mobile-open'); // Close drawer on mobile
+            showToast('Filtros aplicados con éxito');
+        });
+    }
 
     // Clear filters
-    btnClearFilters.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearAllFilters();
-        showToast('Filtros restablecidos');
-    });
+    if (btnClearFilters) {
+        btnClearFilters.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearAllFilters();
+            showToast('Filtros restablecidos');
+        });
+    }
+
+    // Artist GPS Coordinates (La Araucanía region)
+    const artistCoordinates = {
+        'pipo': [-39.2045, -73.0538], // Teodoro Schmidt center
+        'lara': [-38.7500, -72.6300], // Padre Las Casas
+        'kame': [-38.7200, -72.5800], // Temuco
+        'sombra': [-39.2783, -72.2272]  // Villarrica
+    };
+
+    // Haversine geodesic distance helper (in km)
+    function getHaversineDistance(coords1, coords2) {
+        const lat1 = coords1[0];
+        const lon1 = coords1[1];
+        const lat2 = coords2[0];
+        const lon2 = coords2[1];
+        
+        const R = 6371; // Earth radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
 
     function clearAllFilters() {
-        filterLocation.value = 'all';
-        state.activeFilters.location = 'all';
+        state.activeFilters.userCoords = null;
+        state.activeFilters.distance = 150;
+        state.activeFilters.locationName = 'Todos';
+        state.activeFilters.onlyFavorites = false;
+        state.activeFilters.category = 'Todos';
         
-        btnStyles.forEach(b => b.classList.remove('active'));
+        if (inputDistance) inputDistance.value = 100;
+        if (valDistance) valDistance.textContent = '100 km';
+        if (locationStatus) locationStatus.innerHTML = 'Ubicación no autorizada (usando centro regional Temuco)';
+        
+        const locationSelect = document.getElementById('filter-location-select');
+        if (locationSelect) locationSelect.value = 'Todos';
+
+        const radiusSelect = document.getElementById('filter-radius-select');
+        if (radiusSelect) radiusSelect.value = '150';
+
+        const stylePills = document.querySelectorAll('.style-pill');
+        stylePills.forEach(pill => {
+            if (pill.getAttribute('data-style') === 'Todos') {
+                pill.classList.add('active');
+            } else {
+                pill.classList.remove('active');
+            }
+        });
+
+        const sidebarGuardados = document.getElementById('sidebar-btn-guardados');
+        if (sidebarGuardados) sidebarGuardados.classList.remove('active');
+
+        // Remove user marker from map
+        if (window.userLocationMarker && mapInstance) {
+            mapInstance.removeLayer(window.userLocationMarker);
+            window.userLocationMarker = null;
+        }
+        
+        if (btnStyles) btnStyles.forEach(b => b.classList.remove('active'));
         state.activeFilters.styles.clear();
         
-        btnExperiences.forEach(b => b.classList.remove('active'));
-        state.activeFilters.experience = 'all';
-        
-        btnPrices.forEach(b => b.classList.remove('active'));
-        state.activeFilters.price = 'all';
-        
-        checkAvailWeek.checked = false;
-        checkAvailMonth.checked = false;
-        state.activeFilters.availability.clear();
+        if (checkAvailWeek) checkAvailWeek.checked = false;
+        if (checkAvailMonth) checkAvailMonth.checked = false;
+        if (state.activeFilters.availability) state.activeFilters.availability.clear();
 
-        state.activeFilters.category = 'Todos';
-        btnCategories.forEach(b => {
-            if (b.getAttribute('data-category') === 'Todos') b.classList.add('active');
-            else b.classList.remove('active');
-        });
+        if (btnCategories) {
+            btnCategories.forEach(b => {
+                if (b.getAttribute('data-category') === 'Todos') b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        }
         
         if (searchInput) searchInput.value = '';
         
         applyFilters();
     }
 
-    // Apply Filter Logic to Card DOM elements
     function applyFilters() {
         let visibleCount = 0;
         
         artistCards.forEach(card => {
             const cardLocation = card.getAttribute('data-location');
-            const cardPrice = card.getAttribute('data-price');
-            const cardExp = parseInt(card.getAttribute('data-exp'));
             
             // Read array-like style list string
             const rawStyles = card.getAttribute('data-styles') || '';
@@ -336,12 +718,19 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let showCard = true;
 
-            // 1. Location filter
-            if (state.activeFilters.location !== 'all' && state.activeFilters.location !== cardLocation) {
-                // Check if card is 'Studio Tatto Pipo' under Temuco but cardDetailed lists Teodoro Schmidt
-                if (!(state.activeFilters.location === 'Temuco' && cardLocation === 'Teodoro Schmidt')) {
-                    showCard = false;
-                }
+            // 0. Suspended artist check
+            const cardId = card.getAttribute('data-id');
+            if (state.suspendedArtists.has(cardId)) {
+                showCard = false;
+            }
+
+            // 1. Distance & location permission filter (Facebook Marketplace style radius)
+            const artistCoords = artistCoordinates[cardId] || [-38.7396, -72.5984];
+            const center = state.activeFilters.userCoords || [-38.7396, -72.5984]; // Default to Temuco regional center
+            const dist = getHaversineDistance(center, artistCoords);
+            
+            if (dist > state.activeFilters.distance) {
+                showCard = false;
             }
 
             // 2. Style filter
@@ -360,27 +749,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 4. Experience filter
-            if (state.activeFilters.experience !== 'all') {
-                if (state.activeFilters.experience === '0-2' && cardExp > 2) showCard = false;
-                if (state.activeFilters.experience === '3-5' && (cardExp < 3 || cardExp > 5)) showCard = false;
-                if (state.activeFilters.experience === '5-10' && (cardExp < 5 || cardExp > 10)) showCard = false;
-                if (state.activeFilters.experience === '10+' && cardExp < 10) showCard = false;
-            }
-
-            // 5. Price filter
-            if (state.activeFilters.price !== 'all' && state.activeFilters.price !== cardPrice) {
-                showCard = false;
-            }
-
-            // 6. Search input text
-            const searchVal = searchInput.value.toLowerCase().trim();
-            if (searchVal !== '') {
-                const cardName = card.querySelector('.artist-name').textContent.toLowerCase();
-                const matchedStyle = cardStyles.some(s => s.toLowerCase().includes(searchVal));
-                const matchedLoc = cardLocation.toLowerCase().includes(searchVal);
-                if (!cardName.includes(searchVal) && !matchedStyle && !matchedLoc) {
-                    showCard = false;
+            // 4. Search input text (safeguarded)
+            if (searchInput) {
+                const searchVal = searchInput.value.toLowerCase().trim();
+                if (searchVal !== '') {
+                    const cardName = card.querySelector('.artist-name').textContent.toLowerCase();
+                    const matchedStyle = cardStyles.some(s => s.toLowerCase().includes(searchVal));
+                    const matchedLoc = cardLocation.toLowerCase().includes(searchVal);
+                    if (!cardName.includes(searchVal) && !matchedStyle && !matchedLoc) {
+                        showCard = false;
+                    }
                 }
             }
 
@@ -410,6 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     // ==========================================================================
     // 3. CATEGORIES CAROUSEL TAB CLICKS
     // ==========================================================================
@@ -426,297 +805,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.getElementById('btn-more-categories').addEventListener('click', () => {
-        toggleDrawer(overlayFilterArtists, true);
-    });
+    const btnMoreCategories = document.getElementById('btn-more-categories');
+    if (btnMoreCategories) {
+        btnMoreCategories.addEventListener('click', () => {
+            toggleDrawer(overlayFilterArtists, true);
+        });
+    }
+
 
     // ==========================================================================
     // 4. SEARCH TRIGGER
     // ==========================================================================
-    btnSearchTrigger.addEventListener('click', () => {
-        applyFilters();
-        document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+    if (btnSearchTrigger) {
+        btnSearchTrigger.addEventListener('click', () => {
             applyFilters();
-            document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-
-    // ==========================================================================
-    // 5. DRAWERS & MODALS INTERACTIVITY
-    // ==========================================================================
-    function toggleDrawer(drawerElement, show) {
-        if (show) {
-            drawerElement.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Lock scroll
-        } else {
-            drawerElement.classList.remove('active');
-            document.body.style.overflow = ''; // Unlock scroll
-        }
+            const featSec = document.querySelector('.featured-section');
+            if (featSec) featSec.scrollIntoView({ behavior: 'smooth' });
+        });
     }
 
-    // Open/Close Handlers
-    btnGlobalFilter.addEventListener('click', () => toggleDrawer(overlayFilterArtists, true));
-    btnProfileFilters.addEventListener('click', () => toggleDrawer(overlayFilterArtists, true));
-    btnCloseFilterArtists.addEventListener('click', () => toggleDrawer(overlayFilterArtists, false));
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                applyFilters();
+                const featSec = document.querySelector('.featured-section');
+                if (featSec) featSec.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+
     
-    // Close on overlay backdrop clicks
-    overlayFilterArtists.addEventListener('click', (e) => {
-        if (e.target === overlayFilterArtists) toggleDrawer(overlayFilterArtists, false);
-    });
-    overlayArtistInfo.addEventListener('click', (e) => {
-        if (e.target === overlayArtistInfo) toggleDrawer(overlayArtistInfo, false);
-    });
-
-    // Distance Slider text update
-    inputDistance.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value);
-        if (val > 100) {
-            valDistance.textContent = 'Sin límite';
-            state.activeFilters.distance = 105;
-        } else {
-            valDistance.textContent = `${val} km`;
-            state.activeFilters.distance = val;
-        }
-    });
-
-    // Apply button inside Filtrar Artistas Drawer
-    btnApplyArtistFilters.addEventListener('click', () => {
-        // Collect checkbox states
-        const activeToggles = {
-            puntillismo: document.getElementById('toggle-puntillismo').checked,
-            blackwork: document.getElementById('toggle-blackwork').checked,
-            realismo: document.getElementById('toggle-realismo').checked,
-            blackGrey: document.getElementById('toggle-black-grey').checked,
-            acuarela: document.getElementById('toggle-acuarela').checked,
-            fineline: document.getElementById('toggle-fineline').checked
-        };
-
-        // Sync sidebar active styles
-        state.activeFilters.styles.clear();
-        btnStyles.forEach(btn => btn.classList.remove('active'));
-
-        if (activeToggles.blackwork) {
-            state.activeFilters.styles.add('Blackwork');
-            document.querySelector('.btn-style[data-style="Blackwork"]').classList.add('active');
-        }
-        if (activeToggles.realismo) {
-            state.activeFilters.styles.add('Realismo');
-            document.querySelector('.btn-style[data-style="Realismo"]').classList.add('active');
-        }
-        if (activeToggles.fineline) {
-            state.activeFilters.styles.add('Fine Line');
-            document.querySelector('.btn-style[data-style="Fine Line"]').classList.add('active');
-        }
-        if (activeToggles.acuarela) {
-            state.activeFilters.styles.add('Acuarela');
-            document.querySelector('.btn-style[data-style="Acuarela"]').classList.add('active');
-        }
-
-        applyFilters();
-        toggleDrawer(overlayFilterArtists, false);
-        showToast('Filtros de artistas aplicados');
-    });
-
-    // Artist Info Drawer Tabs (Image 2)
-    triggerInfoDrawer.addEventListener('click', () => {
-        toggleDrawer(overlayArtistInfo, true);
-    });
-    btnCloseArtistInfo.addEventListener('click', () => {
-        toggleDrawer(overlayArtistInfo, false);
-    });
-
-    const infoActionLinks = document.querySelectorAll('.info-action-link');
-    const infoSubSections = document.querySelectorAll('.info-sub-section');
-
-    infoActionLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            const targetSection = link.getAttribute('data-section');
-            
-            // Toggle active states of links
-            infoActionLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            
-            // Toggle panel displays
-            infoSubSections.forEach(sec => {
-                if (sec.id === `sec-${targetSection}`) {
-                    sec.classList.add('active');
-                } else {
-                    sec.classList.remove('active');
-                }
-            });
-        });
-    });
 
     // ==========================================================================
-    // 6. PORTFOLIO CAROUSEL 3D (ARTIST VIEW)
-    // ==========================================================================
-    function setupCarousel3D() {
-        updateCarouselDOM();
-    }
 
-    function updateCarouselDOM() {
-        const totalItems = carouselItems.length;
-        
-        carouselItems.forEach((item, index) => {
-            item.className = 'carousel-3d-item'; // Reset class names
-            
-            if (index === state.carouselIndex) {
-                item.classList.add('active');
-            } else if (index === (state.carouselIndex - 1 + totalItems) % totalItems) {
-                item.classList.add('prev');
-            } else if (index === (state.carouselIndex + 1) % totalItems) {
-                item.classList.add('next');
-            }
-        });
-    }
-
-    btnCarouselPrev.addEventListener('click', () => {
-        const totalItems = carouselItems.length;
-        state.carouselIndex = (state.carouselIndex - 1 + totalItems) % totalItems;
-        updateCarouselDOM();
-    });
-
-    btnCarouselNext.addEventListener('click', () => {
-        const totalItems = carouselItems.length;
-        state.carouselIndex = (state.carouselIndex + 1) % totalItems;
-        updateCarouselDOM();
-    });
-
-    // Click carousel item to trigger centering
-    carouselItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            if (state.carouselIndex !== index) {
-                state.carouselIndex = index;
-                updateCarouselDOM();
-            } else {
-                // If clicked active one, trigger zoom lightbox
-                const imgUrl = item.querySelector('img').src;
-                openLightbox(imgUrl, 'Diseño Destacado');
-            }
-        });
-    });
-
-    // Drag / Swipe support for 3D Carousel
-    let startX = 0;
-    let isSwiping = false;
-    const carouselContainer = document.getElementById('carousel-3d');
-    
-    carouselContainer.addEventListener('mousedown', (e) => {
-        startX = e.pageX;
-        isSwiping = true;
-    });
-
-    carouselContainer.addEventListener('mouseup', (e) => {
-        if (!isSwiping) return;
-        isSwiping = false;
-        const diff = e.pageX - startX;
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) {
-                // Swipe right -> prev
-                btnCarouselPrev.click();
-            } else {
-                // Swipe left -> next
-                btnCarouselNext.click();
-            }
-        }
-    });
-
-    carouselContainer.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX;
-        isSwiping = true;
-    });
-
-    carouselContainer.addEventListener('touchend', (e) => {
-        if (!isSwiping) return;
-        isSwiping = false;
-        const diff = e.changedTouches[0].pageX - startX;
-        if (Math.abs(diff) > 40) {
-            if (diff > 0) {
-                btnCarouselPrev.click();
-            } else {
-                btnCarouselNext.click();
-            }
-        }
-    });
+    // 6. ARTIST EXPLORER GRID & CARDS MODULE
 
     // ==========================================================================
-    // 7. PORTFOLIO TABS AND GRID IN ARTIST PROFILE
-    // ==========================================================================
-    tabLinks.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabLinks.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+
+    // Handle artist card click to select and update Ficha card
+    artistCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-favorite')) {
+                return;
+            }
             
-            const category = tab.getAttribute('data-tab');
-            renderGalleryTab(category);
+            const artistId = card.getAttribute('data-id');
+            updateQuickFicha(artistId);
         });
     });
 
-    function renderGalleryTab(category) {
-        galleryGrid.innerHTML = ''; // Clear previous
-        const items = state.portfolio[category] || [];
-        
-        items.forEach(item => {
-            const galleryItem = document.createElement('div');
-            galleryItem.className = 'gallery-item';
-            galleryItem.innerHTML = `
-                <img src="${item.src}" alt="${item.title}">
-                <div class="gallery-item-overlay">
-                    <span><i data-lucide="zoom-in"></i> Ampliar</span>
-                </div>
-            `;
-            
-            galleryGrid.appendChild(galleryItem);
-            
-            // Add Lightbox Event
-            galleryItem.addEventListener('click', () => {
-                openLightbox(item.src, item.title);
-            });
-        });
-        
-        lucide.createIcons();
-    }
-
-    // Lightbox modal creator
-    function openLightbox(imgSrc, title) {
-        const lightbox = document.createElement('div');
-        lightbox.style.position = 'fixed';
-        lightbox.style.inset = '0';
-        lightbox.style.backgroundColor = 'rgba(0,0,0,0.85)';
-        lightbox.style.backdropFilter = 'blur(6px)';
-        lightbox.style.zIndex = '9999';
-        lightbox.style.display = 'flex';
-        lightbox.style.flexDirection = 'column';
-        lightbox.style.alignItems = 'center';
-        lightbox.style.justifyContent = 'center';
-        lightbox.style.cursor = 'zoom-out';
-        lightbox.style.opacity = '0';
-        lightbox.style.transition = 'opacity 0.3s ease';
-
-        lightbox.innerHTML = `
-            <div style="position: relative; max-width: 90%; max-height: 80%; display: flex; flex-direction: column; align-items: center;">
-                <img src="${imgSrc}" alt="${title}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--border-radius-md); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-                <p style="color: white; font-family: var(--font-stack); font-weight: 600; margin-top: 16px; font-size: 1.1rem; letter-spacing: 0.5px;">${title}</p>
-                <button style="position: absolute; top: -48px; right: 0; background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;"><i data-lucide="x"></i></button>
-            </div>
-        `;
-
-        document.body.appendChild(lightbox);
-        setTimeout(() => lightbox.style.opacity = '1', 50);
-        lucide.createIcons();
-
-        // Close on click or close button click
-        const closeLightbox = () => {
-            lightbox.style.opacity = '0';
-            setTimeout(() => lightbox.remove(), 300);
-        };
-
-        lightbox.addEventListener('click', closeLightbox);
-    }
 
     // ==========================================================================
     // 8. FAVORITES HEART TOGGLE
@@ -745,6 +883,137 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    
+
+    // ==========================================================================
+
+    // 7. QUICK FICHA MODULE & INTERACTIVE MAIN MAP
+
+    // ==========================================================================
+
+    let currentFichaArtistId = 'pipo';
+
+    // Update Quick Ficha panel (Right panel)
+    function updateQuickFicha(artistId) {
+        const details = artistsDetails[artistId];
+        if (!details) return;
+
+        currentFichaArtistId = artistId;
+
+        // Update active class on card in the grid
+        document.querySelectorAll('.artist-card').forEach(card => {
+            if (card.getAttribute('data-id') === artistId) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+
+        // Update DOM elements inside the Ficha
+        const avatarImg = document.getElementById('ficha-artist-avatar');
+        if (avatarImg) {
+            avatarImg.src = details.avatar;
+            if (details.avatarFilter) {
+                avatarImg.style.filter = details.avatarFilter;
+            } else {
+                avatarImg.style.filter = '';
+            }
+        }
+
+        const nameEl = document.getElementById('ficha-artist-name');
+        if (nameEl) nameEl.textContent = details.name;
+
+        const locEl = document.getElementById('ficha-artist-location');
+        if (locEl) locEl.innerHTML = `<i data-lucide="map-pin"></i> ${details.location}`;
+
+        const bioEl = document.getElementById('ficha-artist-bio');
+        if (bioEl) bioEl.textContent = details.bio;
+
+        const instaEl = document.getElementById('ficha-artist-instagram');
+        if (instaEl) instaEl.href = details.instagram;
+
+        // Recreate icons
+        lucide.createIcons();
+
+        // Update map focus and marker popup
+        if (mapInstance) {
+            // Re-align map rendering
+            setTimeout(() => {
+                mapInstance.invalidateSize();
+                mapInstance.setView(details.coords, 11);
+                
+                // Find and open popup for this marker
+                const item = markersGroup.find(m => m.id === artistId);
+                if (item && item.marker) {
+                    item.marker.openPopup();
+                }
+            }, 100);
+        }
+    }
+
+    // Ficha navigation controls
+    const btnFichaPrev = document.getElementById('btn-ficha-toggle-prev');
+    const btnFichaNext = document.getElementById('btn-ficha-toggle-next');
+
+    function getVisibleArtistIds() {
+        const visibleCards = Array.from(document.querySelectorAll('.artist-card'))
+            .filter(card => card.style.display !== 'none');
+        return visibleCards.map(card => card.getAttribute('data-id'));
+    }
+
+    if (btnFichaPrev) {
+        btnFichaPrev.addEventListener('click', () => {
+            const visibleIds = getVisibleArtistIds();
+            if (visibleIds.length === 0) return;
+            let index = visibleIds.indexOf(currentFichaArtistId);
+            if (index === -1) index = 0;
+            const newIndex = (index - 1 + visibleIds.length) % visibleIds.length;
+            updateQuickFicha(visibleIds[newIndex]);
+        });
+    }
+
+    if (btnFichaNext) {
+        btnFichaNext.addEventListener('click', () => {
+            const visibleIds = getVisibleArtistIds();
+            if (visibleIds.length === 0) return;
+            let index = visibleIds.indexOf(currentFichaArtistId);
+            if (index === -1) index = 0;
+            const newIndex = (index + 1) % visibleIds.length;
+            updateQuickFicha(visibleIds[newIndex]);
+        });
+    }
+
+    // Ficha View Portfolio Button (Navigates to full portfolio view)
+    const btnFichaPortfolio = document.getElementById('btn-ficha-view-portfolio');
+    if (btnFichaPortfolio) {
+        btnFichaPortfolio.addEventListener('click', () => {
+            switchView('artist-view');
+            const details = artistsDetails[currentFichaArtistId];
+            if (details) {
+                document.querySelector('.profile-name').textContent = details.name;
+                document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> ${details.location}`;
+                const profAvatar = document.querySelector('.profile-avatar-img');
+                if (profAvatar) {
+                    profAvatar.src = details.avatar;
+                    if (details.avatarFilter) profAvatar.style.filter = details.avatarFilter;
+                    else profAvatar.style.filter = '';
+                }
+                const infoTitle = document.querySelector('.info-title');
+                if (infoTitle) infoTitle.textContent = details.name;
+                
+                const infoAvatar = document.querySelector('.info-avatar-circle img');
+                if (infoAvatar) {
+                    infoAvatar.src = details.avatar;
+                    if (details.avatarFilter) infoAvatar.style.filter = details.avatarFilter;
+                    else infoAvatar.style.filter = '';
+                }
+                lucide.createIcons();
+            }
+        });
+    }
+
+
     // ==========================================================================
     // 9. LEAFLET.JS MAP INTERACTION
     // ==========================================================================
@@ -765,7 +1034,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Pins locations details
         const locations = [
-            { id: 'pipo', name: 'Studio Tatto Pipo', coords: [-38.7396, -72.5984], popup: '<strong>Studio tatto pipo</strong><br>Temuco (Teodoro Schmidt)' },
+            { id: 'pipo', name: 'Studio Tatto Pipo', coords: [-39.2045, -73.0538], popup: '<strong>Studio tatto pipo</strong><br>Teodoro Schmidt' },
             { id: 'lara', name: 'Ink Lara', coords: [-38.7500, -72.6300], popup: '<strong>Ink Lara</strong><br>Padre Las Casas' },
             { id: 'kame', name: 'Kame Tattoo', coords: [-38.7200, -72.5800], popup: '<strong>Kame Tattoo</strong><br>Temuco' },
             { id: 'sombra', name: 'Sombra Negra', coords: [-39.2783, -72.2272], popup: '<strong>Sombra Negra</strong><br>Villarrica' }
@@ -809,28 +1078,1619 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Expand Map widget logic
-    btnToggleMapExpand.addEventListener('click', () => {
-        if (mapWrapper.classList.contains('expanded')) {
-            mapWrapper.classList.remove('expanded');
-            mapWrapper.style.height = '160px';
-            btnToggleMapExpand.innerHTML = '<i data-lucide="map"></i> Ver en mapa';
-        } else {
-            mapWrapper.classList.add('expanded');
-            mapWrapper.style.height = '400px';
-            btnToggleMapExpand.innerHTML = '<i data-lucide="map-flat"></i> Contraer mapa';
-        }
-        
-        lucide.createIcons();
-        
-        // Re-align map centering
-        setTimeout(() => {
-            mapInstance.invalidateSize();
-            mapInstance.setView([-38.7396, -72.5984], 10);
-        }, 300);
-    });
+    if (btnToggleMapExpand && mapWrapper) {
+        btnToggleMapExpand.addEventListener('click', () => {
+            if (mapWrapper.classList.contains('expanded')) {
+                mapWrapper.classList.remove('expanded');
+                mapWrapper.style.height = '160px';
+                btnToggleMapExpand.innerHTML = '<i data-lucide="map"></i> Ver en mapa';
+            } else {
+                mapWrapper.classList.add('expanded');
+                mapWrapper.style.height = '400px';
+                btnToggleMapExpand.innerHTML = '<i data-lucide="map-flat"></i> Contraer mapa';
+            }
+            
+            lucide.createIcons();
+            
+            // Re-align map centering
+            setTimeout(() => {
+                mapInstance.invalidateSize();
+                mapInstance.setView([-38.7396, -72.5984], 10);
+            }, 300);
+        });
+    }
 
     // Initialize Map on start
     initMap();
+    updateQuickFicha('pipo');
+
+
+    
+
+    // ==========================================================================
+
+    // 8. ARTIST DETAIL PROFILE MODULE (GALLERY, CAROUSEL 3D, LIGHTBOX, MAPS)
+
+    // ==========================================================================
+
+    // ==========================================================================
+    // 6. PORTFOLIO CAROUSEL 3D (ARTIST VIEW)
+    // ==========================================================================
+    function setupCarousel3D() {
+        updateCarouselDOM();
+    }
+
+    function updateCarouselDOM() {
+        const totalItems = carouselItems.length;
+        
+        carouselItems.forEach((item, index) => {
+            item.className = 'carousel-3d-item'; // Reset class names
+            
+            if (index === state.carouselIndex) {
+                item.classList.add('active');
+            } else if (index === (state.carouselIndex - 1 + totalItems) % totalItems) {
+                item.classList.add('prev');
+            } else if (index === (state.carouselIndex + 1) % totalItems) {
+                item.classList.add('next');
+            }
+        });
+    }
+
+    if (btnCarouselPrev) {
+        btnCarouselPrev.addEventListener('click', () => {
+            const totalItems = carouselItems.length;
+            state.carouselIndex = (state.carouselIndex - 1 + totalItems) % totalItems;
+            updateCarouselDOM();
+        });
+    }
+
+    if (btnCarouselNext) {
+        btnCarouselNext.addEventListener('click', () => {
+            const totalItems = carouselItems.length;
+            state.carouselIndex = (state.carouselIndex + 1) % totalItems;
+            updateCarouselDOM();
+        });
+    }
+
+    // Click carousel item to trigger centering
+    carouselItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            if (state.carouselIndex !== index) {
+                state.carouselIndex = index;
+                updateCarouselDOM();
+            } else {
+                // If clicked active one, trigger zoom lightbox
+                const imgUrl = item.querySelector('img').src;
+                openLightbox(imgUrl, 'Diseño Destacado');
+            }
+        });
+    });
+
+    // Drag / Swipe support for 3D Carousel
+    let startX = 0;
+    let isSwiping = false;
+    const carouselContainer = document.getElementById('carousel-3d');
+    
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mousedown', (e) => {
+            startX = e.pageX;
+            isSwiping = true;
+        });
+
+        carouselContainer.addEventListener('mouseup', (e) => {
+            if (!isSwiping) return;
+            isSwiping = false;
+            const diff = e.pageX - startX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    // Swipe right -> prev
+                    btnCarouselPrev.click();
+                } else {
+                    // Swipe left -> next
+                    btnCarouselNext.click();
+                }
+            }
+        });
+
+        carouselContainer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].pageX;
+            isSwiping = true;
+        });
+
+        carouselContainer.addEventListener('touchend', (e) => {
+            if (!isSwiping) return;
+            isSwiping = false;
+            const diff = e.changedTouches[0].pageX - startX;
+            if (Math.abs(diff) > 40) {
+                if (diff > 0) {
+                    btnCarouselPrev.click();
+                } else {
+                    btnCarouselNext.click();
+                }
+            }
+        });
+    }
+
+
+    // ==========================================================================
+    // 7. PORTFOLIO TABS AND GRID IN ARTIST PROFILE
+    // ==========================================================================
+    // Tab Zone Filters
+    tabLinks.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabLinks.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            state.activeProfileZone = tab.getAttribute('data-tab');
+            renderFilteredProfileGallery();
+        });
+    });
+
+    // Style Tab Filters
+    document.querySelectorAll('.style-filters-list .style-tab-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.style-filters-list .style-tab-link').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            state.activeProfileStyle = btn.getAttribute('data-style');
+            renderFilteredProfileGallery();
+        });
+    });
+
+    function renderFilteredProfileGallery() {
+        galleryGrid.innerHTML = '';
+        
+        // Filter items based on active tabs
+        const filtered = state.portfolioItems.filter(item => {
+            const zoneMatch = state.activeProfileZone === 'all-zones' || item.zone === state.activeProfileZone;
+            const styleMatch = state.activeProfileStyle === 'all-styles' || item.style === state.activeProfileStyle;
+            return zoneMatch && styleMatch;
+        });
+
+        if (filtered.length === 0) {
+            galleryGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0; font-family: var(--font-stack);">No se encontraron diseños para este filtro.</p>`;
+            return;
+        }
+
+        filtered.forEach(item => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="${item.src}" alt="${item.title}">
+                <div class="gallery-item-overlay">
+                    <span><i data-lucide="zoom-in"></i> Ampliar</span>
+                </div>
+            `;
+            
+            galleryGrid.appendChild(galleryItem);
+            
+            galleryItem.addEventListener('click', () => {
+                openLightbox(item.src, `${item.title} (${item.style} - ${item.zone.toUpperCase()})`);
+            });
+        });
+        
+        lucide.createIcons();
+    }
+
+    // Lightbox modal creator
+    function openLightbox(imgSrc, title) {
+        const lightbox = document.createElement('div');
+        lightbox.style.position = 'fixed';
+        lightbox.style.inset = '0';
+        lightbox.style.backgroundColor = 'rgba(0,0,0,0.85)';
+        lightbox.style.backdropFilter = 'blur(6px)';
+        lightbox.style.zIndex = '9999';
+        lightbox.style.display = 'flex';
+        lightbox.style.flexDirection = 'column';
+        lightbox.style.alignItems = 'center';
+        lightbox.style.justifyContent = 'center';
+        lightbox.style.cursor = 'zoom-out';
+        lightbox.style.opacity = '0';
+        lightbox.style.transition = 'opacity 0.3s ease';
+
+        lightbox.innerHTML = `
+            <div style="position: relative; max-width: 90%; max-height: 80%; display: flex; flex-direction: column; align-items: center;">
+                <img src="${imgSrc}" alt="${title}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--border-radius-md); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                <p style="color: white; font-family: var(--font-stack); font-weight: 600; margin-top: 16px; font-size: 1.1rem; letter-spacing: 0.5px;">${title}</p>
+                <button style="position: absolute; top: -48px; right: 0; background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;"><i data-lucide="x"></i></button>
+            </div>
+        `;
+
+        document.body.appendChild(lightbox);
+        setTimeout(() => lightbox.style.opacity = '1', 50);
+        lucide.createIcons();
+
+        // Close on click or close button click
+        const closeLightbox = () => {
+            lightbox.style.opacity = '0';
+            setTimeout(() => lightbox.remove(), 300);
+        };
+
+        lightbox.addEventListener('click', closeLightbox);
+    }
+
+
+    // ==========================================================================
+    // 5. DRAWERS & MODALS INTERACTIVITY
+    // ==========================================================================
+    function toggleDrawer(drawerElement, show) {
+        if (show) {
+            drawerElement.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Lock scroll
+        } else {
+            drawerElement.classList.remove('active');
+            document.body.style.overflow = ''; // Unlock scroll
+        }
+    }
+
+    // Open/Close Handlers
+    if (btnGlobalFilter && overlayFilterArtists) {
+        btnGlobalFilter.addEventListener('click', () => toggleDrawer(overlayFilterArtists, true));
+    }
+    if (btnProfileFilters && overlayFilterArtists) {
+        btnProfileFilters.addEventListener('click', () => toggleDrawer(overlayFilterArtists, true));
+    }
+    if (btnCloseFilterArtists && overlayFilterArtists) {
+        btnCloseFilterArtists.addEventListener('click', () => toggleDrawer(overlayFilterArtists, false));
+    }
+    
+    // Close on overlay backdrop clicks
+    if (overlayFilterArtists) {
+        overlayFilterArtists.addEventListener('click', (e) => {
+            if (e.target === overlayFilterArtists) toggleDrawer(overlayFilterArtists, false);
+        });
+    }
+    if (overlayArtistInfo) {
+        overlayArtistInfo.addEventListener('click', (e) => {
+            if (e.target === overlayArtistInfo) toggleDrawer(overlayArtistInfo, false);
+        });
+    }
+
+    // Distance Slider text update
+    if (inputDistance && valDistance) {
+        inputDistance.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            if (val > 100) {
+                valDistance.textContent = 'Sin límite';
+                state.activeFilters.distance = 105;
+            } else {
+                valDistance.textContent = `${val} km`;
+                state.activeFilters.distance = val;
+            }
+        });
+    }
+
+    // Apply button inside Filtrar Artistas Drawer
+    if (btnApplyArtistFilters) {
+        btnApplyArtistFilters.addEventListener('click', () => {
+            // Collect checkbox states safely
+            const togglePuntillismo = document.getElementById('toggle-puntillismo');
+            const toggleBlackwork = document.getElementById('toggle-blackwork');
+            const toggleRealismo = document.getElementById('toggle-realismo');
+            const toggleBlackGrey = document.getElementById('toggle-black-grey');
+            const toggleAcuarela = document.getElementById('toggle-acuarela');
+            const toggleFineline = document.getElementById('toggle-fineline');
+
+            const activeToggles = {
+                puntillismo: togglePuntillismo ? togglePuntillismo.checked : false,
+                blackwork: toggleBlackwork ? toggleBlackwork.checked : false,
+                realismo: toggleRealismo ? toggleRealismo.checked : false,
+                blackGrey: toggleBlackGrey ? toggleBlackGrey.checked : false,
+                acuarela: toggleAcuarela ? toggleAcuarela.checked : false,
+                fineline: toggleFineline ? toggleFineline.checked : false
+            };
+
+            // Sync sidebar active styles
+            state.activeFilters.styles.clear();
+            if (btnStyles) btnStyles.forEach(btn => btn.classList.remove('active'));
+
+            if (activeToggles.puntillismo) {
+                state.activeFilters.styles.add('Puntillismo');
+                const btn = document.querySelector('.btn-style[data-style="Puntillismo"]');
+                if (btn) btn.classList.add('active');
+            }
+            if (activeToggles.blackwork) {
+                state.activeFilters.styles.add('Blackwork');
+                const btn = document.querySelector('.btn-style[data-style="Blackwork"]');
+                if (btn) btn.classList.add('active');
+            }
+            if (activeToggles.realismo) {
+                state.activeFilters.styles.add('Realismo');
+                const btn = document.querySelector('.btn-style[data-style="Realismo"]');
+                if (btn) btn.classList.add('active');
+            }
+            if (activeToggles.blackGrey) {
+                state.activeFilters.styles.add('Black & Grey');
+                const btn = document.querySelector('.btn-style[data-style="Black & Grey"]');
+                if (btn) btn.classList.add('active');
+            }
+            if (activeToggles.acuarela) {
+                state.activeFilters.styles.add('Acuarela');
+                const btn = document.querySelector('.btn-style[data-style="Acuarela"]');
+                if (btn) btn.classList.add('active');
+            }
+            if (activeToggles.fineline) {
+                state.activeFilters.styles.add('Fine Line');
+                const btn = document.querySelector('.btn-style[data-style="Fine Line"]');
+                if (btn) btn.classList.add('active');
+            }
+
+            applyFilters();
+            toggleDrawer(overlayFilterArtists, false);
+            showToast('Filtros de artistas aplicados');
+        });
+    }
+
+    // Artist Info Drawer Tabs (Image 2)
+    if (triggerInfoDrawer) {
+        triggerInfoDrawer.addEventListener('click', () => {
+            toggleDrawer(overlayArtistInfo, true);
+        });
+    }
+    if (btnCloseArtistInfo) {
+        btnCloseArtistInfo.addEventListener('click', () => {
+            toggleDrawer(overlayArtistInfo, false);
+        });
+    }
+
+    const infoActionLinks = document.querySelectorAll('.info-action-link');
+    const infoSubSections = document.querySelectorAll('.info-sub-section');
+
+    infoActionLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const targetSection = link.getAttribute('data-section');
+            
+            // Toggle active states of links
+            infoActionLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            // Toggle panel displays
+            infoSubSections.forEach(sec => {
+                if (sec.id === `sec-${targetSection}`) {
+                    sec.classList.add('active');
+                } else {
+                    sec.classList.remove('active');
+                }
+            });
+        });
+    });
+
+
+    
+
+    // ==========================================================================
+
+    // 9. ADDITIONAL BUSINESS LOGIC (ADMIN, TATUADOR WORKSPACE, ONBOARDING)
+
+    // ==========================================================================
+
+    // ==========================================================================
+    // 11. ADDITIONAL LOGIC: HISTORY TABS, NEEDLES INFO, MAPS, DASHBOARDS
+    // ==========================================================================
+
+    // History & Trivia View Tab switching
+    document.querySelectorAll('.btn-history-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.btn-history-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const target = btn.getAttribute('data-history-tab');
+            document.querySelectorAll('.history-tab-content').forEach(panel => {
+                if (panel.id === `history-sec-${target}`) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    // Profile Map initialization
+    function initArtistProfileMap() {
+        let coords = [-38.9705, -73.0487]; // Teodoro Schmidt (Pipo)
+        const activeName = document.querySelector('.profile-name').textContent.toLowerCase();
+        
+        if (activeName.includes('lara')) {
+            coords = [-38.7500, -72.6300];
+        } else if (activeName.includes('kame')) {
+            coords = [-38.7200, -72.5800];
+        } else if (activeName.includes('sombra')) {
+            coords = [-39.2783, -72.2272];
+        }
+
+        document.getElementById('profile-map-artist-name').textContent = document.querySelector('.profile-name').textContent;
+
+        setTimeout(() => {
+            const mapContainer = document.getElementById('artist-profile-map');
+            if (!mapContainer) return;
+            
+            if (artistProfileMapInstance) {
+                artistProfileMapInstance.remove();
+                artistProfileMapInstance = null;
+            }
+
+            artistProfileMapInstance = L.map('artist-profile-map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView(coords, 12);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19
+            }).addTo(artistProfileMapInstance);
+
+            const purpleIcon = L.divIcon({
+                html: '<div style="background-color: #5d32a8; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.3);"></div>',
+                className: 'custom-map-pin',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            });
+
+            L.marker(coords, { icon: purpleIcon }).addTo(artistProfileMapInstance)
+                .bindPopup(`<strong>${document.querySelector('.profile-name').textContent}</strong>`)
+                .openPopup();
+        }, 300);
+    }
+
+    // Admin dashboard: navigation tabs
+    document.querySelectorAll('#dashboard-admin-view .db-nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('#dashboard-admin-view .db-nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            const tab = link.getAttribute('data-db-tab');
+            document.querySelectorAll('#dashboard-admin-view .db-tab-panel').forEach(panel => {
+                if (panel.id === tab) panel.classList.add('active');
+                else panel.classList.remove('active');
+            });
+        });
+    });
+
+    // Admin dashboard: render table of artists
+    function renderAdminArtistsTable() {
+        const tbody = document.getElementById('admin-artists-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        state.artistsData.forEach(art => {
+            const tr = document.createElement('tr');
+            
+            let statusBadgeClass = 'badge-success';
+            if (art.status === 'Pendiente') statusBadgeClass = 'badge-warning';
+            else if (art.status === 'Suspendido') statusBadgeClass = 'badge-danger';
+            
+            let planBadgeClass = 'badge-premium';
+            if (art.plan === 'Básico') planBadgeClass = 'badge-basic';
+
+            tr.innerHTML = `
+                <td>
+                    <div style="display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background-color: var(--primary-light); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                            ${art.name.charAt(0).toUpperCase()}
+                        </div>
+                        ${art.name}
+                    </div>
+                </td>
+                <td>${art.location}</td>
+                <td><span class="badge ${planBadgeClass}">${art.plan}</span></td>
+                <td><span class="badge ${statusBadgeClass}">${art.status}</span></td>
+                <td>
+                    <div style="display: flex; gap: 8px;">
+                        ${art.status === 'Pendiente' ? `
+                             <button class="btn btn-primary btn-xs btn-admin-action" data-id="${art.id}" data-action="verify">Verificar</button>
+                        ` : ''}
+                        ${art.status !== 'Suspendido' ? `
+                             <button class="btn btn-outline btn-xs btn-admin-action" data-id="${art.id}" data-action="suspend" style="color: #e53e3e; border-color: #e53e3e;">Suspender</button>
+                        ` : `
+                             <button class="btn btn-outline btn-xs btn-admin-action" data-id="${art.id}" data-action="reactivate" style="color: #38a169; border-color: #38a169;">Reactivar</button>
+                        `}
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Table action click handlers
+        document.querySelectorAll('.btn-admin-action').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                const action = btn.getAttribute('data-action');
+                const artist = state.artistsData.find(a => a.id === id);
+                
+                if (artist) {
+                    if (action === 'verify') {
+                        artist.status = 'Verificado';
+                        showToast(`Artista ${artist.name} verificado`);
+                    } else if (action === 'suspend') {
+                        artist.status = 'Suspendido';
+                        state.suspendedArtists.add(id);
+                        showToast(`Artista ${artist.name} suspendido`);
+                    } else if (action === 'reactivate') {
+                        artist.status = 'Verificado';
+                        state.suspendedArtists.delete(id);
+                        showToast(`Artista ${artist.name} reactivado`);
+                    }
+                    renderAdminArtistsTable();
+                    refreshAdminStats();
+                    applyFilters();
+                }
+            });
+        });
+    }
+
+    function refreshAdminStats() {
+        const totalArtistsEl = document.getElementById('admin-stat-artists');
+        const pendingEl = document.getElementById('admin-stat-pending');
+        
+        if (totalArtistsEl) totalArtistsEl.textContent = state.artistsData.length;
+        if (pendingEl) {
+            const pendingCount = state.artistsData.filter(a => a.status === 'Pendiente').length;
+            pendingEl.textContent = pendingCount;
+        }
+    }
+
+    // Save plans configs
+    document.querySelectorAll('.btn-save-plan').forEach(btn => {
+        btn.addEventListener('click', () => {
+            showToast('¡Configuración de tarifas guardada!');
+        });
+    });
+
+    // Add artist invitation simulation
+    const btnAdminAddArtist = document.getElementById('btn-admin-add-artist');
+    if (btnAdminAddArtist) {
+        btnAdminAddArtist.addEventListener('click', () => {
+            showToast('Enlace de invitación copiado al portapapeles');
+        });
+    }
+
+    // Tatuador onboarding choose plan
+    document.querySelectorAll('.btn-select-plan').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const plan = btn.getAttribute('data-plan');
+            state.selectedSubscriptionPlan = plan;
+            
+            const nameEl = document.getElementById('payment-plan-name');
+            const priceEl = document.getElementById('payment-plan-price');
+            
+            if (nameEl) {
+                if (plan === 'basic') {
+                    nameEl.textContent = 'Plan Explorador (Básico)';
+                } else {
+                    nameEl.textContent = 'Plan Máster (Premium)';
+                }
+            }
+            if (priceEl) {
+                if (plan === 'basic') {
+                    priceEl.textContent = '$14.990/mes';
+                } else {
+                    priceEl.textContent = '$29.990/mes';
+                }
+            }
+            
+            const step1 = document.getElementById('onb-step-1');
+            const step2 = document.getElementById('onb-step-2');
+            const view1 = document.getElementById('onb-view-1');
+            const view2 = document.getElementById('onb-view-2');
+            if (step1) step1.classList.remove('active');
+            if (step2) step2.classList.add('active');
+            if (view1) view1.classList.remove('active');
+            if (view2) view2.classList.add('active');
+        });
+    });
+
+    const btnCancelPayment = document.getElementById('btn-cancel-payment');
+    if (btnCancelPayment) {
+        btnCancelPayment.addEventListener('click', (e) => {
+            e.preventDefault();
+            const step1 = document.getElementById('onb-step-1');
+            const step2 = document.getElementById('onb-step-2');
+            const view1 = document.getElementById('onb-view-1');
+            const view2 = document.getElementById('onb-view-2');
+            if (step2) step2.classList.remove('active');
+            if (step1) step1.classList.add('active');
+            if (view2) view2.classList.remove('active');
+            if (view1) view1.classList.add('active');
+        });
+    }
+
+    // Onboarding Payment credit card form submit
+    const btnSubmitPayment = document.getElementById('btn-submit-payment');
+    if (btnSubmitPayment) {
+        btnSubmitPayment.addEventListener('click', (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('pay-card-name');
+            const numberInput = document.getElementById('pay-card-number');
+            
+            if (nameInput && numberInput) {
+                if (nameInput.value.trim() === '' || numberInput.value.trim() === '') {
+                    showToast('Por favor, completa los datos de pago.');
+                    return;
+                }
+            }
+
+            showToast('Procesando pago seguro...');
+            
+            setTimeout(() => {
+                showToast('¡Pago procesado con éxito!');
+                state.isTatuadorSubscribed = true;
+                
+                const step2 = document.getElementById('onb-step-2');
+                const step3 = document.getElementById('onb-step-3');
+                const view2 = document.getElementById('onb-view-2');
+                const view3 = document.getElementById('onb-view-3');
+                if (step2) step2.classList.remove('active');
+                if (step3) step3.classList.add('active');
+                if (view2) view2.classList.remove('active');
+                if (view3) view3.classList.add('active');
+            }, 1200);
+        });
+    }
+
+    // Fast Registration Form submit
+    const btnSubmitRegister = document.getElementById('btn-submit-register');
+    if (btnSubmitRegister) {
+        btnSubmitRegister.addEventListener('click', () => {
+            const artNameEl = document.getElementById('reg-art-name');
+            const locEl = document.getElementById('reg-art-location');
+            const expEl = document.getElementById('reg-art-exp');
+            const bioEl = document.getElementById('reg-art-bio');
+            
+            const artName = artNameEl ? artNameEl.value.trim() : '';
+            const loc = locEl ? locEl.value : '';
+            const exp = expEl ? expEl.value : '';
+            const bio = bioEl ? bioEl.value.trim() : '';
+            
+            if (artName === '' || exp === '') {
+                showToast('Por favor, completa los campos requeridos.');
+                return;
+            }
+
+            // Update profile in state
+            state.tatuadorProfile.name = artName;
+            state.tatuadorProfile.location = loc;
+            state.tatuadorProfile.experience = parseInt(exp);
+            state.tatuadorProfile.bio = bio;
+            
+            // Push into admin list
+            state.artistsData.push({
+                id: artName.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                name: artName,
+                location: loc,
+                plan: state.selectedSubscriptionPlan === 'basic' ? 'Básico' : 'Premium',
+                status: 'Verificado'
+            });
+
+            // Dynamically add card to grids
+            addNewArtistCardToGrid(artName, loc, exp);
+
+            showToast('¡Perfil creado exitosamente! Bienvenido a Tinta Conectada.');
+            refreshTatuadorWorkspace();
+        });
+    }
+
+    // Helper to dynamically inject new artist card
+    function addNewArtistCardToGrid(name, loc, exp) {
+        const grid = document.getElementById('artist-grid');
+        const safeId = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        const card = document.createElement('article');
+        card.className = 'artist-card';
+        card.setAttribute('data-id', safeId);
+        card.setAttribute('data-location', loc);
+        card.setAttribute('data-styles', "['Fine Line', 'Blackwork']");
+        card.setAttribute('data-exp', exp);
+        card.setAttribute('data-price', 'Intermedio');
+        
+        card.innerHTML = `
+            <div class="card-image-wrapper">
+                <img src="assets/tattoo_flower.png" alt="Tatuaje de ${name}" class="card-tattoo-img">
+                <button class="btn-favorite" aria-label="Agregar a favoritos">
+                     <i data-lucide="heart" class="icon-heart"></i>
+                </button>
+            </div>
+            <div class="card-info">
+                <div class="artist-brand-row">
+                    <div class="artist-avatar-circle">
+                        <img src="assets/logo_pipo.png" alt="${name} Avatar" style="filter: hue-rotate(45deg);">
+                    </div>
+                    <div class="artist-brand-text">
+                        <h3 class="artist-name">${name}</h3>
+                        <span class="artist-loc"><i data-lucide="map-pin"></i> ${loc}</span>
+                    </div>
+                </div>
+                
+                <div class="artist-tags">
+                     <span class="tag">Fine Line</span>
+                     <span class="tag">Blackwork</span>
+                     <span class="tag tag-count">+2</span>
+                </div>
+                
+                <div class="artist-meta">
+                     <span class="meta-exp">${exp}+ años tatuando</span>
+                     <span class="meta-price"><span class="price-highlight">$$</span> Intermedio</span>
+                </div>
+            </div>
+        `;
+        
+        grid.appendChild(card);
+        
+        // Click action
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-favorite')) return;
+            switchView('artist-view');
+            
+            document.querySelector('.profile-name').textContent = name;
+            document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> ${loc}`;
+            document.querySelector('.profile-avatar-img').src = "assets/logo_pipo.png";
+            document.querySelector('.info-title').textContent = name;
+            document.querySelector('.info-avatar-circle img').src = "assets/logo_pipo.png";
+            lucide.createIcons();
+        });
+        
+        // Favorite heart action
+        const heart = card.querySelector('.btn-favorite');
+        heart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (heart.classList.contains('active')) {
+                heart.classList.remove('active');
+                state.favorites.delete(safeId);
+                showToast('Eliminado de tus favoritos');
+            } else {
+                heart.classList.add('active');
+                state.favorites.add(safeId);
+                showToast('¡Guardado en tus favoritos!');
+            }
+        });
+        
+        lucide.createIcons();
+    }
+
+    // Refresh active workspace panels
+    function refreshTatuadorWorkspace() {
+        const onboardingPanel = document.getElementById('tatuador-onboarding-panel');
+        const workspacePanel = document.getElementById('tatuador-workspace-panel');
+        
+        if (state.isTatuadorSubscribed) {
+            onboardingPanel.style.display = 'none';
+            workspacePanel.style.display = 'flex';
+            
+            // Populate workspace form fields
+            document.getElementById('edit-art-name').value = state.tatuadorProfile.name;
+            document.getElementById('edit-art-location').value = state.tatuadorProfile.location;
+            document.getElementById('edit-art-exp').value = state.tatuadorProfile.experience;
+            document.getElementById('edit-art-price').value = state.tatuadorProfile.price;
+            document.getElementById('edit-art-bio').value = state.tatuadorProfile.bio;
+            document.getElementById('edit-art-inks').value = state.tatuadorProfile.inks.join(', ');
+            document.getElementById('edit-art-needles').value = state.tatuadorProfile.needles.join(', ');
+            
+            document.getElementById('workspace-sidebar-name').textContent = state.tatuadorProfile.name;
+            document.getElementById('workspace-sidebar-plan').textContent = state.selectedSubscriptionPlan === 'basic' ? 'Plan Básico' : 'Plan Premium';
+            
+            renderWorkspacePortfolio();
+            renderWorkspaceAppointments();
+        } else {
+            onboardingPanel.style.display = 'block';
+            workspacePanel.style.display = 'none';
+            
+            // Reset onboarding steps
+            document.getElementById('onb-step-1').className = 'onboarding-step active';
+            document.getElementById('onb-step-2').className = 'onboarding-step';
+            document.getElementById('onb-step-3').className = 'onboarding-step';
+            document.getElementById('onb-view-1').className = 'onboarding-content-step active';
+            document.getElementById('onb-view-2').className = 'onboarding-content-step';
+            document.getElementById('onb-view-3').className = 'onboarding-content-step';
+        }
+    }
+
+    // Workspace uploader selection & drag-drop
+    const dragArea = document.getElementById('upload-drag-area');
+    const fileInput = document.getElementById('input-portfolio-file');
+    const fileNameIndicator = document.getElementById('file-name-indicator');
+
+    if (dragArea && fileInput) {
+        dragArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameIndicator.textContent = `Archivo: ${fileInput.files[0].name}`;
+            }
+        });
+    }
+
+    // Upload portfolio trigger
+    const btnAddToPortfolio = document.getElementById('btn-add-to-portfolio');
+    if (btnAddToPortfolio) {
+        btnAddToPortfolio.addEventListener('click', () => {
+            const titleInput = document.getElementById('new-tattoo-title');
+            const title = titleInput.value.trim();
+            const style = document.getElementById('new-tattoo-style').value;
+            const zone = document.getElementById('new-tattoo-zone').value;
+            
+            if (title === '') {
+                showToast('Por favor, ingresa un título para el diseño.');
+                return;
+            }
+
+            const newImg = {
+                src: 'assets/tattoo_flower.png', // Fallback to existing asset
+                title: title,
+                style: style,
+                zone: zone
+            };
+            
+            state.portfolioItems.push(newImg);
+            titleInput.value = '';
+            if (fileNameIndicator) fileNameIndicator.textContent = '';
+            
+            showToast('¡Diseño agregado a tu portafolio público!');
+            renderWorkspacePortfolio();
+            renderFilteredProfileGallery();
+        });
+    }
+
+    function renderWorkspacePortfolio() {
+        const grid = document.getElementById('workspace-portfolio-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = '';
+        state.portfolioItems.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'uploaded-item';
+            div.innerHTML = `
+                <img src="${item.src}" alt="${item.title}">
+                <div class="uploaded-item-info">
+                    <span>${item.title}</span>
+                    <small>${item.style} / ${item.zone.toUpperCase()}</small>
+                </div>
+                <button class="btn-delete-uploaded" data-index="${index}" title="Eliminar diseño"><i data-lucide="trash-2"></i></button>
+            `;
+            grid.appendChild(div);
+        });
+
+        // Delete handlers
+        document.querySelectorAll('.btn-delete-uploaded').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.getAttribute('data-index'));
+                state.portfolioItems.splice(index, 1);
+                showToast('Diseño eliminado');
+                renderWorkspacePortfolio();
+                renderFilteredProfileGallery();
+            });
+        });
+
+        lucide.createIcons();
+    }
+
+    // Render client appointment list
+    function renderWorkspaceAppointments() {
+        const list = document.getElementById('workspace-appointments-list');
+        if (!list) return;
+        
+        list.innerHTML = '';
+        state.tatuadorAppointments.forEach(app => {
+            const card = document.createElement('div');
+            card.className = 'appointment-card';
+            
+            let badgeClass = 'badge-warning';
+            let statusText = 'Pendiente';
+            if (app.status === 'approved') {
+                badgeClass = 'badge-success';
+                statusText = 'Aprobada';
+            } else if (app.status === 'declined') {
+                badgeClass = 'badge-danger';
+                statusText = 'Declinada';
+            }
+
+            card.innerHTML = `
+                <div class="appointment-info">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h4>${app.clientName}</h4>
+                        <span class="badge ${badgeClass}">${statusText}</span>
+                    </div>
+                    <div class="appointment-meta">
+                        <span><i data-lucide="mail"></i> ${app.email}</span>
+                        <span><i data-lucide="phone"></i> ${app.phone}</span>
+                        <span><i data-lucide="calendar"></i> Propuesto: ${app.date}</span>
+                        <span><i data-lucide="shapes"></i> Estilo: ${app.style}</span>
+                    </div>
+                    <div class="appointment-msg">"${app.message}"</div>
+                </div>
+                <div class="appointment-actions">
+                    ${app.status === 'pending' ? `
+                        <button class="btn btn-primary btn-sm btn-app-action" data-id="${app.id}" data-action="approve"><i data-lucide="check"></i> Aprobar</button>
+                        <button class="btn btn-outline btn-sm btn-app-action" data-id="${app.id}" data-action="decline" style="color: #e53e3e; border-color: #e53e3e;"><i data-lucide="x"></i> Declinar</button>
+                    ` : `
+                        <button class="btn btn-outline btn-sm btn-app-action" data-id="${app.id}" data-action="reset">Restablecer</button>
+                    `}
+                </div>
+            `;
+            list.appendChild(card);
+        });
+
+        // App actions click handlers
+        document.querySelectorAll('.btn-app-action').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                const action = btn.getAttribute('data-action');
+                const appointment = state.tatuadorAppointments.find(a => a.id === id);
+                
+                if (appointment) {
+                    if (action === 'approve') {
+                        appointment.status = 'approved';
+                        showToast('Cita aprobada con éxito');
+                    } else if (action === 'decline') {
+                        appointment.status = 'declined';
+                        showToast('Cita declinada');
+                    } else {
+                        appointment.status = 'pending';
+                    }
+                    renderWorkspaceAppointments();
+                }
+            });
+        });
+
+        lucide.createIcons();
+    }
+
+    // Edit profile submit handler
+    const formTatuadorProfile = document.getElementById('form-tatuador-profile-edit');
+    if (formTatuadorProfile) {
+        formTatuadorProfile.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('edit-art-name').value.trim();
+            const loc = document.getElementById('edit-art-location').value;
+            const exp = document.getElementById('edit-art-exp').value;
+            const price = document.getElementById('edit-art-price').value;
+            const bio = document.getElementById('edit-art-bio').value.trim();
+            const inks = document.getElementById('edit-art-inks').value.split(',').map(s => s.trim());
+            const needles = document.getElementById('edit-art-needles').value.split(',').map(s => s.trim());
+            
+            state.tatuadorProfile.name = name;
+            state.tatuadorProfile.location = loc;
+            state.tatuadorProfile.experience = parseInt(exp);
+            state.tatuadorProfile.price = price;
+            state.tatuadorProfile.bio = bio;
+            state.tatuadorProfile.inks = inks;
+            state.tatuadorProfile.needles = needles;
+            
+            // Sync workspace sidebar details
+            document.getElementById('workspace-sidebar-name').textContent = name;
+            
+            // Sync drawer details on pipo profile
+            document.getElementById('profile-bio-text').textContent = bio;
+            document.getElementById('profile-exp-text').textContent = `${exp}+ Años de trayectoria profesional`;
+            
+            const inkList = document.getElementById('profile-inks-list');
+            if (inkList) inkList.innerHTML = inks.map(ink => `<li><strong>${ink}</strong></li>`).join('');
+            
+            const needleList = document.getElementById('profile-needles-list');
+            if (needleList) needleList.innerHTML = needles.map(n => `<li><strong>${n}</strong></li>`).join('');
+            
+            // Sync public explorer cards
+            const card = document.querySelector(`.artist-card[data-id="pipo"]`);
+            if (card) {
+                card.setAttribute('data-location', loc);
+                card.setAttribute('data-exp', exp);
+                card.setAttribute('data-price', price);
+                
+                card.querySelector('.artist-name').textContent = name;
+                card.querySelector('.artist-loc').innerHTML = `<i data-lucide="map-pin"></i> ${loc}`;
+                card.querySelector('.meta-exp').textContent = `${exp}+ años tatuando`;
+                
+                let priceSymbols = '$$';
+                if (price === 'Accesible') priceSymbols = '$';
+                else if (price === 'Premium') priceSymbols = '$$$';
+                else if (price === 'Especialista') priceSymbols = '$$$$';
+                card.querySelector('.meta-price').innerHTML = `<span class="price-highlight">${priceSymbols}</span> ${price}`;
+            }
+
+            showToast('¡Ficha del perfil del estudio guardada!');
+            lucide.createIcons();
+        });
+    }
+
+    // Log-out tatuador
+    const btnTatuadorLogout = document.getElementById('btn-tatuador-logout');
+    if (btnTatuadorLogout) {
+        btnTatuadorLogout.addEventListener('click', () => {
+            state.isTatuadorSubscribed = false;
+            showToast('Sesión de artista cerrada');
+            switchView('landing-view');
+        });
+    }
+
+
+    
+
+    // ==========================================================================
+
+    // 10. VISUAL FX ENGINE (PARTICLES, MAGNETIC BUTTON, CUSTOM CURSOR)
+
+    // ==========================================================================
+
+    // ==========================================================================
+    // 8. VISUAL EFFECTS ENGINE (PARTICLES, MAGNET, TILT)
+    // ==========================================================================
+    function initLandingParticles() {
+        const canvas = document.getElementById('landing-particles');
+        const container = document.getElementById('landing-view');
+        if (!canvas || !container) return;
+        
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        let mouse = {
+            x: null,
+            y: null,
+            radius: 120
+        };
+        
+        function resizeCanvas() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            initParticles();
+        }
+        
+        window.addEventListener('mousemove', (e) => {
+            if (state.currentView !== 'landing-view') return;
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+        
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+        
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.size = Math.random() * 2 + 1;
+                this.color = this.getRandomColor();
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.density = (Math.random() * 20) + 10;
+            }
+            
+            getRandomColor() {
+                const rand = Math.random();
+                if (rand < 0.6) return 'rgba(122, 0, 194, ' + (Math.random() * 0.3 + 0.2) + ')'; // Purple
+                if (rand < 0.85) return 'rgba(255, 200, 44, ' + (Math.random() * 0.4 + 0.3) + ')'; // Yellow
+                return 'rgba(27, 27, 27, ' + (Math.random() * 0.2 + 0.15) + ')'; // Charcoal/Dark Grey
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            
+            update() {
+                this.baseX += this.vx;
+                this.baseY += this.vy;
+                
+                if (this.baseX < 0) this.baseX = canvas.width;
+                if (this.baseX > canvas.width) this.baseX = 0;
+                if (this.baseY < 0) this.baseY = canvas.height;
+                if (this.baseY > canvas.height) this.baseY = 0;
+                
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        let directionX = forceDirectionX * force * this.density;
+                        let directionY = forceDirectionY * force * this.density;
+                        
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    } else {
+                        if (this.x !== this.baseX) {
+                            let dxHome = this.x - this.baseX;
+                            this.x -= dxHome / 20;
+                        }
+                        if (this.y !== this.baseY) {
+                            let dyHome = this.y - this.baseY;
+                            this.y -= dyHome / 20;
+                        }
+                    }
+                } else {
+                    if (this.x !== this.baseX) {
+                        let dxHome = this.x - this.baseX;
+                        this.x -= dxHome / 20;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dyHome = this.y - this.baseY;
+                        this.y -= dyHome / 20;
+                    }
+                }
+            }
+        }
+        
+        function initParticles() {
+            particlesArray = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 11000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                particlesArray.push(new Particle(x, y));
+            }
+        }
+        
+        let isAnimating = false;
+        function animate() {
+            if (state.currentView !== 'landing-view') {
+                isAnimating = false;
+                return;
+            }
+            isAnimating = true;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+        
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 75) {
+                        opacityValue = 1 - (distance / 75);
+                        ctx.strokeStyle = 'rgba(122, 0, 194, ' + opacityValue * 0.12 + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        resumeLandingParticles = function() {
+            if (!isAnimating) {
+                animate();
+            }
+        };
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animate();
+    }
+
+    function initMagneticButton() {
+        const button = document.getElementById('btn-landing-enter-magnetic');
+        if (!button) return;
+        
+        document.addEventListener('mousemove', (e) => {
+            if (state.currentView !== 'landing-view') return;
+            
+            const bound = button.getBoundingClientRect();
+            const buttonCenterX = bound.left + bound.width / 2;
+            const buttonCenterY = bound.top + bound.height / 2;
+            
+            const deltaX = e.clientX - buttonCenterX;
+            const deltaY = e.clientY - buttonCenterY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            const pullRadius = 140;
+            
+            if (distance < pullRadius) {
+                const force = (pullRadius - distance) / pullRadius;
+                const pullX = deltaX * force * 0.45;
+                const pullY = deltaY * force * 0.45;
+                
+                button.style.transition = 'transform 0.1s ease-out';
+                button.style.transform = `translate(${pullX}px, ${pullY}px)`;
+            } else {
+                button.style.transition = 'transform 0.3s ease-out';
+                button.style.transform = 'translate(0px, 0px)';
+            }
+        });
+    }
+
+    function initCardTiltEffect() {
+        const grid = document.getElementById('artist-grid');
+        if (!grid) return;
+        
+        grid.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.artist-card');
+            if (!card) return;
+            
+            const rect = card.getBoundingClientRect();
+            const cardWidth = rect.width;
+            const cardHeight = rect.height;
+            
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const xVal = (mouseX - cardWidth / 2) / (cardWidth / 2); // -1 to 1
+            const yVal = (mouseY - cardHeight / 2) / (cardHeight / 2); // -1 to 1
+            
+            const maxTilt = 10;
+            const rotateX = -yVal * maxTilt;
+            const rotateY = xVal * maxTilt;
+            
+            card.style.transition = 'transform 0.05s ease-out';
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        grid.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.artist-card');
+            if (!card) return;
+            
+            const related = e.relatedTarget;
+            if (related && card.contains(related)) return;
+            
+            card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+    }
+
+    function initCustomCursor() {
+        const dot = document.getElementById('custom-cursor-dot');
+        const ring = document.getElementById('custom-cursor-ring');
+        
+        if (!dot || !ring) return;
+        
+        // Detect touch devices (no precise pointer) and disable custom cursor
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            dot.style.display = 'none';
+            ring.style.display = 'none';
+            return;
+        }
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let ringX = 0;
+        let ringY = 0;
+        
+        // Initially hide cursor until first mouse movement
+        dot.style.opacity = '0';
+        ring.style.opacity = '0';
+        dot.style.transition = 'opacity 0.3s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease';
+        ring.style.transition = 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease';
+        
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Instantly position the central dot
+            dot.style.left = `${mouseX}px`;
+            dot.style.top = `${mouseY}px`;
+            
+            // Fade in cursors upon mouse activity
+            dot.style.opacity = '1';
+            ring.style.opacity = '1';
+        });
+        
+        // Trailing ring with lag/inertia using requestAnimationFrame loop (60fps)
+        function animateRing() {
+            // Ring lags slightly (moves 15% closer to target coordinates per frame)
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            
+            ring.style.left = `${ringX}px`;
+            ring.style.top = `${ringY}px`;
+            
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+        
+        // Hover state trigger for interactive targets
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            const isInteractive = target.closest('a') || 
+                                  target.closest('button') || 
+                                  target.closest('select') || 
+                                  target.closest('input') || 
+                                  target.closest('textarea') || 
+                                  target.closest('label') ||
+                                  target.closest('.artist-card') || 
+                                  target.closest('.btn-style') || 
+                                  target.closest('.btn-category') ||
+                                  target.closest('.carousel-3d-item') ||
+                                  target.closest('.gallery-item') ||
+                                  target.closest('.tab-link') ||
+                                  target.closest('.btn-favorite') ||
+                                  target.closest('.nav-link') ||
+                                  target.closest('.info-action-link') ||
+                                  target.closest('.btn-more-styles') ||
+                                  target.style.cursor === 'pointer';
+                                  
+            if (isInteractive) {
+                dot.classList.add('hovered');
+                ring.classList.add('hovered');
+            } else {
+                dot.classList.remove('hovered');
+                ring.classList.remove('hovered');
+            }
+        });
+        
+        // Click effect triggers scale/color changes
+        window.addEventListener('mousedown', () => {
+            ring.classList.add('active');
+            dot.classList.add('active');
+        });
+        
+        window.addEventListener('mouseup', () => {
+            ring.classList.remove('active');
+            dot.classList.remove('active');
+        });
+        
+        // Hide custom cursor elements if mouse leaves the screen viewport bounds
+        document.addEventListener('mouseleave', () => {
+            dot.style.opacity = '0';
+            ring.style.opacity = '0';
+        });
+        
+        document.addEventListener('mouseenter', () => {
+            dot.style.opacity = '1';
+            ring.style.opacity = '1';
+        });
+    }
+
+    function initTattooDrawingAnimation() {
+        const svg = document.getElementById('landing-drawing-svg');
+        if (!svg) return;
+        
+        // Define paths for 3 designs (relative to a 200x200 viewBox)
+        const designs = [
+            {
+                name: 'mandala',
+                viewBox: '0 0 200 200',
+                paths: [
+                    'M 100,100 m -40,0 a 40,40 0 1,0 80,0 a 40,40 0 1,0 -80,0',
+                    'M 95,65 A 35,35 0 0,0 95,135 A 30,30 0 0,1 95,65',
+                    'M 100,50 L 100,20',
+                    'M 100,150 L 100,180',
+                    'M 50,100 L 20,100',
+                    'M 150,100 L 180,100',
+                    'M 65,65 L 45,45',
+                    'M 135,65 L 155,45',
+                    'M 65,135 L 45,155',
+                    'M 135,135 L 155,155',
+                    'M 100,100 m -55,0 a 55,55 0 1,0 110,0 a 55,55 0 1,0 -110,0'
+                ]
+            },
+            {
+                name: 'rose',
+                viewBox: '0 0 200 200',
+                paths: [
+                    'M 100,60 C 80,45 60,65 80,85 C 95,100 115,80 100,60', // central petal
+                    'M 80,85 C 65,95 75,115 100,105 C 120,95 115,75 100,60', // outer petal 1
+                    'M 100,105 C 105,125 115,145 100,175', // stem
+                    'M 102,120 C 120,125 125,115 102,120', // leaf right
+                    'M 98,135 C 80,140 75,130 98,135', // leaf left
+                    'M 100,60 C 110,40 130,55 115,75' // outer petal 2
+                ]
+            },
+            {
+                name: 'swallow',
+                viewBox: '0 0 200 200',
+                paths: [
+                    'M 40,85 C 45,80 55,75 60,80', // beak
+                    'M 60,80 C 80,45 110,15 120,35 C 105,50 90,70 80,85', // top wing
+                    'M 80,85 C 95,95 110,100 130,105', // body line
+                    'M 130,105 C 150,110 165,105 175,115 C 160,120 150,130 140,125 C 125,120 105,115 80,110', // tail
+                    'M 80,110 C 70,125 50,160 40,150 C 55,135 70,105 80,85' // bottom wing
+                ]
+            }
+        ];
+        
+        let currentDrawTimeout = null;
+        let isActive = true;
+        
+        function drawNextTattoo() {
+            if (!isActive || state.currentView !== 'landing-view') return;
+            
+            // Clean previous drawing elements
+            svg.innerHTML = '';
+            
+            // Pick a random design
+            const design = designs[Math.floor(Math.random() * designs.length)];
+            
+            // Position randomly in the landing-view
+            const containerWidth = svg.clientWidth || window.innerWidth;
+            const containerHeight = svg.clientHeight || window.innerHeight;
+            
+            // Avoid center area where logo, tagline, and button are located
+            const onRight = Math.random() > 0.5;
+            let posX, posY;
+            
+            if (containerWidth > 900) {
+                // Wide screen: place on sides
+                posX = onRight 
+                    ? Math.random() * (containerWidth / 2 - 280) + (containerWidth / 2 + 100)
+                    : Math.random() * (containerWidth / 2 - 280) + 50;
+                posY = Math.random() * (containerHeight - 350) + 80;
+            } else {
+                // Narrow screen: place randomly in top or bottom
+                posX = Math.random() * (containerWidth - 220) + 20;
+                posY = Math.random() > 0.5 
+                    ? Math.random() * 80 + 30
+                    : Math.random() * 120 + (containerHeight - 280);
+            }
+            
+            // Create a group for the design
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('transform', `translate(${posX}, ${posY}) scale(${Math.random() * 0.4 + 0.8})`);
+            svg.appendChild(g);
+            
+            // Colors from palette: Purple (#7A00C2), Yellow/Gold (#FFC82C), Charcoal (#1B1B1B)
+            const colors = ['#7A00C2', '#1B1B1B', '#FFC82C'];
+            const designColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Create a needle indicator
+            const needle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            needle.setAttribute('class', 'tattoo-needle-tip');
+            needle.setAttribute('r', '5');
+            g.appendChild(needle);
+            
+            let currentPathIndex = 0;
+            
+            function drawPath() {
+                if (!isActive || state.currentView !== 'landing-view') return;
+                
+                if (currentPathIndex >= design.paths.length) {
+                    // Finished drawing this design! Hide needle, wait, then fade out and draw next
+                    needle.classList.remove('active');
+                    currentDrawTimeout = setTimeout(() => {
+                        g.style.transition = 'opacity 1.5s ease';
+                        g.style.opacity = '0';
+                        currentDrawTimeout = setTimeout(drawNextTattoo, 1600);
+                    }, 4000); // Remain visible for 4s
+                    return;
+                }
+                
+                const pathStr = design.paths[currentPathIndex];
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('class', 'tattoo-path active');
+                path.setAttribute('d', pathStr);
+                path.setAttribute('stroke', designColor);
+                path.setAttribute('stroke-width', design.name === 'rose' || design.name === 'swallow' ? '1.8' : '1.3');
+                
+                // Add path before needle
+                g.insertBefore(path, needle);
+                
+                // Calculate length for drawing effect
+                const length = path.getTotalLength();
+                path.style.strokeDasharray = length;
+                path.style.strokeDashoffset = length;
+                
+                // Show needle tip
+                needle.classList.add('active');
+                
+                // Animate path drawing and needle position
+                const duration = length * 8; // milliseconds per pixel
+                let start = null;
+                
+                function step(timestamp) {
+                    if (!isActive || state.currentView !== 'landing-view') return;
+                    if (!start) start = timestamp;
+                    const progress = timestamp - start;
+                    const percent = Math.min(progress / duration, 1);
+                    
+                    // Draw path
+                    path.style.strokeDashoffset = length * (1 - percent);
+                    
+                    // Move needle to current point
+                    try {
+                        const currentPoint = path.getPointAtLength(length * percent);
+                        needle.setAttribute('cx', currentPoint.x);
+                        needle.setAttribute('cy', currentPoint.y);
+                    } catch (e) {}
+                    
+                    if (percent < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        currentPathIndex++;
+                        setTimeout(drawPath, 150); // Pause between paths
+                    }
+                }
+                
+                requestAnimationFrame(step);
+            }
+            
+            setTimeout(drawPath, 200);
+        }
+        
+        // Listen to view changes to toggle animation
+        const observer = new MutationObserver(() => {
+            const isLandingActive = document.getElementById('landing-view').classList.contains('active');
+            if (isLandingActive) {
+                if (!isActive) {
+                    isActive = true;
+                    drawNextTattoo();
+                }
+            } else {
+                isActive = false;
+                clearTimeout(currentDrawTimeout);
+                svg.innerHTML = '';
+            }
+        });
+        observer.observe(document.getElementById('landing-view'), { attributes: true, attributeFilter: ['class'] });
+        
+        drawNextTattoo();
+        
+        window.addEventListener('resize', () => {
+            if (state.currentView === 'landing-view') {
+                clearTimeout(currentDrawTimeout);
+                drawNextTattoo();
+            }
+        });
+    }
+
+    function initLandingVideos() {
+        const logoVideo = document.querySelector('.landing-logo-video');
+        const logoFallback = document.querySelector('.landing-logo-fallback');
+        const maskContainer = document.querySelector('.landing-logo-mask-container');
+        const bgVideo = document.querySelector('.landing-bg-video');
+        
+        // Browser security policies (Same-Origin) block CSS masks of local files under file://
+        // If loaded locally via folder double-click, we hide the video elements to fallback cleanly.
+        if (window.location.protocol === 'file:') {
+            if (logoVideo) logoVideo.style.display = 'none';
+            if (bgVideo) bgVideo.style.display = 'none';
+            if (logoFallback) logoFallback.style.opacity = '1';
+            return;
+        }
+        
+        if (logoVideo && logoFallback && maskContainer) {
+            // When the video actually starts playing, transition opacity to show the ink effect inside the mask
+            logoVideo.addEventListener('playing', () => {
+                maskContainer.style.opacity = '1';
+                logoFallback.style.opacity = '0';
+            });
+            
+            // If the video fails to load, stay on the fallback image
+            logoVideo.addEventListener('error', () => {
+                maskContainer.style.opacity = '0';
+                logoFallback.style.opacity = '1';
+            });
+            
+            // Fallback play trigger (in case browser blocks autoplay)
+            logoVideo.play().catch(() => {
+                maskContainer.style.opacity = '0';
+                logoFallback.style.opacity = '1';
+            });
+        }
+    }
+
+    // Initialize Visual FX
+    initLandingParticles();
+    initMagneticButton();
+    initCardTiltEffect();
+    initCustomCursor();
+    initTattooDrawingAnimation();
+    initLandingVideos();
+
+    // Default start view: landing page
+    switchView('landing-view');
+
+    
+
+    // ==========================================================================
+
+    // 11. GENERAL UTILITY HELPER METHODS
+
+    // ==========================================================================
 
     // ==========================================================================
     // 10. TOAST NOTIFICATION UTILITY
@@ -873,4 +2733,8 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => toast.remove(), 300);
         }, 2500);
     }
+
+
+    
+
 });
