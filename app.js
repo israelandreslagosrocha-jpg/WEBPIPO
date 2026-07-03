@@ -6,6 +6,31 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Initialize Supabase JS Client
+    const SUPABASE_URL = "https://xoxazrbkibxzchxqlosn.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhveGF6cmJraWJ4emNoeHFsb3NuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTY1MDAsImV4cCI6MjA5ODU5MjUwMH0.gszC4U6sU8DsdpLUGUeuXuOQA3VU3fCWzSI8SknitvY";
+    
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+        console.error("Supabase SDK CDN failed to load. Make sure you are connected to the internet.");
+    }
+
+    // Safe HTML Escaping Helper to prevent XSS
+    function escapeHTML(str) {
+        if (typeof str !== 'string') return str;
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag)
+        );
+    }
+
     // ==========================================================================
 
     // 1. STATE & STATIC DATABASE CONFIGURATIONS
@@ -53,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'sombra', name: 'Sombra Negra', location: 'Villarrica', plan: 'Premium', status: 'Verificado' }
         ],
 
-        // Tatuador dashboard dynamic state
-        selectedSubscriptionPlan: null,
-        isTatuadorSubscribed: false,
+        // Tatuador dashboard dynamic state (Pre-logged in demo mode active by default)
+        selectedSubscriptionPlan: 'premium',
+        isTatuadorSubscribed: true,
         tatuadorProfile: {
             name: 'Studio tatto pipo',
             location: 'Teodoro Schmidt',
@@ -63,11 +88,21 @@ document.addEventListener('DOMContentLoaded', () => {
             price: 'Intermedio',
             bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.',
             inks: ['Dynamic Ink', 'Eternal Ink', 'Solid Ink'],
-            needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges']
+            needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges'],
+            instagram: 'https://instagram.com/studiotattopipo',
+            coords: [-39.2045, -73.0538],
+            styles: ['Fine Line', 'Blackwork'],
+            billingStatus: 'paid'
         },
         tatuadorAppointments: [
             { id: 1, clientName: 'Carolina Soto', email: 'caro.soto@gmail.com', phone: '+56 9 8877 6655', style: 'Fine Line', date: '2026-06-25', message: 'Hola, me gustaría cotizar una flor fina de unos 10cm en el antebrazo. Quedo atenta, gracias!', status: 'pending' },
             { id: 2, clientName: 'Andrés Morales', email: 'andres.m@yahoo.com', phone: '+56 9 5544 3322', style: 'Blackwork', date: '2026-06-28', message: 'Estimado, busco turno para un diseño geométrico de mandala en la muñeca. Saludos.', status: 'approved' }
+        ],
+        // Client reviews dynamic state (moderated by the artist)
+        tatuadorComments: [
+            { id: 1, artistId: 'pipo', clientName: 'Martina Rojas', text: 'Increíble trabajo de trazo fino. Muy higiénico y detallista.', status: 'approved' },
+            { id: 2, artistId: 'pipo', clientName: 'Lucas Valenzuela', text: 'Excelente atención. Me encantó el diseño de Blackwork que armamos.', status: 'approved' },
+            { id: 3, artistId: 'pipo', clientName: 'Sofía Muñoz', text: '¿Tienen disponibilidad para este sábado? Me gustaría cotizar.', status: 'pending' }
         ]
     };
 
@@ -852,8 +887,157 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const artistId = card.getAttribute('data-id');
             updateQuickFicha(artistId);
+            
+            // Open the slide-out quick-sheet drawer
+            const drawer = document.getElementById('artist-quick-sheet');
+            if (drawer) {
+                drawer.classList.add('active');
+            }
+            
+            // Push layout grid column to accommodate the drawer
+            const homeLayout = document.querySelector('.home-layout');
+            if (homeLayout) {
+                homeLayout.classList.add('has-sidebar-open');
+            }
         });
     });
+
+    // Close button click handler for quick-sheet drawer
+    const btnFichaClose = document.getElementById('btn-ficha-close');
+    if (btnFichaClose) {
+        btnFichaClose.addEventListener('click', () => {
+            const drawer = document.getElementById('artist-quick-sheet');
+            if (drawer) {
+                drawer.classList.remove('active');
+            }
+            // Collapse layout grid column
+            const homeLayout = document.querySelector('.home-layout');
+            if (homeLayout) {
+                homeLayout.classList.remove('has-sidebar-open');
+            }
+            // Remove active style from cards in explorer grid
+            document.querySelectorAll('.artist-card').forEach(card => {
+                card.classList.remove('active');
+            });
+        });
+    }
+
+    // Render reviews inside the public Quick Sheet
+    function renderFichaComments(artistId) {
+        const commentsListEl = document.getElementById('ficha-comments-list');
+        const commentsCountEl = document.getElementById('ficha-comments-count');
+        if (!commentsListEl) return;
+
+        const list = state.tatuadorComments.filter(c => c.artistId === artistId && c.status === 'approved');
+        
+        if (commentsCountEl) {
+            commentsCountEl.textContent = list.length;
+        }
+
+        if (list.length === 0) {
+            commentsListEl.innerHTML = `<p style="font-size: 0.8rem; font-weight: 500; color: #718096; text-align: center; margin: 12px 0;">Aún no hay recomendaciones aprobadas.</p>`;
+            return;
+        }
+
+        commentsListEl.innerHTML = list.map(c => `
+            <div class="ficha-comment-bubble" style="margin-bottom: 8px;">
+                <div class="ficha-comment-bubble-inner">
+                    <p style="margin: 0; font-weight: 600;">${escapeHTML(c.text)}</p>
+                </div>
+            </div>
+            <div class="ficha-comment-author" style="margin-bottom: 12px;">
+                &mdash; ${escapeHTML(c.clientName)}
+            </div>
+        `).join('');
+    }
+
+    // Toggle comments form inside Ficha drawer
+    const btnShowAddComment = document.getElementById('btn-show-add-comment');
+    const addCommentFormContainer = document.getElementById('add-comment-form-container');
+    if (btnShowAddComment && addCommentFormContainer) {
+        btnShowAddComment.addEventListener('click', () => {
+            if (addCommentFormContainer.style.display === 'none') {
+                addCommentFormContainer.style.display = 'block';
+                btnShowAddComment.style.display = 'none';
+            } else {
+                addCommentFormContainer.style.display = 'none';
+                btnShowAddComment.style.display = 'block';
+            }
+        });
+    }
+
+    const btnCancelComment = document.getElementById('btn-cancel-comment');
+    if (btnCancelComment && addCommentFormContainer && btnShowAddComment) {
+        btnCancelComment.addEventListener('click', () => {
+            addCommentFormContainer.style.display = 'none';
+            btnShowAddComment.style.display = 'block';
+            document.getElementById('comment-client-name').value = '';
+            document.getElementById('comment-client-text').value = '';
+        });
+    }
+
+    // Submit client review
+    const btnSubmitComment = document.getElementById('btn-submit-comment');
+    if (btnSubmitComment && addCommentFormContainer && btnShowAddComment) {
+        btnSubmitComment.addEventListener('click', async () => {
+            const nameVal = document.getElementById('comment-client-name').value.trim();
+            const textVal = document.getElementById('comment-client-text').value.trim();
+            
+            if (nameVal === '' || textVal === '') {
+                showToast('Por favor, ingresa tu nombre y comentario.');
+                return;
+            }
+
+            // Persist to Supabase and get back the inserted row with its auto-generated ID
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from('comments')
+                    .insert({
+                        artist_id: currentFichaArtistId,
+                        client_name: nameVal,
+                        text: textVal,
+                        status: 'pending'
+                    })
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error("Error submitting comment to Supabase:", error);
+                    showToast('Error al enviar. Intenta de nuevo.');
+                    return;
+                }
+
+                // Push to local state with the real DB id
+                state.tatuadorComments.push({
+                    id: parseInt(data.id),
+                    artistId: data.artist_id,
+                    clientName: data.client_name,
+                    text: data.text,
+                    status: data.status
+                });
+            } else {
+                // Fallback: offline only
+                state.tatuadorComments.push({
+                    id: state.tatuadorComments.length + 1,
+                    artistId: currentFichaArtistId,
+                    clientName: nameVal,
+                    text: textVal,
+                    status: 'pending'
+                });
+            }
+
+            showToast('¡Gracias! Tu recomendación ha sido enviada para moderación.');
+            
+            // Collapse form and reset fields
+            addCommentFormContainer.style.display = 'none';
+            btnShowAddComment.style.display = 'block';
+            document.getElementById('comment-client-name').value = '';
+            document.getElementById('comment-client-text').value = '';
+
+            // Update dashboards
+            renderDashboardComments();
+        });
+    }
 
 
     // ==========================================================================
@@ -932,6 +1116,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const instaEl = document.getElementById('ficha-artist-instagram');
         if (instaEl) instaEl.href = details.instagram;
+
+        // Render client reviews
+        renderFichaComments(artistId);
 
         // Recreate icons
         lucide.createIcons();
@@ -1100,9 +1287,390 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function addOrUpdateArtistMarker(artistId, name, coords, location) {
+        if (!mapInstance) return;
+        
+        // Remove existing marker if it exists
+        const existingIdx = markersGroup.findIndex(m => m.id === artistId);
+        if (existingIdx !== -1) {
+            mapInstance.removeLayer(markersGroup[existingIdx].marker);
+            markersGroup.splice(existingIdx, 1);
+        }
+
+        const purpleIcon = L.divIcon({
+            html: '<div style="background-color: #5d32a8; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.3);"></div>',
+            className: 'custom-map-pin',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+
+        const marker = L.marker(coords, { icon: purpleIcon }).addTo(mapInstance);
+        marker.bindPopup(`<strong>${escapeHTML(name)}</strong><br>${escapeHTML(location)}`);
+        
+        markersGroup.push({
+            id: artistId,
+            marker: marker
+        });
+
+        marker.on('click', () => {
+            const targetCard = document.querySelector(`.artist-card[data-id="${artistId}"]`);
+            if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetCard.style.borderColor = '#7b4ad8';
+                targetCard.style.boxShadow = '0 0 16px rgba(123, 74, 216, 0.4)';
+                setTimeout(() => {
+                    targetCard.style.borderColor = '';
+                    targetCard.style.boxShadow = '';
+                }, 1200);
+            }
+        });
+        
+        // Initialize dashboard profile editor map
+        const profileMapEl = document.getElementById('profile-editor-map');
+        if (profileMapEl) {
+            window.artistProfileMapInstance = L.map('profile-editor-map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([-39.2045, -73.0538], 12);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19
+            }).addTo(window.artistProfileMapInstance);
+
+            const initialCoords = state.tatuadorProfile.coords || [-39.2045, -73.0538];
+            const profileMarker = L.marker(initialCoords, { draggable: true }).addTo(window.artistProfileMapInstance);
+            
+            // Map click listener
+            window.artistProfileMapInstance.on('click', (e) => {
+                const { lat, lng } = e.latlng;
+                profileMarker.setLatLng([lat, lng]);
+                document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                reverseGeocodeMock(lat, lng);
+            });
+
+            // Marker drag listener
+            profileMarker.on('dragend', () => {
+                const position = profileMarker.getLatLng();
+                const lat = position.lat;
+                const lng = position.lng;
+                document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                reverseGeocodeMock(lat, lng);
+            });
+
+            window.artistProfileMarkerInstance = profileMarker;
+        }
+    }
+
+    // Mock reverse geocoding to keep the address input synced with map clicks
+    async function reverseGeocodeMock(lat, lng) {
+        const addressInput = document.getElementById('edit-art-address');
+        if (!addressInput) return;
+
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+            const data = await res.json();
+            if (data && data.display_name) {
+                const parts = data.display_name.split(',');
+                const shortAddress = parts.slice(0, 3).join(',').trim();
+                addressInput.value = shortAddress;
+                return;
+            }
+        } catch (e) {
+            console.warn("Geocoding failed, using fallback coordinates text representation", e);
+        }
+
+        addressInput.value = `Calle Tatuajes, Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+    }
+
+    // Auto-seed default database records if Supabase has 0 entries
+    async function seedDatabaseIfEmpty() {
+        if (!supabaseClient) return;
+
+        try {
+            const { count, error } = await supabaseClient
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+
+            if (error) {
+                console.error("Error checking profiles count", error);
+                return;
+            }
+
+            if (count === 0) {
+                console.log("Database is empty. Seeding mockup profiles...");
+                
+                const defaultProfiles = [
+                    {
+                        id: 'pipo',
+                        name: 'Studio tatto pipo',
+                        location: 'Teodoro Schmidt',
+                        experience: 5,
+                        price: 'Intermedio',
+                        bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la Araucanía.',
+                        instagram: 'https://instagram.com/studiotattopipo',
+                        coords: [-39.2045, -73.0538],
+                        styles: ['Fine Line', 'Blackwork'],
+                        inks: ['Dynamic Ink', 'Eternal Ink', 'Solid Ink'],
+                        needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'assets/logo_pipo.png'
+                    },
+                    {
+                        id: 'lara',
+                        name: 'Ink Lara',
+                        location: 'Padre Las Casas',
+                        experience: 4,
+                        price: 'Accesible',
+                        bio: 'Especialista en Realismo de sombras, retratos y Black & Grey detallado.',
+                        instagram: 'https://instagram.com/inklara',
+                        coords: [-38.7500, -72.6300],
+                        styles: ['Realismo', 'Black & Grey'],
+                        inks: ['Dynamic Ink', 'Silverback Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'assets/logo_pipo.png'
+                    },
+                    {
+                        id: 'kame',
+                        name: 'Kame Tattoo',
+                        location: 'Temuco',
+                        experience: 8,
+                        price: 'Especialista',
+                        bio: 'Estudio de tatuajes anime y full color inspirado en la cultura geek en pleno centro de Temuco.',
+                        instagram: 'https://instagram.com/kametattoo',
+                        coords: [-38.7200, -72.5800],
+                        styles: ['Acuarela', 'Full Color', 'Anime'],
+                        inks: ['Eternal Ink', 'Fusion Ink'],
+                        needles: ['Cheyenne Safety Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'assets/logo_pipo.png'
+                    },
+                    {
+                        id: 'sombra',
+                        name: 'Sombra Negra',
+                        location: 'Villarrica',
+                        experience: 6,
+                        price: 'Premium',
+                        bio: 'Especialistas en Blackwork tribal de gran cobertura y puntillismo geométrico.',
+                        instagram: 'https://instagram.com/sombranegratattoo',
+                        coords: [-39.2783, -72.2272],
+                        styles: ['Blackwork', 'Puntillismo'],
+                        inks: ['Dynamic Ink', 'Solid Ink'],
+                        needles: ['Cheyenne Hawk Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'assets/logo_pipo.png'
+                    }
+                ];
+
+                const { error: insertError } = await supabaseClient
+                    .from('profiles')
+                    .insert(defaultProfiles);
+
+                if (insertError) {
+                    console.error("Error seeding default profiles", insertError);
+                    return;
+                }
+
+                // Insert default portfolio items
+                const defaultPortfolio = [
+                    { artist_id: 'pipo', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'pipo', title: 'Geometría Sagrada', style: 'Blackwork', body_part: 'Espalda', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'lara', title: 'León Realista en Sombras', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'kame', title: 'Goku Super Saiyajin Full Color', style: 'Anime', body_part: 'Piernas', image_url: 'assets/tattoo_goku.png' },
+                    { artist_id: 'sombra', title: 'Mandala Puntillista', style: 'Puntillismo', body_part: 'Brazos', image_url: 'assets/tattoo_mandala.png' }
+                ];
+
+                await supabaseClient.from('portfolio').insert(defaultPortfolio);
+
+                // Insert default comments
+                const defaultComments = [
+                    { artist_id: 'pipo', client_name: 'Martina Rojas', text: 'Increíble trabajo de trazo fino. Muy higiénico y detallista.', status: 'approved' },
+                    { artist_id: 'pipo', client_name: 'Lucas Valenzuela', text: 'Excelente atención. Me encantó el diseño de Blackwork que armamos.', status: 'approved' },
+                    { artist_id: 'pipo', client_name: 'Sofía Muñoz', text: '¿Tienen disponibilidad para este sábado? Me gustaría cotizar.', status: 'pending' },
+                    { artist_id: 'lara', client_name: 'Ignacio Fuentes', text: 'El realismo de león quedó brutal. Lo recomiendo 100%.', status: 'approved' }
+                ];
+
+                await supabaseClient.from('comments').insert(defaultComments);
+                
+                // Insert stats
+                const defaultStats = [
+                    { artist_id: 'pipo', impressions: 1240, clicks: 340, messages: 18 },
+                    { artist_id: 'lara', impressions: 980, clicks: 210, messages: 12 },
+                    { artist_id: 'kame', impressions: 850, clicks: 190, messages: 8 },
+                    { artist_id: 'sombra', impressions: 1100, clicks: 290, messages: 14 }
+                ];
+                
+                await supabaseClient.from('stats').insert(defaultStats);
+                
+                console.log("Database seeded successfully.");
+            }
+        } catch (e) {
+            console.error("Seeding operation failed", e);
+        }
+    }
+
+    // Load and synchronize data from Supabase
+    async function loadSupabaseData() {
+        if (!supabaseClient) return;
+
+        // 1. Seed database if it is empty
+        await seedDatabaseIfEmpty();
+
+        try {
+            // 2. Fetch all profiles
+            const { data: profiles, error: pError } = await supabaseClient
+                .from('profiles')
+                .select('*');
+
+            if (pError) {
+                console.error("Error loading profiles from Supabase", pError);
+                return;
+            }
+
+            // Clear static arrays
+            state.artistsData = [];
+            
+            // Re-populate state and maps
+            profiles.forEach(p => {
+                state.artistsData.push({
+                    id: p.id,
+                    name: p.name,
+                    location: p.location,
+                    plan: p.plan === 'basic' ? 'Básico' : 'Premium',
+                    status: 'Verificado'
+                });
+
+                artistsDetails[p.id] = {
+                    name: p.name,
+                    location: p.location,
+                    bio: p.bio || '',
+                    instagram: p.instagram || '',
+                    avatar: p.avatar_url || 'assets/logo_pipo.png',
+                    coords: p.coords,
+                    experience: p.experience,
+                    price: p.price,
+                    styles: p.styles || [],
+                    inks: p.inks || [],
+                    needles: p.needles || []
+                };
+
+                artistCoordinates[p.id] = p.coords;
+
+                // Sync logged-in artist profile default settings if id is 'pipo'
+                if (p.id === 'pipo') {
+                    state.tatuadorProfile = {
+                        name: p.name,
+                        location: p.location,
+                        experience: p.experience,
+                        price: p.price,
+                        bio: p.bio,
+                        inks: p.inks || [],
+                        needles: p.needles || [],
+                        instagram: p.instagram,
+                        coords: p.coords,
+                        styles: p.styles || [],
+                        billingStatus: p.billing_status
+                    };
+                    state.selectedSubscriptionPlan = p.plan;
+                }
+            });
+
+            // 3. Fetch comments
+            const { data: comments, error: cError } = await supabaseClient
+                .from('comments')
+                .select('*');
+
+            if (!cError && comments) {
+                state.tatuadorComments = comments.map(c => ({
+                    id: parseInt(c.id),
+                    artistId: c.artist_id,
+                    clientName: c.client_name,
+                    text: c.text,
+                    status: c.status
+                }));
+            }
+
+            // 4. Fetch appointments
+            const { data: appointments, error: aError } = await supabaseClient
+                .from('appointments')
+                .select('*');
+
+            if (!aError && appointments) {
+                state.tatuadorAppointments = appointments.map(a => ({
+                    id: parseInt(a.id),
+                    clientName: a.client_name,
+                    email: a.email,
+                    phone: a.phone,
+                    style: a.style,
+                    date: a.date,
+                    message: a.message || '',
+                    status: a.status
+                }));
+            }
+
+            // 5. Update UI Grid from Supabase records
+            renderPublicArtistCardsFromSupabase();
+
+            // 6. Refresh workspace UI panels
+            refreshTatuadorWorkspace();
+            
+            // Re-render Leaflet map markers
+            if (mapInstance) {
+                // Clear existing markers
+                markersGroup.forEach(m => mapInstance.removeLayer(m.marker));
+                markersGroup.length = 0; // Empty array
+                
+                // Add new markers
+                Object.keys(artistsDetails).forEach(id => {
+                    const artist = artistsDetails[id];
+                    addOrUpdateArtistMarker(id, artist.name, artist.coords, artist.location);
+                });
+            }
+
+            updateQuickFicha('pipo');
+            document.querySelectorAll('.artist-card').forEach(card => card.classList.remove('active'));
+        } catch (e) {
+            console.error("Supabase data loading failed", e);
+        }
+    }
+
+    function renderPublicArtistCardsFromSupabase() {
+        const grid = document.getElementById('artist-grid');
+        if (!grid) return;
+        grid.innerHTML = ''; // Clear hardcoded ones
+        
+        Object.keys(artistsDetails).forEach(id => {
+            const artist = artistsDetails[id];
+            addNewArtistCardToGrid(artist.name, artist.location, artist.experience || 5, artist.styles, id, artist.avatar);
+        });
+
+        // Set card click handlers & favorites setup
+        document.querySelectorAll('.artist-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-favorite')) return;
+                const cardId = card.getAttribute('data-id');
+                updateQuickFicha(cardId);
+                
+                const drawer = document.getElementById('artist-quick-sheet');
+                if (drawer) drawer.classList.add('active');
+                
+                const homeLayout = document.querySelector('.home-layout');
+                if (homeLayout) homeLayout.classList.add('has-sidebar-open');
+            });
+        });
+        
+        lucide.createIcons();
+    }
+
     // Initialize Map on start
     initMap();
-    updateQuickFicha('pipo');
+    
+    // Load and synchronize data from Supabase
+    loadSupabaseData();
 
 
     
@@ -1566,12 +2134,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                     <div style="display: flex; align-items: center; gap: 10px; font-weight: 600;">
                         <div style="width: 32px; height: 32px; border-radius: 50%; background-color: var(--primary-light); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                            ${art.name.charAt(0).toUpperCase()}
+                            ${escapeHTML(art.name.charAt(0).toUpperCase())}
                         </div>
-                        ${art.name}
+                        ${escapeHTML(art.name)}
                     </div>
                 </td>
-                <td>${art.location}</td>
+                <td>${escapeHTML(art.location)}</td>
                 <td><span class="badge ${planBadgeClass}">${art.plan}</span></td>
                 <td><span class="badge ${statusBadgeClass}">${art.status}</span></td>
                 <td>
@@ -1735,34 +2303,76 @@ document.addEventListener('DOMContentLoaded', () => {
             const locEl = document.getElementById('reg-art-location');
             const expEl = document.getElementById('reg-art-exp');
             const bioEl = document.getElementById('reg-art-bio');
+            const instagramEl = document.getElementById('reg-art-instagram');
+            const coordsEl = document.getElementById('reg-art-coords');
             
             const artName = artNameEl ? artNameEl.value.trim() : '';
             const loc = locEl ? locEl.value : '';
             const exp = expEl ? expEl.value : '';
             const bio = bioEl ? bioEl.value.trim() : '';
+            const instagram = instagramEl ? instagramEl.value.trim() : '';
+            const coordsStr = coordsEl ? coordsEl.value.trim() : '';
             
-            if (artName === '' || exp === '') {
+            if (artName === '' || exp === '' || instagram === '' || coordsStr === '') {
                 showToast('Por favor, completa los campos requeridos.');
                 return;
             }
+
+            let coords = [-38.7396, -72.5984]; // Default to Temuco
+            const parts = coordsStr.split(',').map(p => parseFloat(p.trim()));
+            if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                coords = parts;
+            } else {
+                showToast('Coordenadas GPS inválidas. Formato: Latitud, Longitud');
+                return;
+            }
+
+            const selectedStyles = [];
+            document.querySelectorAll('input[name="reg-art-styles"]:checked').forEach(cb => {
+                selectedStyles.push(cb.value);
+            });
+            if (selectedStyles.length === 0) {
+                showToast('Por favor, selecciona al menos un estilo de tatuaje.');
+                return;
+            }
+
+            const safeId = artName.toLowerCase().replace(/[^a-z0-9]/g, '');
 
             // Update profile in state
             state.tatuadorProfile.name = artName;
             state.tatuadorProfile.location = loc;
             state.tatuadorProfile.experience = parseInt(exp);
             state.tatuadorProfile.bio = bio;
+            state.tatuadorProfile.instagram = instagram;
+            state.tatuadorProfile.coords = coords;
+            state.tatuadorProfile.styles = selectedStyles;
+            state.tatuadorProfile.billingStatus = 'paid';
             
             // Push into admin list
             state.artistsData.push({
-                id: artName.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                id: safeId,
                 name: artName,
                 location: loc,
                 plan: state.selectedSubscriptionPlan === 'basic' ? 'Básico' : 'Premium',
                 status: 'Verificado'
             });
 
+            // Save details to global coordinate and info maps
+            artistCoordinates[safeId] = coords;
+            artistsDetails[safeId] = {
+                name: artName,
+                location: loc,
+                bio: bio,
+                instagram: instagram,
+                avatar: 'assets/logo_pipo.png',
+                coords: coords
+            };
+
             // Dynamically add card to grids
-            addNewArtistCardToGrid(artName, loc, exp);
+            addNewArtistCardToGrid(artName, loc, exp, selectedStyles);
+
+            // Add Leaflet map marker
+            addOrUpdateArtistMarker(safeId, artName, coords, loc);
 
             showToast('¡Perfil creado exitosamente! Bienvenido a Tinta Conectada.');
             refreshTatuadorWorkspace();
@@ -1770,21 +2380,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Helper to dynamically inject new artist card
-    function addNewArtistCardToGrid(name, loc, exp) {
+    function addNewArtistCardToGrid(name, loc, exp, styles, artistId, avatarUrl) {
         const grid = document.getElementById('artist-grid');
-        const safeId = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        // Use explicit artistId if provided, else derive from name
+        const safeId = artistId || name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const avatar = avatarUrl || 'assets/logo_pipo.png';
         
         const card = document.createElement('article');
         card.className = 'artist-card';
         card.setAttribute('data-id', safeId);
         card.setAttribute('data-location', loc);
-        card.setAttribute('data-styles', "['Fine Line', 'Blackwork']");
+        
+        const stylesStr = JSON.stringify(styles || ['Fine Line']).replace(/"/g, "'");
+        card.setAttribute('data-styles', stylesStr);
         card.setAttribute('data-exp', exp);
         card.setAttribute('data-price', 'Intermedio');
         
         card.innerHTML = `
             <div class="card-image-wrapper">
-                <img src="assets/tattoo_flower.png" alt="Tatuaje de ${name}" class="card-tattoo-img">
+                <img src="assets/tattoo_flower.png" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img">
                 <button class="btn-favorite" aria-label="Agregar a favoritos">
                      <i data-lucide="heart" class="icon-heart"></i>
                 </button>
@@ -1792,22 +2406,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-info">
                 <div class="artist-brand-row">
                     <div class="artist-avatar-circle">
-                        <img src="assets/logo_pipo.png" alt="${name} Avatar" style="filter: hue-rotate(45deg);">
+                        <img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)} Avatar">
                     </div>
                     <div class="artist-brand-text">
-                        <h3 class="artist-name">${name}</h3>
-                        <span class="artist-loc"><i data-lucide="map-pin"></i> ${loc}</span>
+                        <h3 class="artist-name">${escapeHTML(name)}</h3>
+                        <span class="artist-loc"><i data-lucide="map-pin"></i> ${escapeHTML(loc)}</span>
                     </div>
                 </div>
                 
                 <div class="artist-tags">
-                     <span class="tag">Fine Line</span>
-                     <span class="tag">Blackwork</span>
-                     <span class="tag tag-count">+2</span>
+                     ${(styles || ['Fine Line']).slice(0, 2).map(s => `<span class="tag">${escapeHTML(s)}</span>`).join('')}
+                     ${(styles || []).length > 2 ? `<span class="tag tag-count">+${(styles || []).length - 2}</span>` : ''}
                 </div>
                 
                 <div class="artist-meta">
-                     <span class="meta-exp">${exp}+ años tatuando</span>
+                     <span class="meta-exp">${escapeHTML(String(exp))}+ años tatuando</span>
                      <span class="meta-price"><span class="price-highlight">$$</span> Intermedio</span>
                 </div>
             </div>
@@ -1815,17 +2428,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         grid.appendChild(card);
         
-        // Click action
+        // Click action — opens quick sheet drawer
         card.addEventListener('click', (e) => {
             if (e.target.closest('.btn-favorite')) return;
-            switchView('artist-view');
-            
-            document.querySelector('.profile-name').textContent = name;
-            document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> ${loc}`;
-            document.querySelector('.profile-avatar-img').src = "assets/logo_pipo.png";
-            document.querySelector('.info-title').textContent = name;
-            document.querySelector('.info-avatar-circle img').src = "assets/logo_pipo.png";
-            lucide.createIcons();
+            updateQuickFicha(safeId);
+
+            const drawer = document.getElementById('artist-quick-sheet');
+            if (drawer) drawer.classList.add('active');
+            const homeLayout = document.querySelector('.home-layout');
+            if (homeLayout) homeLayout.classList.add('has-sidebar-open');
+
+            document.querySelectorAll('.artist-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
         });
         
         // Favorite heart action
@@ -1863,12 +2477,32 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('edit-art-bio').value = state.tatuadorProfile.bio;
             document.getElementById('edit-art-inks').value = state.tatuadorProfile.inks.join(', ');
             document.getElementById('edit-art-needles').value = state.tatuadorProfile.needles.join(', ');
+            document.getElementById('edit-art-instagram').value = state.tatuadorProfile.instagram || '';
+            document.getElementById('edit-art-coords').value = (state.tatuadorProfile.coords || []).join(', ');
+            
+            // Populate styles checkboxes
+            const currentStyles = state.tatuadorProfile.styles || [];
+            document.querySelectorAll('input[name="edit-art-styles"]').forEach(cb => {
+                cb.checked = currentStyles.includes(cb.value);
+            });
+
+            // Populate account balance / billing info
+            const planTypeEl = document.getElementById('billing-plan-type');
+            if (planTypeEl) {
+                planTypeEl.textContent = state.selectedSubscriptionPlan === 'basic' ? 'Plan Básico' : 'Plan Premium';
+            }
+            const amountEl = document.getElementById('billing-amount');
+            if (amountEl) {
+                amountEl.textContent = state.selectedSubscriptionPlan === 'basic' ? '$14.990 CLP' : '$29.990 CLP';
+            }
+            updateBillingUI();
             
             document.getElementById('workspace-sidebar-name').textContent = state.tatuadorProfile.name;
             document.getElementById('workspace-sidebar-plan').textContent = state.selectedSubscriptionPlan === 'basic' ? 'Plan Básico' : 'Plan Premium';
             
             renderWorkspacePortfolio();
             renderWorkspaceAppointments();
+            renderDashboardComments();
         } else {
             onboardingPanel.style.display = 'block';
             workspacePanel.style.display = 'none';
@@ -1984,16 +2618,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="appointment-info">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <h4>${app.clientName}</h4>
-                        <span class="badge ${badgeClass}">${statusText}</span>
+                        <h4>${escapeHTML(app.clientName)}</h4>
+                        <span class="badge ${badgeClass}">${escapeHTML(statusText)}</span>
                     </div>
                     <div class="appointment-meta">
-                        <span><i data-lucide="mail"></i> ${app.email}</span>
-                        <span><i data-lucide="phone"></i> ${app.phone}</span>
-                        <span><i data-lucide="calendar"></i> Propuesto: ${app.date}</span>
-                        <span><i data-lucide="shapes"></i> Estilo: ${app.style}</span>
+                        <span><i data-lucide="mail"></i> ${escapeHTML(app.email)}</span>
+                        <span><i data-lucide="phone"></i> ${escapeHTML(app.phone)}</span>
+                        <span><i data-lucide="calendar"></i> Propuesto: ${escapeHTML(app.date)}</span>
+                        <span><i data-lucide="shapes"></i> Estilo: ${escapeHTML(app.style)}</span>
                     </div>
-                    <div class="appointment-msg">"${app.message}"</div>
+                    <div class="appointment-msg">"${escapeHTML(app.message)}"</div>
                 </div>
                 <div class="appointment-actions">
                     ${app.status === 'pending' ? `
@@ -2015,16 +2649,115 @@ document.addEventListener('DOMContentLoaded', () => {
                 const appointment = state.tatuadorAppointments.find(a => a.id === id);
                 
                 if (appointment) {
+                    let newStatus = 'pending';
                     if (action === 'approve') {
-                        appointment.status = 'approved';
+                        newStatus = 'approved';
                         showToast('Cita aprobada con éxito');
                     } else if (action === 'decline') {
-                        appointment.status = 'declined';
+                        newStatus = 'declined';
                         showToast('Cita declinada');
-                    } else {
-                        appointment.status = 'pending';
                     }
+                    appointment.status = newStatus;
+
+                    // Persist to Supabase
+                    if (supabaseClient) {
+                        supabaseClient
+                            .from('appointments')
+                            .update({ status: newStatus })
+                            .eq('id', id)
+                            .then(({ error }) => {
+                                if (error) console.error("Error updating appointment status:", error);
+                            });
+                    }
+
                     renderWorkspaceAppointments();
+                }
+            });
+        });
+
+        lucide.createIcons();
+    }
+
+    // Render comments list inside Dashboard Comments Moderation tab
+    function renderDashboardComments() {
+        const container = document.getElementById('db-comments-manager-container');
+        if (!container) return;
+
+        // Current artist represents logged-in user
+        const list = state.tatuadorComments.filter(c => c.artistId === (currentAuthUserId || 'pipo'));
+        
+        container.innerHTML = '';
+        if (list.length === 0) {
+            container.innerHTML = `<p style="font-size: 0.95rem; font-weight: 500; color: #4a5568; text-align: center; margin: 20px 0;">No has recibido ninguna recomendación de clientes aún.</p>`;
+            return;
+        }
+
+        list.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'comment-item-card';
+
+            let statusClass = 'comment-status-pending';
+            let statusText = 'Pendiente de Aprobación';
+            if (c.status === 'approved') {
+                statusClass = 'comment-status-approved';
+                statusText = 'Aprobado (Visible)';
+            } else if (c.status === 'hidden') {
+                statusClass = 'comment-status-hidden';
+                statusText = 'Oculto (No visible)';
+            }
+
+            card.innerHTML = `
+                <div class="comment-item-header">
+                    <span class="comment-item-name"><i data-lucide="user" style="display:inline-block; width:14px; height:14px; vertical-align:middle; margin-right: 4px;"></i> ${escapeHTML(c.clientName)}</span>
+                    <span class="comment-item-status-badge ${statusClass}">${escapeHTML(statusText)}</span>
+                </div>
+                <div class="comment-item-body">
+                    "${escapeHTML(c.text)}"
+                </div>
+                <div class="comment-item-actions">
+                    ${c.status === 'pending' || c.status === 'hidden' ? `
+                        <button type="button" class="btn btn-primary btn-sm btn-comment-action" data-id="${c.id}" data-action="approve"><i data-lucide="check"></i> Aprobar para Perfil</button>
+                    ` : ''}
+                    ${c.status === 'approved' ? `
+                        <button type="button" class="btn btn-outline btn-sm btn-comment-action" data-id="${c.id}" data-action="hide" style="color:#e53e3e; border-color:#e53e3e;"><i data-lucide="eye-off"></i> Ocultar</button>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // Add action event listeners
+        container.querySelectorAll('.btn-comment-action').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                const action = btn.getAttribute('data-action');
+                const comment = state.tatuadorComments.find(c => c.id === id);
+
+                if (comment) {
+                    let newStatus = comment.status;
+                    if (action === 'approve') {
+                        newStatus = 'approved';
+                        showToast('Recomendación aprobada y publicada.');
+                    } else if (action === 'hide') {
+                        newStatus = 'hidden';
+                        showToast('Recomendación oculta.');
+                    }
+                    comment.status = newStatus;
+
+                    // Persist status change to Supabase
+                    if (supabaseClient) {
+                        supabaseClient
+                            .from('comments')
+                            .update({ status: newStatus })
+                            .eq('id', id)
+                            .then(({ error }) => {
+                                if (error) console.error("Error updating comment status:", error);
+                            });
+                    }
+
+                    renderDashboardComments();
+                    // Also refresh public reviews inside quick sheet in case it's currently open
+                    renderFichaComments(currentFichaArtistId);
                 }
             });
         });
@@ -2044,6 +2777,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const bio = document.getElementById('edit-art-bio').value.trim();
             const inks = document.getElementById('edit-art-inks').value.split(',').map(s => s.trim());
             const needles = document.getElementById('edit-art-needles').value.split(',').map(s => s.trim());
+            const instagram = document.getElementById('edit-art-instagram').value.trim();
+            const coordsStr = document.getElementById('edit-art-coords').value.trim();
+            
+            if (name === '' || exp === '') {
+                showToast('Por favor, completa tu nombre y años de experiencia.');
+                return;
+            }
+
+            // Coords: use map field if filled, otherwise fallback to existing saved coords
+            let coords = state.tatuadorProfile.coords || [-39.2045, -73.0538];
+            if (coordsStr !== '') {
+                const parts = coordsStr.split(',').map(p => parseFloat(p.trim()));
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                    coords = parts;
+                }
+                // If format is invalid, silently keep the existing coords (non-blocking)
+            }
+
+            const selectedStyles = [];
+            document.querySelectorAll('input[name="edit-art-styles"]:checked').forEach(cb => {
+                selectedStyles.push(cb.value);
+            });
+            if (selectedStyles.length === 0) {
+                showToast('Por favor, selecciona al menos un estilo de tatuaje.');
+                return;
+            }
             
             state.tatuadorProfile.name = name;
             state.tatuadorProfile.location = loc;
@@ -2052,39 +2811,102 @@ document.addEventListener('DOMContentLoaded', () => {
             state.tatuadorProfile.bio = bio;
             state.tatuadorProfile.inks = inks;
             state.tatuadorProfile.needles = needles;
+            state.tatuadorProfile.instagram = instagram;
+            state.tatuadorProfile.coords = coords;
+            state.tatuadorProfile.styles = selectedStyles;
             
+            // Sync database maps
+            const artistId = currentAuthUserId || 'pipo';
+            artistCoordinates[artistId] = coords;
+            if (!artistsDetails[artistId]) {
+                artistsDetails[artistId] = {};
+            }
+            artistsDetails[artistId].name = name;
+            artistsDetails[artistId].location = loc;
+            artistsDetails[artistId].bio = bio;
+            artistsDetails[artistId].instagram = instagram;
+            artistsDetails[artistId].coords = coords;
+
+            // Sync Leaflet marker
+            addOrUpdateArtistMarker(artistId, name, coords, loc);
+
             // Sync workspace sidebar details
             document.getElementById('workspace-sidebar-name').textContent = name;
             
-            // Sync drawer details on pipo profile
+            // Sync drawer details on active profile if it matches first card
             document.getElementById('profile-bio-text').textContent = bio;
             document.getElementById('profile-exp-text').textContent = `${exp}+ Años de trayectoria profesional`;
             
             const inkList = document.getElementById('profile-inks-list');
-            if (inkList) inkList.innerHTML = inks.map(ink => `<li><strong>${ink}</strong></li>`).join('');
+            if (inkList) inkList.innerHTML = inks.map(ink => `<li><strong>${escapeHTML(ink)}</strong></li>`).join('');
             
             const needleList = document.getElementById('profile-needles-list');
-            if (needleList) needleList.innerHTML = needles.map(n => `<li><strong>${n}</strong></li>`).join('');
+            if (needleList) needleList.innerHTML = needles.map(n => `<li><strong>${escapeHTML(n)}</strong></li>`).join('');
             
             // Sync public explorer cards
-            const card = document.querySelector(`.artist-card[data-id="pipo"]`);
+            let card = document.querySelector(`.artist-card[data-id="${artistId}"]`);
+            if (!card) {
+                renderPublicArtistCardsFromSupabase();
+                card = document.querySelector(`.artist-card[data-id="${artistId}"]`);
+            }
             if (card) {
                 card.setAttribute('data-location', loc);
                 card.setAttribute('data-exp', exp);
                 card.setAttribute('data-price', price);
                 
+                const stylesStr = JSON.stringify(selectedStyles).replace(/"/g, "'");
+                card.setAttribute('data-styles', stylesStr);
+                
                 card.querySelector('.artist-name').textContent = name;
-                card.querySelector('.artist-loc').innerHTML = `<i data-lucide="map-pin"></i> ${loc}`;
-                card.querySelector('.meta-exp').textContent = `${exp}+ años tatuando`;
+                card.querySelector('.artist-loc').innerHTML = `<i data-lucide="map-pin"></i> ${escapeHTML(loc)}`;
+                card.querySelector('.meta-exp').textContent = `${escapeHTML(exp)}+ años tatuando`;
                 
                 let priceSymbols = '$$';
                 if (price === 'Accesible') priceSymbols = '$';
                 else if (price === 'Premium') priceSymbols = '$$$';
                 else if (price === 'Especialista') priceSymbols = '$$$$';
-                card.querySelector('.meta-price').innerHTML = `<span class="price-highlight">${priceSymbols}</span> ${price}`;
+                card.querySelector('.meta-price').innerHTML = `<span class="price-highlight">${priceSymbols}</span> ${escapeHTML(price)}`;
+                
+                // Re-generate tags in card
+                const tagsContainer = card.querySelector('.artist-tags');
+                if (tagsContainer) {
+                    tagsContainer.innerHTML = `
+                        ${selectedStyles.slice(0, 2).map(s => `<span class="tag">${escapeHTML(s)}</span>`).join('')}
+                        ${selectedStyles.length > 2 ? `<span class="tag tag-count">+${selectedStyles.length - 2}</span>` : ''}
+                    `;
+                }
             }
 
-            showToast('¡Ficha del perfil del estudio guardada!');
+            // Immediately apply filters to update map markers visibility and search grid
+            applyFilters();
+
+            // Persist to Supabase
+            if (supabaseClient) {
+                supabaseClient
+                    .from('profiles')
+                    .upsert({
+                        id: artistId,
+                        name,
+                        location: loc,
+                        experience: parseInt(exp),
+                        price,
+                        bio,
+                        inks,
+                        needles,
+                        instagram,
+                        coords,
+                        styles: selectedStyles,
+                        billing_status: state.tatuadorProfile.billingStatus,
+                        plan: state.selectedSubscriptionPlan
+                    })
+                    .then(({ error }) => {
+                        if (error) console.error("Error saving profile to Supabase:", error);
+                        else showToast('¡Ficha guardada y sincronizada con la nube!');
+                    });
+            } else {
+                showToast('¡Ficha del perfil del estudio guardada!');
+            }
+
             lucide.createIcons();
         });
     }
@@ -2098,6 +2920,227 @@ document.addEventListener('DOMContentLoaded', () => {
             switchView('landing-view');
         });
     }
+
+    // Tatuador dashboard: navigation tabs switching
+    document.querySelectorAll('#tatuador-workspace-panel .db-nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('#tatuador-workspace-panel .db-nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            const tab = link.getAttribute('data-db-tab');
+            document.querySelectorAll('#tatuador-workspace-panel .db-tab-panel').forEach(panel => {
+                if (panel.id === tab) panel.classList.add('active');
+                else panel.classList.remove('active');
+            });
+            
+            // Re-render Leaflet maps if switching to stats or others where Leaflet needs to refresh size
+            if (tab === 'tatuador-profile' && window.artistProfileMapInstance) {
+                setTimeout(() => window.artistProfileMapInstance.invalidateSize(), 100);
+            }
+        });
+    });
+
+    // Update Billing UI
+    function updateBillingUI() {
+        const badge = document.getElementById('billing-status-badge');
+        const payBtn = document.getElementById('btn-pay-pending');
+        
+        if (!badge) return;
+        
+        if (state.tatuadorProfile.billingStatus === 'paid') {
+            badge.className = 'billing-badge billing-badge-active';
+            badge.textContent = 'Al día';
+            if (payBtn) payBtn.style.display = 'none';
+        } else {
+            badge.className = 'billing-badge billing-badge-owed';
+            badge.textContent = 'Deuda Pendiente';
+            if (payBtn) payBtn.style.display = 'block';
+        }
+    }
+
+    // Billing status simulation toggle
+    const btnToggleBilling = document.getElementById('btn-toggle-billing-status');
+    if (btnToggleBilling) {
+        btnToggleBilling.addEventListener('click', () => {
+            if (state.tatuadorProfile.billingStatus === 'paid') {
+                state.tatuadorProfile.billingStatus = 'unpaid';
+                showToast('Estado de cuenta: Deuda pendiente simulada.');
+            } else {
+                state.tatuadorProfile.billingStatus = 'paid';
+                showToast('Estado de cuenta: Al día.');
+            }
+            updateBillingUI();
+        });
+    }
+
+    // Pay pending balance
+    const btnPayPending = document.getElementById('btn-pay-pending');
+    if (btnPayPending) {
+        btnPayPending.addEventListener('click', () => {
+            state.tatuadorProfile.billingStatus = 'paid';
+            showToast('¡Pago de mensualidad procesado con éxito!');
+            updateBillingUI();
+
+            // Persist to Supabase
+            if (supabaseClient) {
+                supabaseClient
+                    .from('profiles')
+                    .update({ billing_status: 'paid' })
+                    .eq('id', currentAuthUserId || 'pipo')
+                    .then(({ error }) => {
+                        if (error) console.error('Error updating billing status:', error);
+                    });
+            }
+        });
+    }
+
+    // Address Search geocoding
+    const btnSearchAddress = document.getElementById('btn-search-address');
+    if (btnSearchAddress) {
+        btnSearchAddress.addEventListener('click', async () => {
+            const addressInput = document.getElementById('edit-art-address');
+            if (!addressInput) return;
+
+            const query = addressInput.value.trim();
+            if (query === '') {
+                showToast('Ingresa una dirección para buscar.');
+                return;
+            }
+
+            showToast('Buscando ubicación...');
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lng = parseFloat(data[0].lon);
+                    
+                    document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    
+                    if (window.artistProfileMapInstance && window.artistProfileMarkerInstance) {
+                        window.artistProfileMapInstance.setView([lat, lng], 13);
+                        window.artistProfileMarkerInstance.setLatLng([lat, lng]);
+                    }
+                    showToast('Ubicación encontrada y fijada en el mapa.');
+                } else {
+                    showToast('No se encontró la dirección. Intenta con otra comuna o calle.');
+                }
+            } catch (e) {
+                console.error("Geocoding search failed", e);
+                showToast('Error de búsqueda. Intenta marcar la ubicación haciendo clic en el mapa.');
+            }
+        });
+    }
+
+    // Plan Switching Simulation
+    const btnChangePlanBasic = document.getElementById('btn-change-plan-basic');
+    if (btnChangePlanBasic) {
+        btnChangePlanBasic.addEventListener('click', () => {
+            if (state.selectedSubscriptionPlan === 'basic') return;
+            
+            state.selectedSubscriptionPlan = 'basic';
+            showToast('Te has cambiado al Plan Básico.');
+            
+            // Update workspace sidebar plan badge
+            const sidebarPlan = document.getElementById('workspace-sidebar-plan');
+            if (sidebarPlan) {
+                sidebarPlan.textContent = 'Plan Básico';
+                sidebarPlan.className = 'badge';
+                sidebarPlan.style.background = '#4a5568';
+            }
+
+            // Update UI elements in pricing tab
+            const btnCurrentBasic = document.getElementById('btn-change-plan-basic');
+            const btnCurrentPremium = document.getElementById('btn-current-plan-premium');
+            
+            if (btnCurrentBasic) {
+                btnCurrentBasic.textContent = 'Tu Plan Actual';
+                btnCurrentBasic.disabled = true;
+                btnCurrentBasic.style.cursor = 'default';
+            }
+            
+            if (btnCurrentPremium) {
+                btnCurrentPremium.textContent = 'Cambiar a este plan';
+                btnCurrentPremium.disabled = false;
+                btnCurrentPremium.style.cursor = 'pointer';
+                btnCurrentPremium.className = 'btn btn-primary btn-block';
+            }
+
+            // Update billing amounts
+            const planTypeEl = document.getElementById('billing-plan-type');
+            if (planTypeEl) {
+                planTypeEl.textContent = 'Plan Básico';
+                planTypeEl.className = 'badge';
+                planTypeEl.style.background = '#4a5568';
+            }
+            const amountEl = document.getElementById('billing-amount');
+            if (amountEl) {
+                amountEl.textContent = '$14.990 CLP';
+            }
+
+            // Persist plan change to Supabase
+            if (supabaseClient) {
+                supabaseClient
+                    .from('profiles')
+                    .update({ plan: 'basic' })
+                    .eq('id', currentAuthUserId || 'pipo')
+                    .then(({ error }) => {
+                        if (error) console.error('Error saving plan change to Supabase:', error);
+                    });
+            }
+        });
+    }
+
+    // Set up back to Premium click handler if Premium button is clicked (when not active)
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('#btn-current-plan-premium');
+        if (btn && !btn.disabled && state.selectedSubscriptionPlan === 'basic') {
+            state.selectedSubscriptionPlan = 'premium';
+            showToast('¡Te has cambiado al Plan Premium!');
+
+            const sidebarPlan = document.getElementById('workspace-sidebar-plan');
+            if (sidebarPlan) {
+                sidebarPlan.textContent = 'Plan Premium';
+                sidebarPlan.className = 'badge badge-premium';
+                sidebarPlan.style.background = '';
+            }
+
+            const btnCurrentBasic = document.getElementById('btn-change-plan-basic');
+            if (btnCurrentBasic) {
+                btnCurrentBasic.textContent = 'Cambiar a este plan';
+                btnCurrentBasic.disabled = false;
+                btnCurrentBasic.style.cursor = 'pointer';
+            }
+
+            btn.textContent = 'Tu Plan Actual';
+            btn.disabled = true;
+            btn.style.cursor = 'default';
+
+            // Update billing amounts
+            const planTypeEl = document.getElementById('billing-plan-type');
+            if (planTypeEl) {
+                planTypeEl.textContent = 'Plan Premium';
+                planTypeEl.className = 'badge badge-premium';
+                planTypeEl.style.background = '';
+            }
+            const amountEl = document.getElementById('billing-amount');
+            if (amountEl) {
+                amountEl.textContent = '$29.990 CLP';
+            }
+
+            // Persist plan change to Supabase
+            if (supabaseClient) {
+                supabaseClient
+                    .from('profiles')
+                    .update({ plan: 'premium' })
+                    .eq('id', currentAuthUserId || 'pipo')
+                    .then(({ error }) => {
+                        if (error) console.error('Error saving plan change to Supabase:', error);
+                    });
+            }
+        }
+    });
 
 
     
@@ -2673,6 +3716,88 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ==========================================================================
+    // HOW IT WORKS — DYNAMIC STEP CARD INTERACTIONS
+    // ==========================================================================
+    function initHowItWorksCards() {
+        const stepCards = document.querySelectorAll('.step-card');
+        if (!stepCards.length) return;
+
+        // 1. Scroll-triggered entrance animation using IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    // Stagger each card entrance by 120ms
+                    const delay = parseInt(entry.target.dataset.stepNum || '0') * 120;
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        stepCards.forEach(card => observer.observe(card));
+
+        // 2. Ripple on click + action routing
+        const cardActions = {
+            'step-card-1': () => {
+                // Scroll smoothly to the search/filter area
+                const searchInput = document.getElementById('global-search-input');
+                if (searchInput) {
+                    searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => searchInput.focus(), 400);
+                }
+                showToast('🔍 Usa los filtros de estilo para encontrar tu artista');
+            },
+            'step-card-2': () => {
+                // Scroll to the artist grid cards
+                const grid = document.getElementById('artist-grid');
+                if (grid) {
+                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                showToast('❤️ Revisa los portafolios y recomendaciones de clientes');
+            },
+            'step-card-3': () => {
+                // Open the first artist's quick sheet drawer to show the booking form
+                const firstCard = document.querySelector('.artist-card');
+                if (firstCard) {
+                    firstCard.click();
+                }
+                showToast('📅 ¡Así de fácil puedes agendar tu cita!');
+            }
+        };
+
+        stepCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Ripple effect
+                const ripple = document.createElement('span');
+                ripple.className = 'step-ripple';
+                const rect = card.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height) * 2;
+                ripple.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${e.clientX - rect.left - size / 2}px;
+                    top: ${e.clientY - rect.top - size / 2}px;
+                `;
+                card.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+
+                // Route to action
+                const action = cardActions[card.id];
+                if (action) {
+                    setTimeout(action, 200);
+                }
+            });
+
+            // Subtle bounce on mouseenter
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background-color 0.2s ease';
+            });
+        });
+    }
+
     // Initialize Visual FX
     initLandingParticles();
     initMagneticButton();
@@ -2680,6 +3805,398 @@ document.addEventListener('DOMContentLoaded', () => {
     initCustomCursor();
     initTattooDrawingAnimation();
     initLandingVideos();
+    initHowItWorksCards();
+
+    // ==========================================================================
+    // SUPABASE AUTH — LOGIN, REGISTER, SESSION MANAGEMENT
+    // ==========================================================================
+
+    // Track current logged-in user id (null when not logged in)
+    let currentAuthUserId = null;
+
+    // Helper: set auth button loading state
+    function setAuthLoading(formId, loading) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+        const btn = form.querySelector('.auth-submit-btn');
+        if (!btn) return;
+        btn.disabled = loading;
+        btn.querySelector('.btn-text').style.display = loading ? 'none' : 'inline';
+        btn.querySelector('.btn-loader').style.display = loading ? 'inline-flex' : 'none';
+        lucide.createIcons();
+    }
+
+    // Helper: show auth error
+    function showAuthError(errorId, message) {
+        const el = document.getElementById(errorId);
+        if (!el) return;
+        el.textContent = message;
+        el.style.display = 'block';
+    }
+
+    function hideAuthError(errorId) {
+        const el = document.getElementById(errorId);
+        if (el) el.style.display = 'none';
+    }
+
+    // Load artist profile from Supabase by userId
+    async function loadArtistProfile(userId) {
+        if (!supabaseClient || !userId) return;
+
+        const { data: profile, error } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        if (error || !profile) {
+            // First-time login: new artist — show onboarding
+            const authPanel = document.getElementById('tatuador-auth-panel');
+            const onboardingPanel = document.getElementById('tatuador-onboarding-panel');
+            if (authPanel) authPanel.style.display = 'none';
+            if (onboardingPanel) onboardingPanel.style.display = 'block';
+            return;
+        }
+
+        // Populate state with real profile from Supabase
+        state.tatuadorProfile = {
+            name: profile.name,
+            location: profile.location || 'Araucanía',
+            experience: profile.experience || 1,
+            price: profile.price || 'Intermedio',
+            bio: profile.bio || '',
+            inks: profile.inks || [],
+            needles: profile.needles || [],
+            instagram: profile.instagram || '',
+            coords: profile.coords || [-38.7396, -72.5984],
+            styles: profile.styles || [],
+            billingStatus: profile.billing_status || 'paid'
+        };
+        state.selectedSubscriptionPlan = profile.plan || 'basic';
+        state.isTatuadorSubscribed = true;
+        currentAuthUserId = userId;
+
+        // Hydrate or update the artist details in memory
+        if (!artistsDetails[userId]) {
+            artistsDetails[userId] = {};
+        }
+        artistsDetails[userId] = {
+            name: profile.name,
+            location: profile.location || 'Araucanía',
+            bio: profile.bio || '',
+            instagram: profile.instagram || '',
+            avatar: profile.avatar_url || 'assets/logo_pipo.png',
+            coords: profile.coords || [-38.7396, -72.5984],
+            experience: profile.experience || 1,
+            price: profile.price || 'Intermedio',
+            styles: profile.styles || [],
+            inks: profile.inks || [],
+            needles: profile.needles || []
+        };
+        artistCoordinates[userId] = profile.coords || [-38.7396, -72.5984];
+
+        // Keep 'pipo' default instagram up to date if this user is 'pipo'
+        if (userId === 'pipo') {
+            artistsDetails['pipo'].instagram = profile.instagram || 'https://www.instagram.com/pipo.tattooo/';
+        }
+
+        // Hide auth panel, show workspace
+        const authPanel = document.getElementById('tatuador-auth-panel');
+        if (authPanel) authPanel.style.display = 'none';
+
+        // Show workspace
+        refreshTatuadorWorkspace();
+
+        // Update navbar button to show name
+        const btnSoyTatuador = document.getElementById('btn-soy-tatuador');
+        if (btnSoyTatuador) {
+            btnSoyTatuador.textContent = profile.name || 'Mi Panel';
+        }
+    }
+
+    // Listen for session changes (handles page reload with active session)
+    if (supabaseClient) {
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' && session?.user) {
+                await loadArtistProfile(session.user.id);
+            } else if (event === 'SIGNED_OUT') {
+                currentAuthUserId = null;
+                state.isTatuadorSubscribed = false;
+                const btnSoyTatuador = document.getElementById('btn-soy-tatuador');
+                if (btnSoyTatuador) btnSoyTatuador.textContent = 'Soy tatuador/a';
+            }
+        });
+    }
+
+    // Auth panel tab switching
+    const authTabLogin = document.getElementById('auth-tab-login');
+    const authTabRegister = document.getElementById('auth-tab-register');
+    const authFormLogin = document.getElementById('auth-form-login');
+    const authFormRegister = document.getElementById('auth-form-register');
+
+    function switchAuthTab(tab) {
+        const isLogin = tab === 'login';
+        authTabLogin.classList.toggle('active', isLogin);
+        authTabLogin.setAttribute('aria-selected', isLogin);
+        authTabRegister.classList.toggle('active', !isLogin);
+        authTabRegister.setAttribute('aria-selected', !isLogin);
+        authFormLogin.style.display = isLogin ? 'flex' : 'none';
+        authFormRegister.style.display = isLogin ? 'none' : 'flex';
+        // Hide success/error states
+        const successEl = document.getElementById('auth-success-confirm');
+        if (successEl) successEl.style.display = 'none';
+        hideAuthError('auth-login-error');
+        hideAuthError('auth-register-error');
+    }
+
+    if (authTabLogin) authTabLogin.addEventListener('click', () => switchAuthTab('login'));
+    if (authTabRegister) authTabRegister.addEventListener('click', () => switchAuthTab('register'));
+
+    const btnBackToLogin = document.getElementById('btn-back-to-login');
+    if (btnBackToLogin) {
+        btnBackToLogin.addEventListener('click', () => {
+            document.getElementById('auth-success-confirm').style.display = 'none';
+            switchAuthTab('login');
+        });
+    }
+
+    // Password visibility toggle
+    document.querySelectorAll('.auth-toggle-pw').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.querySelector('i').setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        });
+    });
+
+    // Password strength meter
+    const pwInput = document.getElementById('auth-reg-password');
+    const pwFill = document.getElementById('pw-strength-fill');
+    const pwLabel = document.getElementById('pw-strength-label');
+
+    if (pwInput && pwFill && pwLabel) {
+        pwInput.addEventListener('input', () => {
+            const val = pwInput.value;
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (val.length >= 12) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            const levels = [
+                { pct: '20%', color: '#e53e3e', label: 'Muy débil' },
+                { pct: '40%', color: '#dd6b20', label: 'Débil' },
+                { pct: '60%', color: '#d69e2e', label: 'Media' },
+                { pct: '80%', color: '#38a169', label: 'Fuerte' },
+                { pct: '100%', color: '#276749', label: 'Muy fuerte' }
+            ];
+            const level = levels[Math.max(0, score - 1)] || levels[0];
+            pwFill.style.width = val.length ? level.pct : '0%';
+            pwFill.style.backgroundColor = level.color;
+            pwLabel.textContent = val.length ? level.label : '';
+            pwLabel.style.color = val.length ? level.color : '';
+        });
+    }
+
+    // Login form submit
+    if (authFormLogin) {
+        authFormLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAuthError('auth-login-error');
+
+            const email = document.getElementById('auth-login-email').value.trim();
+            const password = document.getElementById('auth-login-password').value;
+
+            if (!email || !password) {
+                showAuthError('auth-login-error', 'Por favor, ingresa tu correo y contraseña.');
+                return;
+            }
+
+            if (!supabaseClient) {
+                showAuthError('auth-login-error', 'Error de conexión con el servidor.');
+                return;
+            }
+
+            setAuthLoading('auth-form-login', true);
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            setAuthLoading('auth-form-login', false);
+
+            if (error) {
+                const msg = error.message.includes('Invalid login') || error.message.includes('invalid_credentials')
+                    ? 'Correo o contraseña incorrectos.'
+                    : error.message.includes('Email not confirmed')
+                    ? 'Tu correo no ha sido confirmado. Revisa tu bandeja de entrada.'
+                    : `Error: ${error.message}`;
+                showAuthError('auth-login-error', msg);
+                return;
+            }
+
+            // onAuthStateChange will handle the rest
+        });
+    }
+
+    // Register form submit
+    if (authFormRegister) {
+        authFormRegister.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAuthError('auth-register-error');
+
+            const studioName = document.getElementById('auth-reg-name').value.trim();
+            const email = document.getElementById('auth-reg-email').value.trim();
+            const password = document.getElementById('auth-reg-password').value;
+            const confirm = document.getElementById('auth-reg-confirm').value;
+
+            if (!studioName || !email || !password || !confirm) {
+                showAuthError('auth-register-error', 'Por favor, completa todos los campos.');
+                return;
+            }
+            if (password.length < 8) {
+                showAuthError('auth-register-error', 'La contraseña debe tener al menos 8 caracteres.');
+                return;
+            }
+            if (password !== confirm) {
+                showAuthError('auth-register-error', 'Las contraseñas no coinciden.');
+                return;
+            }
+
+            if (!supabaseClient) {
+                showAuthError('auth-register-error', 'Error de conexión con el servidor.');
+                return;
+            }
+
+            setAuthLoading('auth-form-register', true);
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { display_name: studioName }
+                }
+            });
+
+            setAuthLoading('auth-form-register', false);
+
+            if (error) {
+                const msg = error.message.includes('already registered') || error.message.includes('User already registered')
+                    ? 'Ese correo ya tiene una cuenta. Inicia sesión.'
+                    : `Error: ${error.message}`;
+                showAuthError('auth-register-error', msg);
+                return;
+            }
+
+            if (data.user) {
+                // Create a stub profile row in the DB for this artist
+                await supabaseClient.from('profiles').upsert({
+                    id: data.user.id,
+                    name: studioName,
+                    location: 'Araucanía',
+                    experience: 1,
+                    price: 'Intermedio',
+                    bio: '',
+                    inks: [],
+                    needles: [],
+                    instagram: '',
+                    coords: [-38.7396, -72.5984],
+                    styles: [],
+                    billing_status: 'paid',
+                    plan: 'basic',
+                    avatar_url: 'assets/logo_pipo.png'
+                });
+            }
+
+            // If email confirmation is enabled, show success message
+            if (data.user && !data.session) {
+                authFormRegister.style.display = 'none';
+                const successEl = document.getElementById('auth-success-confirm');
+                if (successEl) successEl.style.display = 'flex';
+                return;
+            }
+
+            // Auto-confirmed (dev mode) — session already active
+            if (data.session) {
+                await loadArtistProfile(data.user.id);
+            }
+        });
+    }
+
+    // Updated logout to use Supabase signOut
+    const btnTatuadorLogoutEl = document.getElementById('btn-tatuador-logout');
+    if (btnTatuadorLogoutEl) {
+        // Remove any existing listener by cloning the node
+        const freshLogout = btnTatuadorLogoutEl.cloneNode(true);
+        btnTatuadorLogoutEl.parentNode.replaceChild(freshLogout, btnTatuadorLogoutEl);
+
+        freshLogout.addEventListener('click', async () => {
+            if (supabaseClient) await supabaseClient.auth.signOut();
+            
+            // Reset local state
+            state.isTatuadorSubscribed = false;
+            currentAuthUserId = null;
+            state.tatuadorProfile = {
+                name: 'Studio tatto pipo',
+                location: 'Teodoro Schmidt',
+                experience: 5,
+                price: 'Intermedio',
+                bio: '',
+                inks: [],
+                needles: [],
+                instagram: 'https://www.instagram.com/pipo.tattooo/',
+                coords: [-39.2045, -73.0538],
+                styles: ['Fine Line', 'Blackwork'],
+                billingStatus: 'paid'
+            };
+
+            // Reset auth panel back to login view
+            const authPanel = document.getElementById('tatuador-auth-panel');
+            const onboardingPanel = document.getElementById('tatuador-onboarding-panel');
+            const workspacePanel = document.getElementById('tatuador-workspace-panel');
+            if (authPanel) authPanel.style.display = 'flex';
+            if (onboardingPanel) onboardingPanel.style.display = 'none';
+            if (workspacePanel) workspacePanel.style.display = 'none';
+            switchAuthTab('login');
+
+            // Reset form fields
+            ['auth-login-email', 'auth-login-password'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+
+            showToast('Sesión cerrada correctamente.');
+            switchView('landing-view');
+        });
+    }
+
+    // Show auth panel by default when clicking "Soy tatuador/a" (unless already logged in)
+    const authPanel = document.getElementById('tatuador-auth-panel');
+    const tatuadorOnboardingPanel = document.getElementById('tatuador-onboarding-panel');
+    const tatuadorWorkspacePanel = document.getElementById('tatuador-workspace-panel');
+
+    // Intercept the "Soy tatuador/a" nav button to manage panel visibility
+    const originalBtnSoyTatuador = document.getElementById('btn-soy-tatuador');
+    if (originalBtnSoyTatuador) {
+        originalBtnSoyTatuador.addEventListener('click', () => {
+            // If already logged in, go straight to workspace
+            if (state.isTatuadorSubscribed && currentAuthUserId) {
+                if (authPanel) authPanel.style.display = 'none';
+                if (tatuadorOnboardingPanel) tatuadorOnboardingPanel.style.display = 'none';
+                refreshTatuadorWorkspace();
+                return;
+            }
+            // Otherwise show auth panel
+            if (authPanel) authPanel.style.display = 'flex';
+            if (tatuadorOnboardingPanel) tatuadorOnboardingPanel.style.display = 'none';
+            if (tatuadorWorkspacePanel) tatuadorWorkspacePanel.style.display = 'none';
+            switchAuthTab('login');
+            lucide.createIcons();
+        }, { capture: true }); // capture: true so this runs before other click handlers
+    }
 
     // Default start view: landing page
     switchView('landing-view');
