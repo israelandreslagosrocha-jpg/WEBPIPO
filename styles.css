@@ -12,6 +12,13 @@
 /* Reset & Variables */
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&display=swap');
 
+@font-face {
+    font-family: 'Ghosthey';
+    src: url('./assets/fonts/ghosthey-Regular.ttf?v=3') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --primary-color: #5d32a8;       /* Primary Deep Purple */
     --primary-light: #7b4ad8;      /* Lighter Violet */
@@ -805,6 +812,13 @@ button, input, select, textarea {
     display: inline-block;
 }
 
+.style-pill-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .style-pill:hover, .style-pill.active {
     background-color: #FFC82C;
     transform: translateY(-2px);
@@ -812,12 +826,13 @@ button, input, select, textarea {
 }
 
 .tatuadores-gothic-title {
-    font-family: 'Cinzel', serif;
-    font-weight: 900;
-    font-size: 1.6rem;
+    font-family: 'Ghosthey', sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 2.8rem;
     color: #000000;
     margin: 0;
-    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .tatuadores-filters-row {
@@ -1295,12 +1310,13 @@ button, input, select, textarea {
 }
 
 .editorial-title {
-    font-family: 'Cinzel', serif;
-    font-weight: 900;
-    font-size: 2rem;
+    font-family: 'Ghosthey', sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 3.5rem;
     color: #000000;
     margin: 0 0 10px 0;
-    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .editorial-subtitle {
@@ -5298,4 +5314,196 @@ h5 {
     margin-top: 4px;
     color: #7b4ad8;
     margin-left: 24px;
+}
+
+/* ==========================================================================
+   YELLOW SIDEBAR & PROFILES REDESIGN (DUP-BASED LAYOUT)
+   ========================================================================== */
+
+/* Hide yellow sidebar in landing/auth views */
+.landing-active .floating-sidebar-menu {
+    display: none !important;
+}
+
+/* Sidebar default styling */
+.floating-sidebar-menu {
+    background-color: #FFC82C;
+    border: 3px solid #000000;
+    box-shadow: 5px 5px 0px #000000;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 12px;
+    gap: 20px;
+    height: auto;
+    min-height: 380px;
+    width: 76px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Sidebar item layout fixes */
+.floating-sidebar-menu .sidebar-item {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #000000;
+    transition: all 0.2s ease;
+    border: 2.5px solid transparent;
+}
+
+.floating-sidebar-menu .sidebar-item i {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5px;
+}
+
+.floating-sidebar-menu .sidebar-item.active {
+    background-color: #000000;
+    color: #FFC82C;
+    border-color: #000000;
+}
+
+/* Flex layout overrides for trivia & history views */
+@media (min-width: 769px) {
+    .sabias-que-layout,
+    .history-layout {
+        display: flex !important;
+        gap: 32px !important;
+        max-width: 1200px !important;
+        margin: 40px auto !important;
+        padding: 0 24px !important;
+        align-items: flex-start !important;
+    }
+
+    .sabias-que-layout > :not(.floating-sidebar-menu),
+    .history-layout > :not(.floating-sidebar-menu) {
+        flex: 1 !important;
+        min-width: 0 !important;
+        margin: 0 !important; /* Clear auto centering margins */
+    }
+}
+
+@media (max-width: 768px) {
+    .sabias-que-layout,
+    .history-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+        padding: 16px !important;
+    }
+    
+    .floating-sidebar-menu {
+        flex-direction: row !important;
+        height: auto !important;
+        min-height: auto !important;
+        position: relative !important;
+        top: 0 !important;
+        width: 100% !important;
+        padding: 12px 20px !important;
+        justify-content: space-around !important;
+        border-radius: 20px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .sidebar-item.item-logo {
+        border-bottom: none !important;
+        border-right: 2px solid #000000 !important;
+        padding-bottom: 0 !important;
+        padding-right: 12px !important;
+        margin-bottom: 0 !important;
+        margin-right: 12px !important;
+        width: auto !important;
+    }
+}
+
+/* Profiles customization */
+.artist-insta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7b4ad8;
+    margin-top: 4px;
+}
+
+.artist-insta i {
+    width: 13px;
+    height: 13px;
+}
+
+.btn-contactar {
+    background-color: #FFC82C;
+    border: 2px solid #000000;
+    box-shadow: 2px 2px 0px #000000;
+    color: #000000;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.btn-contactar:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px #000000;
+    background-color: #ffe066;
+}
+
+.btn-contactar:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #000000;
+}
+
+/* Artist card adjustments */
+.artist-card .artist-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+}
+
+/* History header card styling */
+.history-header-card {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.history-title {
+    font-family: 'Ghosthey', sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 3.5rem;
+    color: #000000;
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+}
+
+.history-subtitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
 }

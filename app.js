@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.',
             inks: ['Dynamic Ink', 'Eternal Ink', 'Solid Ink'],
             needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges'],
-            instagram: 'https://instagram.com/studiotattopipo',
+            instagram: 'https://www.instagram.com/pipo.tattooo/',
             coords: [-39.2045, -73.0538],
             styles: ['Fine Line', 'Blackwork'],
             billingStatus: 'paid'
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'Studio tatto pipo',
             location: 'Teodoro Schmidt',
             bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la Araucanía.',
-            instagram: 'https://instagram.com/studiotattopipo',
-            avatar: 'assets/logo_pipo.png',
+            instagram: 'https://www.instagram.com/pipo.tattooo/',
+            avatar: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp',
             coords: [-39.2045, -73.0538]
         },
         'lara': {
@@ -123,8 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Padre Las Casas',
             bio: 'Especialista en realismo en sombras y retratos hiperrealistas. Amplia experiencia en coberturas (cover-up) complejas y piezas de gran formato.',
             instagram: 'https://instagram.com/inklara',
-            avatar: 'assets/logo_pipo.png',
-            avatarFilter: 'hue-rotate(90deg)',
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
             coords: [-38.7500, -72.6300]
         },
         'kame': {
@@ -132,8 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Temuco',
             bio: 'Ilustradora y tatuadora dedicada al estilo anime, acuarela y full color vibrante. Diseños personalizados inspirados en cultura pop y videojuegos.',
             instagram: 'https://instagram.com/kametattoo',
-            avatar: 'assets/logo_pipo.png',
-            avatarFilter: 'hue-rotate(180deg)',
+            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
             coords: [-38.7200, -72.5800]
         },
         'sombra': {
@@ -141,8 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Villarrica',
             bio: 'Estudio enfocado en el blackwork extremo, puntillismo y geometría sagrada. Diseños oscuros y composiciones fluidas adaptadas a la anatomía corporal.',
             instagram: 'https://instagram.com/sombranegratattoo',
-            avatar: 'assets/logo_pipo.png',
-            avatarFilter: 'hue-rotate(270deg)',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
             coords: [-39.2783, -72.2272]
         }
     };
@@ -257,6 +254,22 @@ document.addEventListener('DOMContentLoaded', () => {
             appContainer.classList.remove('landing-active');
         }
 
+        // Hide/show yellow menu on dashboard views
+        if (targetViewId === 'dashboard-admin-view' || targetViewId === 'dashboard-tatuador-view') {
+            appContainer.classList.add('dashboard-active');
+        } else {
+            appContainer.classList.remove('dashboard-active');
+        }
+
+        // Dynamic back-to-home button visibility across all sidebars
+        document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-back-home').forEach(btn => {
+            if (targetViewId !== 'home-view') {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
         // Hide all views with class transitions
         viewPanels.forEach(panel => {
             panel.classList.remove('active');
@@ -278,19 +291,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Sync yellow sidebar active state
+        // Sync yellow sidebar active state across all sidebars
         document.querySelectorAll('.floating-sidebar-menu .sidebar-item').forEach(item => {
             item.classList.remove('active');
         });
         if (targetViewId === 'home-view') {
-            const homeItem = document.getElementById('sidebar-btn-home');
-            if (homeItem) homeItem.classList.add('active');
+            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-home').forEach(item => item.classList.add('active'));
         } else if (targetViewId === 'sabias-que-view') {
-            const triviaItem = document.getElementById('sidebar-btn-sabias-que-side');
-            if (triviaItem) triviaItem.classList.add('active');
+            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-sabias-que').forEach(item => item.classList.add('active'));
         } else if (targetViewId === 'history-view') {
-            const historyItem = document.getElementById('sidebar-btn-historia-side');
-            if (historyItem) historyItem.classList.add('active');
+            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-historia').forEach(item => item.classList.add('active'));
         }
         
         // If switching to home view, refresh map rendering
@@ -434,45 +444,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Yellow Sidebar Click Handlers
-    const sidebarLogo = document.getElementById('sidebar-btn-logo');
-    if (sidebarLogo) {
-        sidebarLogo.addEventListener('click', () => switchView('landing-view'));
-    }
+    // Yellow Sidebar Click Handlers (binds to all instances)
+    document.querySelectorAll('.floating-sidebar-menu').forEach(menu => {
+        const logo = menu.querySelector('.item-logo');
+        if (logo) {
+            logo.addEventListener('click', () => switchView('landing-view'));
+        }
 
-    const sidebarHome = document.getElementById('sidebar-btn-home');
-    if (sidebarHome) {
-        sidebarHome.addEventListener('click', () => switchView('home-view'));
-    }
+        const home = menu.querySelector('.btn-sidebar-home');
+        if (home) {
+            home.addEventListener('click', () => {
+                state.activeFilters.onlyFavorites = false;
+                document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => btn.classList.remove('active'));
+                switchView('home-view');
+                applyFilters();
+            });
+        }
 
-    const sidebarSabiasQue = document.getElementById('sidebar-btn-sabias-que-side');
-    if (sidebarSabiasQue) {
-        sidebarSabiasQue.addEventListener('click', () => switchView('sabias-que-view'));
-    }
+        const backHome = menu.querySelector('.btn-sidebar-back-home');
+        if (backHome) {
+            backHome.addEventListener('click', () => switchView('home-view'));
+        }
 
-    const sidebarHistoria = document.getElementById('sidebar-btn-historia-side');
-    if (sidebarHistoria) {
-        sidebarHistoria.addEventListener('click', () => {
-            switchView('history-view');
-            const worldTabBtn = document.querySelector('[data-history-tab="history-world"]');
-            if (worldTabBtn) worldTabBtn.click();
-        });
-    }
+        const sabiasQue = menu.querySelector('.btn-sidebar-sabias-que');
+        if (sabiasQue) {
+            sabiasQue.addEventListener('click', () => switchView('sabias-que-view'));
+        }
 
-    const sidebarGuardados = document.getElementById('sidebar-btn-guardados');
-    if (sidebarGuardados) {
-        sidebarGuardados.addEventListener('click', () => {
-            state.activeFilters.onlyFavorites = !state.activeFilters.onlyFavorites;
-            if (state.activeFilters.onlyFavorites) {
-                sidebarGuardados.classList.add('active');
-                showToast('Filtrando por favoritos');
-            } else {
-                sidebarGuardados.classList.remove('active');
-                showToast('Mostrando todos los artistas');
-            }
-            applyFilters();
-        });
-    }
+        const historia = menu.querySelector('.btn-sidebar-historia');
+        if (historia) {
+            historia.addEventListener('click', () => {
+                switchView('history-view');
+                const worldTabBtn = document.querySelector('[data-history-tab="history-world"]');
+                if (worldTabBtn) worldTabBtn.click();
+            });
+        }
+
+        const guardados = menu.querySelector('.btn-sidebar-guardados');
+        if (guardados) {
+            guardados.addEventListener('click', () => {
+                state.activeFilters.onlyFavorites = !state.activeFilters.onlyFavorites;
+                document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => {
+                    if (state.activeFilters.onlyFavorites) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                if (state.activeFilters.onlyFavorites) {
+                    showToast('Filtrando por favoritos');
+                } else {
+                    showToast('Mostrando todos los artistas');
+                }
+                applyFilters();
+            });
+        }
+    });
 
     // Trivia balloon "Ver más" link click
     const btnTriviaVerMas = document.getElementById('btn-home-trivia-ver-mas');
@@ -713,8 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const sidebarGuardados = document.getElementById('sidebar-btn-guardados');
-        if (sidebarGuardados) sidebarGuardados.classList.remove('active');
+        document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => btn.classList.remove('active'));
 
         // Remove user marker from map
         if (window.userLocationMarker && mapInstance) {
@@ -1117,6 +1143,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const instaEl = document.getElementById('ficha-artist-instagram');
         if (instaEl) instaEl.href = details.instagram;
 
+        const instaHandleEl = document.getElementById('ficha-artist-insta-handle');
+        if (instaHandleEl) {
+            const handle = details.instagram.substring(details.instagram.lastIndexOf('/') + 1) || 'instagram';
+            instaHandleEl.innerHTML = `<i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @${escapeHTML(handle)}`;
+        }
+
         // Render client reviews
         renderFichaComments(artistId);
 
@@ -1195,6 +1227,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (details.avatarFilter) infoAvatar.style.filter = details.avatarFilter;
                     else infoAvatar.style.filter = '';
                 }
+
+                const profInstaLink = document.getElementById('profile-detail-instagram-link');
+                if (profInstaLink) profInstaLink.href = details.instagram;
+                
+                const profInstaHandle = document.getElementById('profile-detail-insta-handle');
+                if (profInstaHandle) {
+                    const handle = details.instagram.substring(details.instagram.lastIndexOf('/') + 1) || 'instagram';
+                    profInstaHandle.innerHTML = `<i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @${escapeHTML(handle)}`;
+                }
+
                 lucide.createIcons();
             }
         });
@@ -1407,14 +1449,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         experience: 5,
                         price: 'Intermedio',
                         bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la Araucanía.',
-                        instagram: 'https://instagram.com/studiotattopipo',
+                        instagram: 'https://www.instagram.com/pipo.tattooo/',
                         coords: [-39.2045, -73.0538],
                         styles: ['Fine Line', 'Blackwork'],
                         inks: ['Dynamic Ink', 'Eternal Ink', 'Solid Ink'],
                         needles: ['Kwadron Cartridges', 'Cheyenne Safety Cartridges'],
                         billing_status: 'paid',
                         plan: 'premium',
-                        avatar_url: 'assets/logo_pipo.png'
+                        avatar_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp'
                     },
                     {
                         id: 'lara',
@@ -1430,7 +1472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         needles: ['Kwadron Cartridges'],
                         billing_status: 'paid',
                         plan: 'premium',
-                        avatar_url: 'assets/logo_pipo.png'
+                        avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face'
                     },
                     {
                         id: 'kame',
@@ -1446,7 +1488,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         needles: ['Cheyenne Safety Cartridges'],
                         billing_status: 'paid',
                         plan: 'basic',
-                        avatar_url: 'assets/logo_pipo.png'
+                        avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face'
                     },
                     {
                         id: 'sombra',
@@ -1462,7 +1504,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         needles: ['Cheyenne Hawk Cartridges'],
                         billing_status: 'paid',
                         plan: 'premium',
-                        avatar_url: 'assets/logo_pipo.png'
+                        avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
                     }
                 ];
 
@@ -1531,6 +1573,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Silent DB updates for static demo profiles
+            try {
+                const pipoProfile = profiles.find(p => p.id === 'pipo');
+                if (pipoProfile && (pipoProfile.avatar_url !== 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp' || pipoProfile.instagram !== 'https://www.instagram.com/pipo.tattooo/')) {
+                    supabaseClient
+                        .from('profiles')
+                        .update({ 
+                            avatar_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp',
+                            instagram: 'https://www.instagram.com/pipo.tattooo/'
+                        })
+                        .eq('id', 'pipo')
+                        .then(() => console.log("Supabase: pipo profile corrected in database"));
+                }
+                const laraProfile = profiles.find(p => p.id === 'lara');
+                if (laraProfile && laraProfile.avatar_url === 'assets/logo_pipo.png') {
+                    supabaseClient
+                        .from('profiles')
+                        .update({ avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face' })
+                        .eq('id', 'lara')
+                        .then(() => console.log("Supabase: lara avatar corrected"));
+                }
+                const kameProfile = profiles.find(p => p.id === 'kame');
+                if (kameProfile && kameProfile.avatar_url === 'assets/logo_pipo.png') {
+                    supabaseClient
+                        .from('profiles')
+                        .update({ avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face' })
+                        .eq('id', 'kame')
+                        .then(() => console.log("Supabase: kame avatar corrected"));
+                }
+                const sombraProfile = profiles.find(p => p.id === 'sombra');
+                if (sombraProfile && sombraProfile.avatar_url === 'assets/logo_pipo.png') {
+                    supabaseClient
+                        .from('profiles')
+                        .update({ avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' })
+                        .eq('id', 'sombra')
+                        .then(() => console.log("Supabase: sombra avatar corrected"));
+                }
+            } catch (err) {
+                console.error("Database self-healing update failed", err);
+            }
+
             // Clear static arrays
             state.artistsData = [];
             
@@ -1548,8 +1631,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: p.name,
                     location: p.location,
                     bio: p.bio || '',
-                    instagram: p.instagram || '',
-                    avatar: p.avatar_url || 'assets/logo_pipo.png',
+                    instagram: p.id === 'pipo' ? 'https://www.instagram.com/pipo.tattooo/' : (p.instagram || ''),
+                    avatar: p.id === 'pipo' ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp' : 
+                            (p.id === 'lara') ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face' :
+                            (p.id === 'kame') ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face' :
+                            (p.id === 'sombra') ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' :
+                            (p.avatar_url || 'assets/logo_pipo.png'),
                     coords: p.coords,
                     experience: p.experience,
                     price: p.price,
@@ -1570,7 +1657,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         bio: p.bio,
                         inks: p.inks || [],
                         needles: p.needles || [],
-                        instagram: p.instagram,
+                        instagram: 'https://www.instagram.com/pipo.tattooo/',
+                        avatar_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp',
                         coords: p.coords,
                         styles: p.styles || [],
                         billingStatus: p.billing_status
@@ -2384,7 +2472,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('artist-grid');
         // Use explicit artistId if provided, else derive from name
         const safeId = artistId || name.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const avatar = avatarUrl || 'assets/logo_pipo.png';
+        const avatar = (avatarUrl === 'assets/logo_pipo.png' && safeId !== 'pipo') 
+            ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp' 
+            : (avatarUrl || 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp');
         
         const card = document.createElement('article');
         card.className = 'artist-card';
@@ -2395,6 +2485,10 @@ document.addEventListener('DOMContentLoaded', () => {
         card.setAttribute('data-styles', stylesStr);
         card.setAttribute('data-exp', exp);
         card.setAttribute('data-price', 'Intermedio');
+
+        const artistInfo = artistsDetails[safeId];
+        const instagram = (artistInfo && artistInfo.instagram) ? artistInfo.instagram : 'https://instagram.com';
+        const instagramHandle = instagram.substring(instagram.lastIndexOf('/') + 1) || 'instagram';
         
         card.innerHTML = `
             <div class="card-image-wrapper">
@@ -2410,7 +2504,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="artist-brand-text">
                         <h3 class="artist-name">${escapeHTML(name)}</h3>
-                        <span class="artist-loc"><i data-lucide="map-pin"></i> ${escapeHTML(loc)}</span>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span class="artist-loc"><i data-lucide="map-pin"></i> ${escapeHTML(loc)}</span>
+                            <span class="artist-insta"><i data-lucide="instagram"></i> @${escapeHTML(instagramHandle)}</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -2420,8 +2517,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <div class="artist-meta">
-                     <span class="meta-exp">${escapeHTML(String(exp))}+ años tatuando</span>
-                     <span class="meta-price"><span class="price-highlight">$$</span> Intermedio</span>
+                     <span class="meta-exp">${escapeHTML(String(exp))} años tatuando</span>
+                     <a href="${escapeHTML(instagram)}" target="_blank" class="btn-contactar" rel="noopener noreferrer">Contactar</a>
                 </div>
             </div>
         `;

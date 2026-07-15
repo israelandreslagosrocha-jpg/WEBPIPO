@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
     <!-- Global Video Background -->
@@ -31,7 +31,6 @@
         <!-- GLOBAL HEADER -->
         <header class="main-header">
             <div class="header-logo" id="btn-logo-home" style="display: flex; align-items: center; cursor: pointer; border: none; background: transparent; padding: 0;">
-                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924160/compressed_Group_1_uzk0wg.webp" alt="Tinta Conectada" style="height: 90px; object-fit: contain; display: block;">
             </div>
             
             <div class="header-actions">
@@ -87,15 +86,25 @@
                     <div class="home-left-panel">
                         <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
                         <div class="floating-sidebar-menu">
-                            <div class="sidebar-item item-logo" id="sidebar-btn-logo" title="Inicio">
+                            <div class="sidebar-item item-logo" title="Inicio">
                                 <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
                             </div>
-                            <div class="sidebar-item active" id="sidebar-btn-home" title="Tatuadores">
-                                <img src="assets/tattoo_machine_cursor.png" alt="Tatuadores" class="sidebar-machine-icon">
+                            <!-- Volver a Home (Casa) -->
+                            <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                                <i data-lucide="home"></i>
                             </div>
-                            <div class="sidebar-item" id="sidebar-btn-sabias-que-side" title="¿Sabías Que?">¿</div>
-                            <div class="sidebar-item" id="sidebar-btn-historia-side" title="Historia del Tatuaje">𝕳</div>
-                            <div class="sidebar-item" id="sidebar-btn-guardados" title="Tatuadores Guardados"><i data-lucide="bookmark"></i></div>
+                            <div class="sidebar-item active btn-sidebar-home" title="Tatuadores">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
+                                <i data-lucide="bookmark"></i>
+                            </div>
                         </div>
 
                         <!-- SABÍAS QUE? BALLOON / GLOBE (Below Menu) -->
@@ -147,36 +156,36 @@
                                 <!-- Styles Pills (Left) -->
                                 <div class="style-pills-row">
                                     <button class="style-pill active" data-style="Todos">
-                                        <span class="style-pill-color" style="background-color: #cccccc;"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Todos" class="style-pill-icon">
                                         Todos
                                     </button>
                                     <button class="style-pill" data-style="Realismo">
-                                        <span class="style-pill-color" style="background: linear-gradient(135deg, #333 0%, #aaa 100%);"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-realismo_wlmtlj.svg" alt="Realismo" class="style-pill-icon">
                                         REALISMO
                                     </button>
                                     <button class="style-pill" data-style="Acuarela">
-                                        <span class="style-pill-color" style="background: linear-gradient(135deg, #ff4a5a 0%, #7b4ad8 100%);"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tint_fullcolor_ysss41.svg" alt="Full Color" class="style-pill-icon">
                                         FULL COLOR
                                     </button>
                                     <button class="style-pill" data-style="Black & Grey">
-                                        <span class="style-pill-color" style="background: repeating-linear-gradient(45deg, #000, #000 2px, #fff 2px, #fff 4px);"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086732/picto_para_tinta-blackandgary_hkioay.svg" alt="Black and Gray" class="style-pill-icon">
                                         Black and Gray
                                     </button>
                                     <button class="style-pill" data-style="Fine Line">
-                                        <span class="style-pill-color" style="border: 2px solid #FFC82C; background: transparent; display: block; border-radius: 50%; width: 12px; height: 12px;"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-fineline_k6rp0a.svg" alt="Fine Line" class="style-pill-icon">
                                         FINE LINE
                                     </button>
                                     <button class="style-pill" data-style="Blackwork">
-                                        <span class="style-pill-color" style="background-color: #000000;"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086732/picto_para_tinta-blackwoork_woohtv.svg" alt="Black work" class="style-pill-icon">
                                         Black work
                                     </button>
                                     <button class="style-pill" data-style="Puntillismo">
-                                        <span class="style-pill-color" style="background-image: radial-gradient(#000 20%, transparent 20%); background-size: 4px 4px; display: block; width: 12px; height: 12px; border-radius: 50%;"></span>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-puntillismo_zhvrod.svg" alt="Puntillismo" class="style-pill-icon">
                                         PUNTILLISMO
                                     </button>
                                 </div>
                                 <!-- Title (Right) -->
-                                <h2 class="tatuadores-gothic-title">Tatuadores</h2>
+                                <h2 class="tatuadores-gothic-title font-ghosthey">Tatuadores</h2>
                             </div>
 
                             <!-- Search & Dropdown Filters Row -->
@@ -220,11 +229,11 @@
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Avatar">
+                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Studio Tatto Pipo Avatar">
                                             </div>
                                             <div class="artist-brand-text">
                                                 <h3 class="artist-name">Studio tatto pipo</h3>
-                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Teodoro Schmidt</span>
                                             </div>
                                         </div>
                                         <div class="artist-tags">
@@ -245,7 +254,7 @@
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="assets/logo_pipo.png" alt="Ink Lara Avatar" style="filter: hue-rotate(90deg);">
+                                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face" alt="Ink Lara Avatar">
                                             </div>
                                             <div class="artist-brand-text">
                                                 <h3 class="artist-name">Ink Lara</h3>
@@ -270,7 +279,7 @@
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="assets/logo_pipo.png" alt="Kame Tattoo Avatar" style="filter: hue-rotate(180deg);">
+                                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face" alt="Kame Tattoo Avatar">
                                             </div>
                                             <div class="artist-brand-text">
                                                 <h3 class="artist-name">Kame Tattoo</h3>
@@ -295,7 +304,7 @@
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="assets/logo_pipo.png" alt="Sombra Negra Avatar" style="filter: hue-rotate(270deg);">
+                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="Sombra Negra Avatar">
                                             </div>
                                             <div class="artist-brand-text">
                                                 <h3 class="artist-name">Sombra Negra</h3>
@@ -328,7 +337,7 @@
                             </button>
                             <!-- Large Cover/Avatar Image -->
                             <div class="ficha-cover-wrapper">
-                                <img src="assets/logo_pipo.png" id="ficha-artist-avatar" alt="Artist Avatar" class="ficha-avatar-img">
+                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" id="ficha-artist-avatar" alt="Artist Avatar" class="ficha-avatar-img">
                                 <div class="ficha-status-dots">
                                     <span class="status-dot"></span>
                                     <span class="status-dot"></span>
@@ -339,21 +348,26 @@
                             <!-- Info details -->
                             <div class="ficha-info-details">
                                 <h3 class="ficha-artist-name" id="ficha-artist-name">Studio tatto pipo</h3>
-                                <p class="ficha-artist-loc" id="ficha-artist-location"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                                <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;">
+                                    <p class="ficha-artist-loc" id="ficha-artist-location" style="margin: 0;"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                                    <p class="ficha-artist-insta-handle" id="ficha-artist-insta-handle" style="margin: 0; font-size: 0.9rem; color: #7b4ad8; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @pipo.tattooo
+                                    </p>
+                                </div>
                                 
                                 <div class="ficha-biography">
                                     <h4>Biografía</h4>
                                     <p id="ficha-artist-bio">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la región de La Araucanía.</p>
                                 </div>
 
-                                <div class="ficha-bottom-row">
-                                    <!-- Instagram button -->
-                                    <a href="https://instagram.com" target="_blank" id="ficha-artist-instagram" class="btn-instagram-new" rel="noopener noreferrer">
-                                        <i data-lucide="instagram"></i>
+                                <div class="ficha-bottom-row" style="display: flex; gap: 12px; align-items: center; width: 100%;">
+                                    <!-- Contactar Button (Instagram) -->
+                                    <a href="https://instagram.com" target="_blank" id="ficha-artist-instagram" class="btn btn-primary" style="flex: 1; text-decoration: none; justify-content: center; gap: 8px;" rel="noopener noreferrer">
+                                        <i data-lucide="instagram"></i> Contactar
                                     </a>
                                     
                                     <!-- View Full Profile Button -->
-                                    <button class="btn btn-outline btn-ficha-portfolio" id="btn-ficha-view-portfolio">
+                                    <button class="btn btn-outline btn-ficha-portfolio" id="btn-ficha-view-portfolio" style="flex: 1; justify-content: center;">
                                         Ver Galería 3D &rarr;
                                     </button>
                                 </div>
@@ -407,6 +421,28 @@
             <!-- VIEW 2: ARTIST DETAIL VIEW (Studio Tatto Pipo) -->
             <section id="artist-view" class="view-panel">
                 <div class="artist-detail-layout">
+                    <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
+                    <div class="floating-sidebar-menu">
+                        <div class="sidebar-item item-logo" title="Inicio">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
+                        </div>
+                        <!-- Volver a Home (Casa) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <i data-lucide="home"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-home" title="Tatuadores">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
+                            <i data-lucide="help-circle"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
+                            <i data-lucide="bookmark"></i>
+                        </div>
+                    </div>
                     
                     <!-- LEFT COLUMN: Profile Info Card -->
                     <aside class="artist-profile-sidebar">
@@ -417,16 +453,21 @@
                         <div class="artist-card-detailed">
                             <div class="profile-avatar-wrapper">
                                 <div class="avatar-border">
-                                    <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Logo" class="profile-avatar-img">
+                                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Studio Tatto Pipo Logo" class="profile-avatar-img">
                                 </div>
                             </div>
                             
-                            <h2 class="profile-name">Studio tatto pipo</h2>
-                            <p class="profile-location"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                            <h2 class="profile-name" id="profile-detail-name">Studio tatto pipo</h2>
+                            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; align-items: center;">
+                                <p class="profile-location" id="profile-detail-location" style="margin: 0;"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
+                                <p class="profile-insta-handle" id="profile-detail-insta-handle" style="margin: 0; font-size: 0.95rem; color: #7b4ad8; font-weight: 600; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @pipo.tattooo
+                                </p>
+                            </div>
                             
-                            <!-- Instagram CTA -->
-                            <a href="https://instagram.com" target="_blank" class="btn btn-instagram" rel="noopener noreferrer">
-                                <i data-lucide="instagram"></i>
+                            <!-- Instagram CTA (Contactar) -->
+                            <a href="https://instagram.com" target="_blank" id="profile-detail-instagram-link" class="btn btn-primary btn-instagram" style="width: 100%; display: flex; justify-content: center; gap: 8px; text-decoration: none;" rel="noopener noreferrer">
+                                <i data-lucide="instagram"></i> Contactar
                             </a>
                             
                             <!-- Visual status indicators -->
@@ -522,10 +563,32 @@
             <!-- VIEW: SABÍAS QUE VIEW (Trivia Editorial) -->
             <section id="sabias-que-view" class="view-panel">
                 <div class="sabias-que-layout">
+                    <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
+                    <div class="floating-sidebar-menu">
+                        <div class="sidebar-item item-logo" title="Inicio">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
+                        </div>
+                        <!-- Volver a Home (Casa) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <i data-lucide="home"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-home" title="Tatuadores">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
+                            <i data-lucide="help-circle"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
+                            <i data-lucide="bookmark"></i>
+                        </div>
+                    </div>
+
                     <!-- Title banner -->
                     <div class="editorial-header-card">
-                        <div class="editorial-badge">¿SABÍAS QUE?</div>
-                        <h1 class="editorial-title">DATOS INSÓLITOS Y CURIOSIDADES DEL TATUAJE</h1>
+                        <h1 class="editorial-title font-ghosthey">Sabías que</h1>
                         <p class="editorial-subtitle">Un recorrido por los secretos más fascinantes de este arte milenario en la piel.</p>
                     </div>
 
@@ -592,6 +655,35 @@
             <!-- VIEW 3: HISTORY VIEW -->
             <section id="history-view" class="view-panel">
                 <div class="history-layout">
+                    <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
+                    <div class="floating-sidebar-menu">
+                        <div class="sidebar-item item-logo" title="Inicio">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
+                        </div>
+                        <!-- Volver a Home (Casa) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <i data-lucide="home"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-home" title="Tatuadores">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
+                            <i data-lucide="help-circle"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
+                            <i data-lucide="bookmark"></i>
+                        </div>
+                    </div>
+
+                    <!-- Title banner -->
+                    <div class="history-header-card">
+                        <h1 class="history-title font-ghosthey">Historia del tatuaje</h1>
+                        <p class="history-subtitle">Un recorrido cronológico por los hitos y la evolución del arte corporal en el mundo y en nuestro país.</p>
+                    </div>
+
                     <!-- Tab Navigation for History -->
                     <div class="history-tabs">
                         <button class="btn-history-tab active" data-history-tab="history-world">Tatuaje en el Mundo</button>
@@ -1055,7 +1147,7 @@
                     <!-- Artist Workspace Sidebar -->
                     <aside class="db-sidebar">
                         <div class="db-user-info">
-                            <div class="db-avatar" id="workspace-sidebar-avatar"><img src="assets/logo_pipo.png" alt="Tatuador Avatar"></div>
+                            <div class="db-avatar" id="workspace-sidebar-avatar"><img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Tatuador Avatar"></div>
                             <div class="db-user-details">
                                 <h3 id="workspace-sidebar-name">Studio Tatto Pipo</h3>
                                 <span class="badge badge-premium" id="workspace-sidebar-plan">Plan Premium</span>
@@ -1116,7 +1208,7 @@
                                 <div class="form-row">
                                     <div class="input-group flex-1">
                                         <label>Instagram Link / Usuario</label>
-                                        <input type="url" class="form-control" id="edit-art-instagram" value="https://instagram.com/studiotattopipo">
+                                        <input type="url" class="form-control" id="edit-art-instagram" value="https://www.instagram.com/pipo.tattooo/">
                                     </div>
                                     <div class="input-group flex-1">
                                         <label>Dirección del Estudio / Ubicación</label>
@@ -1474,7 +1566,7 @@
                 
                 <div class="info-panel-header">
                     <div class="info-avatar-circle">
-                        <img src="assets/logo_pipo.png" alt="Studio Tatto Pipo Logo">
+                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Studio Tatto Pipo Logo">
                     </div>
                     <h3 class="info-title">Studio tatto pipo</h3>
                 </div>
