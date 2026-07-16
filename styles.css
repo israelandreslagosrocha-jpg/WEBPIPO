@@ -256,17 +256,18 @@ button, input, select, textarea {
     border: 2.5px solid transparent;
 }
 
-.sidebar-item i {
-    width: 22px;
-    height: 22px;
+.sidebar-item i,
+.sidebar-item svg {
+    width: 38px;
+    height: 38px;
     stroke-width: 2.5px;
 }
 
 .sidebar-item.item-logo {
     font-family: 'Cinzel', serif;
     font-size: 1.6rem;
-    background-color: #ffffff;
-    border: 3px solid #000000;
+    background-color: transparent;
+    border: 3px solid transparent;
     border-radius: 50%;
     margin-bottom: 16px;
     width: 48px;
@@ -275,6 +276,12 @@ button, input, select, textarea {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.sidebar-item.item-logo:hover {
+    background-color: #ffffff;
+    border-color: #000000;
 }
 
 .sidebar-logo-img {
@@ -288,10 +295,10 @@ button, input, select, textarea {
     transform: scale(1.1);
 }
 
-.sidebar-item.active {
-    background-color: #000000;
-    color: #ffffff;
-    border-color: #000000;
+.sidebar-item.active:not(:hover) {
+    background-color: transparent;
+    color: #000000;
+    border-color: transparent;
 }
 
 .sidebar-machine-icon {
@@ -340,10 +347,10 @@ button, input, select, textarea {
     transform: scale(1.1);
 }
 
-.sidebar-item.active:not(.item-logo) {
-    background-color: #000000;
-    color: #FFC82C;
-    border-color: #000000;
+.sidebar-item.active:not(.item-logo):not(:hover) {
+    background-color: transparent;
+    color: #000000;
+    border-color: transparent;
 }
 
 /* MIDDLE COLUMN: HOW IT WORKS */
@@ -1000,6 +1007,13 @@ button, input, select, textarea {
     align-self: start;
     box-sizing: border-box;
     z-index: 10;
+    max-height: calc(100vh - var(--header-height) - 48px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #7b4ad8 #f0f0f0;
 }
 
 .home-layout.has-sidebar-open .home-right-panel {
@@ -1282,9 +1296,11 @@ button, input, select, textarea {
 
 /* EDITORIAL CURIOSIDADES VIEW */
 .sabias-que-layout {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
+    max-width: 100% !important;
+    margin: 40px 0 !important;
+    padding: 0 40px 0 20px !important;
+    width: 100% !important;
+    box-sizing: border-box;
 }
 
 .editorial-header-card {
@@ -3935,8 +3951,23 @@ body:has(#app-container.landing-active) {
    HISTORY & TRIVIA VIEW
    ========================================================================== */
 .history-layout {
-    max-width: 1000px;
-    margin: 40px auto;
+    display: flex;
+    gap: 32px;
+    max-width: 100%;
+    margin: 40px 0;
+    padding: 0 40px 0 20px;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.history-content-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
     padding: 0 20px;
 }
 
@@ -3947,6 +3978,9 @@ body:has(#app-container.landing-active) {
     margin-bottom: 45px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 15px;
+    width: 100%;
+    max-width: 760px;
+    box-sizing: border-box;
 }
 
 .btn-history-tab {
@@ -3985,8 +4019,18 @@ body:has(#app-container.landing-active) {
 }
 
 .history-tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 760px;
     animation: fadeIn 0.4s ease-out;
+}
+
+.history-tab-content .section-title,
+.history-tab-content .section-subtitle {
+    text-align: center;
+    width: 100%;
 }
 
 /* Trivia Cards style */
@@ -4038,8 +4082,9 @@ body:has(#app-container.landing-active) {
 /* History Timeline style */
 .timeline {
     position: relative;
-    max-width: 800px;
-    margin: 40px auto;
+    max-width: 760px;
+    width: 100%;
+    margin: 30px 0;
     padding-left: 30px;
 }
 
@@ -5358,35 +5403,53 @@ h5 {
     border: 2.5px solid transparent;
 }
 
-.floating-sidebar-menu .sidebar-item i {
-    width: 22px;
-    height: 22px;
+.floating-sidebar-menu .sidebar-item i,
+.floating-sidebar-menu .sidebar-item svg {
+    width: 38px;
+    height: 38px;
     stroke-width: 2.5px;
 }
 
-.floating-sidebar-menu .sidebar-item.active {
-    background-color: #000000;
-    color: #FFC82C;
-    border-color: #000000;
+.floating-sidebar-menu .sidebar-item.active:not(:hover) {
+    background-color: transparent;
+    color: #000000;
+    border-color: transparent;
 }
 
 /* Flex layout overrides for trivia & history views */
 @media (min-width: 769px) {
-    .sabias-que-layout,
+    .sabias-que-layout {
+        display: flex !important;
+        gap: 32px !important;
+        max-width: 100% !important;
+        margin: 40px 0 !important;
+        padding: 0 40px 0 20px !important;
+        align-items: flex-start !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
     .history-layout {
         display: flex !important;
         gap: 32px !important;
-        max-width: 1200px !important;
-        margin: 40px auto !important;
-        padding: 0 24px !important;
+        max-width: 100% !important;
+        margin: 40px 0 !important;
+        padding: 0 40px 0 20px !important;
         align-items: flex-start !important;
+        width: 100% !important;
+        box-sizing: border-box;
     }
 
-    .sabias-que-layout > :not(.floating-sidebar-menu),
-    .history-layout > :not(.floating-sidebar-menu) {
+    .sabias-que-layout > :not(.floating-sidebar-menu) {
         flex: 1 !important;
         min-width: 0 !important;
-        margin: 0 !important; /* Clear auto centering margins */
+    }
+
+    .history-layout > .history-content-wrapper {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 }
 
@@ -5489,6 +5552,7 @@ h5 {
     margin-bottom: 24px;
     box-sizing: border-box;
     width: 100%;
+    max-width: 760px;
 }
 
 .history-title {
@@ -5506,4 +5570,186 @@ h5 {
     font-weight: 600;
     color: #333333;
     margin: 0;
+}
+
+/* Horizontal slider style for Sabias Que */
+.editorial-content-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-sizing: border-box;
+}
+
+.editorial-slide-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px 4px 20px 4px;
+    width: 100%;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+/* Custom scrollbar for horizontal slide container */
+.editorial-slide-container::-webkit-scrollbar {
+    height: 8px;
+}
+.editorial-slide-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+.editorial-slide-container::-webkit-scrollbar-thumb {
+    background: #FFC82C;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+}
+
+.editorial-slide-card {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 12px;
+    padding: 20px;
+    width: 300px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.editorial-slide-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0px #000000;
+}
+
+.editorial-slide-card.active {
+    background-color: #FFFbeb;
+    border-color: #7B4AD8;
+    box-shadow: 5px 5px 0px #7B4AD8;
+}
+
+.editorial-card-text-summary {
+    font-size: 0.85rem;
+    color: #555555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Detail container styling */
+.editorial-detail-block {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    border-radius: 16px;
+    padding: 30px;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.detail-header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #efefef;
+    padding-bottom: 15px;
+}
+
+.detail-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #000000;
+    margin: 0;
+}
+
+.detail-body-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #2d3748;
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Horizontal Slide Wrapper & Snap alignment styles */
+.editorial-slide-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.editorial-slide-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding: 10px 4px 20px 4px;
+    width: 100%;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+/* Hide scrollbar Chrome/Safari */
+.editorial-slide-container::-webkit-scrollbar {
+    display: none;
+}
+
+.editorial-slide-card {
+    scroll-snap-align: start; /* Native snap alignment! */
+}
+
+/* Navigation buttons styling */
+.slide-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #FFC82C;
+    border: 3px solid #000000;
+    box-shadow: 3px 3px 0px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.15s ease;
+}
+
+.slide-nav-btn:hover {
+    transform: translateY(-52%) scale(1.05);
+    box-shadow: 4px 4px 0px #000000;
+    background-color: #ffd254;
+}
+
+.slide-nav-btn:active {
+    transform: translateY(-48%) scale(0.95);
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.slide-nav-btn.prev {
+    left: -22px;
+}
+
+.slide-nav-btn.next {
+    right: -22px;
+}
+
+.slide-nav-btn i {
+    width: 24px;
+    height: 24px;
+    color: #000000 !important;
+    stroke-width: 3px;
 }

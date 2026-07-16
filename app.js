@@ -41,6 +41,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Lucide Icons
     lucide.createIcons();
 
+    // All 32 communes of La Araucanía and their central coordinates
+    const COMUNAS_COORDS = {
+        'Todos': [-38.7396, -72.5984],
+        'Temuco': [-38.7396, -72.5984],
+        'Padre Las Casas': [-38.7667, -72.6000],
+        'Villarrica': [-39.2783, -72.2272],
+        'Teodoro Schmidt': [-39.2045, -73.0538],
+        'Angol': [-37.7975, -72.7153],
+        'Carahue': [-38.7058, -73.1678],
+        'Cholchol': [-38.6083, -72.6833],
+        'Collipulli': [-37.9575, -72.4419],
+        'Cunco': [-38.9242, -72.0333],
+        'Curacautín': [-38.4386, -71.8844],
+        'Curarrehue': [-39.3622, -71.5878],
+        'Ercilla': [-38.0506, -72.3917],
+        'Freire': [-38.9564, -72.6567],
+        'Galvarino': [-38.4069, -72.7831],
+        'Gorbea': [-39.1000, -72.6833],
+        'Lautaro': [-38.5303, -72.4475],
+        'Loncoche': [-39.3667, -72.7833],
+        'Lonquimay': [-38.4411, -71.2403],
+        'Los Sauces': [-37.9692, -72.8250],
+        'Lumaco': [-38.1500, -72.9167],
+        'Melipeuco': [-38.8981, -71.6967],
+        'Nueva Imperial': [-38.7439, -72.9511],
+        'Perquenco': [-38.4167, -72.3833],
+        'Pitrufquén': [-38.9833, -72.6333],
+        'Pucón': [-39.2736, -71.9744],
+        'Purén': [-38.0333, -73.0833],
+        'Renaico': [-37.6692, -72.5897],
+        'Saavedra': [-38.7906, -73.3986],
+        'Toltén': [-39.2167, -73.2167],
+        'Traiguén': [-38.2500, -72.6833],
+        'Victoria': [-38.2333, -72.3333],
+        'Vilcún': [-38.6500, -72.2333]
+    };
+    const COMUNAS_LIST = Object.keys(COMUNAS_COORDS).filter(c => c !== 'Todos').sort((a, b) => a.localeCompare(b));
+
     // App state
     const state = {
         currentView: 'landing-view', // Starts on the exclusive landing page!
@@ -73,9 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
         suspendedArtists: new Set(),
         artistsData: [
             { id: 'pipo', name: 'Studio tatto pipo', location: 'Teodoro Schmidt', plan: 'Premium', status: 'Verificado' },
-            { id: 'lara', name: 'Ink Lara', location: 'Padre Las Casas', plan: 'Premium', status: 'Pendiente' },
-            { id: 'kame', name: 'Kame Tattoo', location: 'Temuco', plan: 'Básico', status: 'Verificado' },
-            { id: 'sombra', name: 'Sombra Negra', location: 'Villarrica', plan: 'Premium', status: 'Verificado' }
+            { id: 'wentruart', name: 'Wentruart', location: 'Temuco', plan: 'Premium', status: 'Verificado' },
+            { id: 'tattoopucon', name: 'Tattoo Pucón', location: 'Pucón', plan: 'Premium', status: 'Verificado' },
+            { id: 'puertotinta', name: 'Puerto Tinta', location: 'Saavedra', plan: 'Premium', status: 'Verificado' }
         ],
 
         // Tatuador dashboard dynamic state (Pre-logged in demo mode active by default)
@@ -118,29 +156,29 @@ document.addEventListener('DOMContentLoaded', () => {
             avatar: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp',
             coords: [-39.2045, -73.0538]
         },
-        'lara': {
-            name: 'Ink Lara',
-            location: 'Padre Las Casas',
-            bio: 'Especialista en realismo en sombras y retratos hiperrealistas. Amplia experiencia en coberturas (cover-up) complejas y piezas de gran formato.',
-            instagram: 'https://instagram.com/inklara',
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
-            coords: [-38.7500, -72.6300]
-        },
-        'kame': {
-            name: 'Kame Tattoo',
+        'wentruart': {
+            name: 'Wentruart',
             location: 'Temuco',
-            bio: 'Ilustradora y tatuadora dedicada al estilo anime, acuarela y full color vibrante. Diseños personalizados inspirados en cultura pop y videojuegos.',
-            instagram: 'https://instagram.com/kametattoo',
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-            coords: [-38.7200, -72.5800]
+            bio: 'Taller de tatuajes enfocado en el arte tradicional y neotradicional. Diseños de autor que cuentan historias en la piel.',
+            instagram: 'https://www.instagram.com/wentruart',
+            avatar: 'https://unavatar.io/instagram/wentruart',
+            coords: [-38.7450, -72.6020]
         },
-        'sombra': {
-            name: 'Sombra Negra',
-            location: 'Villarrica',
-            bio: 'Estudio enfocado en el blackwork extremo, puntillismo y geometría sagrada. Diseños oscuros y composiciones fluidas adaptadas a la anatomía corporal.',
-            instagram: 'https://instagram.com/sombranegratattoo',
-            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-            coords: [-39.2783, -72.2272]
+        'tattoopucon': {
+            name: 'Tattoo Pucón',
+            location: 'Pucón',
+            bio: 'El estudio pionero en Pucón. Realismo, puntillismo, acuarela y piezas tribales de gran envergadura.',
+            instagram: 'https://www.instagram.com/tattoopucon/',
+            avatar: 'https://unavatar.io/instagram/tattoopucon',
+            coords: [-39.2736, -71.9744]
+        },
+        'puertotinta': {
+            name: 'Puerto Tinta',
+            location: 'Saavedra',
+            bio: 'Estudio independiente a orillas de la costa. Diseños inspirados en la naturaleza marina y cultura tradicional.',
+            instagram: 'https://www.instagram.com/puertotinta/',
+            avatar: 'https://unavatar.io/instagram/puertotinta',
+            coords: [-38.7906, -73.3986]
         }
     };
 
@@ -156,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewPanels = document.querySelectorAll('.view-panel');
     const navLinks = document.querySelectorAll('.nav-link');
     const btnLogoHome = document.getElementById('btn-logo-home');
-    const artistCards = document.querySelectorAll('.artist-card');
     const btnBackHome = document.getElementById('btn-back-home');
     const btnArtistsNav = document.getElementById('nav-btn-artists');
     const btnViewAllArtists = document.getElementById('btn-view-all-artists');
@@ -193,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSearchTrigger = document.getElementById('btn-search-trigger');
     
     // Carousel 3D
-    const carouselItems = document.querySelectorAll('.carousel-3d-item');
+    let carouselItems = document.querySelectorAll('.carousel-3d-item');
     const btnCarouselPrev = document.getElementById('btn-carousel-prev');
     const btnCarouselNext = document.getElementById('btn-carousel-next');
     
@@ -358,6 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnBackHome.addEventListener('click', () => switchView('home-view'));
     }
     
+    // Bind all back-to-home buttons inside dashboards
+    document.querySelectorAll('.btn-back-to-home').forEach(btn => {
+        btn.addEventListener('click', () => switchView('home-view'));
+    });
+    
 
     
 
@@ -510,11 +552,91 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Editorial back button click
-    const btnEditorialBackHome = document.getElementById('btn-editorial-back-home');
-    if (btnEditorialBackHome) {
-        btnEditorialBackHome.addEventListener('click', () => {
-            switchView('home-view');
+    // ¿Sabías que? Editorial interactive slider and details
+    const SABIAS_QUE_DATA = [
+        {
+            title: "1. El origen de la palabra",
+            icon: "help-circle",
+            colorClass: "yellow",
+            body: `La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar" o "golpear dos veces" (en referencia al sonido rítmico de las herramientas tradicionales de golpeteo). El explorador James Cook la introdujo en el idioma inglés como "tattoo" en el siglo XVIII después de sus expediciones a la Polinesia. Históricamente, este término describe no solo la alteración de la piel, sino todo el ritual social y espiritual que acompañaba al proceso en las islas del Pacífico, donde el tatuaje marcaba el estatus, valor y linaje de una persona.`
+        },
+        {
+            title: "2. La momia de Ötzi y la acupuntura antigua",
+            icon: "history",
+            colorClass: "red",
+            body: `Ötzi, la momia humana natural más antigua descubierta (cerca del 3300 a.C. en los Alpes), cuenta con 61 tatuajes en su cuerpo. Se trata de grupos de líneas y cruces situados en articulaciones y la espalda baja, coincidiendo exactamente con puntos de acupuntura terapéutica moderna, sugiriendo un uso medicinal más que estético. Los escaneos detallados revelaron que Ötzi sufría de artrosis en las zonas tatuadas, lo que refuerza la teoría de que estos cortes rellenos de carbón vegetal tenían un propósito puramente analgésico y de alivio del dolor crónico.`
+        },
+        {
+            title: "3. Tintas modernas y veganismo",
+            icon: "shield-check",
+            colorClass: "purple",
+            body: `En el pasado, muchas tintas utilizaban aglutinantes de origen animal, como gelatina o glicerina, o pigmentos basados en carbón de huesos quemados. Actualmente, la gran mayoría de los artistas de vanguardia emplean tintas 100% veganas y cruelty-free, elaboradas a base de glicerina vegetal y pigmentos minerales de alta pureza. Estas tintas no solo protegen la vida animal, sino que también reducen notablemente el riesgo de reacciones alérgicas y cicatrizaciones defectuosas, siendo mucho más seguras para el organismo.`
+        },
+        {
+            title: "4. ¿Por qué el tatuaje es permanente?",
+            icon: "hourglass",
+            colorClass: "blue",
+            body: `La tinta no se inyecta en la capa externa de la piel (epidermis), sino en la dermis intermedia, cuyas células son sumamente estables. Cuando las agujas depositan la tinta, el cuerpo activa glóbulos blancos (macrófagos) que engullen el pigmento para intentar removerlo, pero al no poder destruirlo, quedan suspendidos en la dermis con el color intacto. A medida que las células de la dermis mueren y se renuevan, son reemplazadas por nuevas células que absorben el mismo pigmento, perpetuando el diseño de por vida.`
+        },
+        {
+            title: "5. El registro arqueológico chileno",
+            icon: "map-pin",
+            colorClass: "green",
+            body: `En el norte de Chile se conserva la evidencia física de tatuajes más antigua de toda América: la momia del cementerio El Morro en Arica (cultura Chinchorro, aprox. 2500 a.C.), que presenta un sutil tatuaje en forma de puntos alineados que forman un bigote falso en el labio superior de un hombre adulto. Este hallazgo demuestra que los pueblos prehispánicos de la costa andina ya utilizaban la modificación corporal permanente con fines identitarios o rituales milenios antes de la llegada de los colonizadores europeos.`
+        },
+        {
+            title: "6. La invención de la máquina eléctrica",
+            icon: "zap",
+            colorClass: "orange",
+            body: `En 1891, el artista neoyorquino Samuel O'Reilly patentó la primera máquina de tatuar eléctrica. Para lograrlo, modificó un invento previo de Thomas Edison: la pluma rotativa para calcar documentos de oficina, agregándole un sistema de bobinas y un tubo portaagujas para inyectar tinta velozmente. Esta innovación revolucionó la industria del tatuaje al permitir realizar diseños mucho más complejos, precisos y rápidos en comparación con los métodos manuales ancestrales.`
+        }
+    ];
+
+    document.querySelectorAll('.editorial-slide-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const index = parseInt(card.getAttribute('data-index'));
+            const data = SABIAS_QUE_DATA[index];
+            if (!data) return;
+
+            // Remove active class from all slide cards
+            document.querySelectorAll('.editorial-slide-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            // Update details view
+            const detailBlock = document.getElementById('editorial-detail-block');
+            if (detailBlock) {
+                const titleEl = document.getElementById('detail-title');
+                const bodyEl = document.getElementById('detail-body');
+                const iconWrapper = document.getElementById('detail-icon-wrapper');
+                
+                if (titleEl) titleEl.textContent = data.title;
+                if (bodyEl) bodyEl.innerHTML = data.body;
+                
+                if (iconWrapper) {
+                    iconWrapper.className = `editorial-card-icon-wrapper ${data.colorClass}`;
+                    iconWrapper.innerHTML = `<i data-lucide="${data.icon}"></i>`;
+                }
+
+                // Re-create lucide icons for the newly injected icon
+                lucide.createIcons();
+            }
+        });
+    });
+
+    // Curiosidades Slide Navigation Buttons
+    const slideContainer = document.getElementById('editorial-slide-container');
+    const btnSlidePrev = document.getElementById('btn-slide-prev');
+    const btnSlideNext = document.getElementById('btn-slide-next');
+
+    if (slideContainer && btnSlidePrev && btnSlideNext) {
+        btnSlidePrev.addEventListener('click', () => {
+            // Scroll left by exactly one card (300px) + gap (20px) = 320px
+            slideContainer.scrollBy({ left: -320, behavior: 'smooth' });
+        });
+
+        btnSlideNext.addEventListener('click', () => {
+            // Scroll right by exactly one card (300px) + gap (20px) = 320px
+            slideContainer.scrollBy({ left: 320, behavior: 'smooth' });
         });
     }
 
@@ -547,14 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (locationSelect) {
         locationSelect.addEventListener('change', () => {
             const locVal = locationSelect.value;
-            const cityCoords = {
-                'Todos': [-38.7396, -72.5984],
-                'Temuco': [-38.7396, -72.5984],
-                'Padre Las Casas': [-38.7500, -72.6300],
-                'Villarrica': [-39.2783, -72.2272],
-                'Teodoro Schmidt': [-39.2045, -73.0538]
-            };
-            state.activeFilters.userCoords = cityCoords[locVal] || cityCoords['Todos'];
+            state.activeFilters.userCoords = COMUNAS_COORDS[locVal] || COMUNAS_COORDS['Todos'];
             state.activeFilters.locationName = locVal;
             applyFilters();
         });
@@ -769,8 +884,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyFilters() {
         let visibleCount = 0;
+        const currentCards = document.querySelectorAll('.artist-card');
         
-        artistCards.forEach(card => {
+        currentCards.forEach(card => {
             const cardLocation = card.getAttribute('data-location');
             
             // Read array-like style list string
@@ -785,13 +901,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 showCard = false;
             }
 
-            // 1. Distance & location permission filter (Facebook Marketplace style radius)
-            const artistCoords = artistCoordinates[cardId] || [-38.7396, -72.5984];
-            const center = state.activeFilters.userCoords || [-38.7396, -72.5984]; // Default to Temuco regional center
-            const dist = getHaversineDistance(center, artistCoords);
-            
-            if (dist > state.activeFilters.distance) {
-                showCard = false;
+            // 1. Distance & location filter
+            if (state.activeFilters.locationName && state.activeFilters.locationName !== 'Todos') {
+                if (state.activeFilters.distance === 150) {
+                    // Strict commune filter (default when no radius is set)
+                    if (cardLocation !== state.activeFilters.locationName) {
+                        showCard = false;
+                    }
+                } else {
+                    // Radius filter around selected commune
+                    const artistCoords = artistCoordinates[cardId];
+                    if (artistCoords && state.activeFilters.userCoords) {
+                        const dist = getHaversineDistance(state.activeFilters.userCoords, artistCoords);
+                        if (dist > state.activeFilters.distance) {
+                            showCard = false;
+                        }
+                    } else {
+                        showCard = false;
+                    }
+                }
             }
 
             // 2. Style filter
@@ -905,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
 
     // Handle artist card click to select and update Ficha card
-    artistCards.forEach(card => {
+    document.querySelectorAll('.artist-card').forEach(card => {
         card.addEventListener('click', (e) => {
             if (e.target.closest('.btn-favorite')) {
                 return;
@@ -1155,6 +1283,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // Recreate icons
         lucide.createIcons();
 
+        // Fetch portfolio items for this artist dynamically
+        if (supabaseClient) {
+            supabaseClient
+                .from('portfolio')
+                .select('*')
+                .eq('artist_id', artistId)
+                .then(({ data: items, error }) => {
+                    if (!error && items && items.length > 0) {
+                        state.portfolioItems = items.map(item => ({
+                            src: item.image_url,
+                            title: item.title || 'Diseño',
+                            style: item.style || 'Fine Line',
+                            zone: (item.body_part || 'Brazos').toLowerCase().replace('brazos', 'brazo')
+                        }));
+                    } else {
+                        // Fallback static items
+                        state.portfolioItems = [
+                            { src: 'assets/tattoo_flower.png', title: 'Diseño Botánico', style: 'Fine Line', zone: 'brazo' },
+                            { src: 'assets/tattoo_butterfly.png', title: 'Mariposa Líneas', style: 'Fine Line', zone: 'brazo' }
+                        ];
+                    }
+                    renderFilteredProfileGallery();
+                    rebuildCarouselDOM();
+                });
+        } else {
+            renderFilteredProfileGallery();
+            rebuildCarouselDOM();
+        }
+
         // Update map focus and marker popup
         if (mapInstance) {
             // Re-align map rendering
@@ -1264,9 +1421,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Pins locations details
         const locations = [
             { id: 'pipo', name: 'Studio Tatto Pipo', coords: [-39.2045, -73.0538], popup: '<strong>Studio tatto pipo</strong><br>Teodoro Schmidt' },
-            { id: 'lara', name: 'Ink Lara', coords: [-38.7500, -72.6300], popup: '<strong>Ink Lara</strong><br>Padre Las Casas' },
-            { id: 'kame', name: 'Kame Tattoo', coords: [-38.7200, -72.5800], popup: '<strong>Kame Tattoo</strong><br>Temuco' },
-            { id: 'sombra', name: 'Sombra Negra', coords: [-39.2783, -72.2272], popup: '<strong>Sombra Negra</strong><br>Villarrica' }
+            { id: 'wentruart', name: 'Wentruart', coords: [-38.7450, -72.6020], popup: '<strong>Wentruart</strong><br>Temuco' },
+            { id: 'tattoopucon', name: 'Tattoo Pucón', coords: [-39.2736, -71.9744], popup: '<strong>Tattoo Pucón</strong><br>Pucón' },
+            { id: 'puertotinta', name: 'Puerto Tinta', coords: [-38.7906, -73.3986], popup: '<strong>Puerto Tinta</strong><br>Saavedra' }
         ];
 
         // Custom Leaflet marker icons with purple theme
@@ -1366,41 +1523,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1200);
             }
         });
+    }
         
-        // Initialize dashboard profile editor map
-        const profileMapEl = document.getElementById('profile-editor-map');
-        if (profileMapEl) {
-            window.artistProfileMapInstance = L.map('profile-editor-map', {
-                zoomControl: true,
-                attributionControl: false
-            }).setView([-39.2045, -73.0538], 12);
+    // Initialize dashboard profile editor map
+    const profileMapEl = document.getElementById('profile-editor-map');
+    if (profileMapEl) {
+        window.artistProfileMapInstance = L.map('profile-editor-map', {
+            zoomControl: true,
+            attributionControl: false
+        }).setView([-39.2045, -73.0538], 12);
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 19
-            }).addTo(window.artistProfileMapInstance);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19
+        }).addTo(window.artistProfileMapInstance);
 
-            const initialCoords = state.tatuadorProfile.coords || [-39.2045, -73.0538];
-            const profileMarker = L.marker(initialCoords, { draggable: true }).addTo(window.artistProfileMapInstance);
-            
-            // Map click listener
-            window.artistProfileMapInstance.on('click', (e) => {
-                const { lat, lng } = e.latlng;
-                profileMarker.setLatLng([lat, lng]);
-                document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-                reverseGeocodeMock(lat, lng);
-            });
+        const initialCoords = state.tatuadorProfile.coords || [-39.2045, -73.0538];
+        const profileMarker = L.marker(initialCoords, { draggable: true }).addTo(window.artistProfileMapInstance);
+        
+        // Map click listener
+        window.artistProfileMapInstance.on('click', (e) => {
+            const { lat, lng } = e.latlng;
+            profileMarker.setLatLng([lat, lng]);
+            document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            reverseGeocodeMock(lat, lng);
+        });
 
-            // Marker drag listener
-            profileMarker.on('dragend', () => {
-                const position = profileMarker.getLatLng();
-                const lat = position.lat;
-                const lng = position.lng;
-                document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-                reverseGeocodeMock(lat, lng);
-            });
+        // Marker drag listener
+        profileMarker.on('dragend', () => {
+            const position = profileMarker.getLatLng();
+            const lat = position.lat;
+            const lng = position.lng;
+            document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            reverseGeocodeMock(lat, lng);
+        });
 
-            window.artistProfileMarkerInstance = profileMarker;
-        }
+        window.artistProfileMarkerInstance = profileMarker;
     }
 
     // Mock reverse geocoding to keep the address input synced with map clicks
@@ -1459,58 +1616,442 @@ document.addEventListener('DOMContentLoaded', () => {
                         avatar_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp'
                     },
                     {
-                        id: 'lara',
-                        name: 'Ink Lara',
-                        location: 'Padre Las Casas',
-                        experience: 4,
-                        price: 'Accesible',
-                        bio: 'Especialista en Realismo de sombras, retratos y Black & Grey detallado.',
-                        instagram: 'https://instagram.com/inklara',
-                        coords: [-38.7500, -72.6300],
-                        styles: ['Realismo', 'Black & Grey'],
-                        inks: ['Dynamic Ink', 'Silverback Ink'],
+                        id: 'danilobravotattoo',
+                        name: 'Danilo Bravo Tattoo',
+                        location: 'Temuco',
+                        experience: 10,
+                        price: 'Especialista',
+                        bio: 'Artista del tatuaje con más de 10 años de experiencia en realismo, dotwork y composiciones personalizadas de gran detalle.',
+                        instagram: 'https://www.instagram.com/danilobravotattoo/',
+                        coords: [-38.7396, -72.5984],
+                        styles: ['Realismo', 'Blackwork', 'Black & Grey'],
+                        inks: ['Dynamic Ink', 'Intenze Ink'],
                         needles: ['Kwadron Cartridges'],
                         billing_status: 'paid',
                         plan: 'premium',
-                        avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face'
+                        avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'
                     },
                     {
-                        id: 'kame',
-                        name: 'Kame Tattoo',
+                        id: 'wentruart',
+                        name: 'Wentruart',
+                        location: 'Temuco',
+                        experience: 6,
+                        price: 'Intermedio',
+                        bio: 'Taller de tatuajes enfocado en el arte tradicional y neotradicional. Diseños de autor que cuentan historias en la piel.',
+                        instagram: 'https://www.instagram.com/wentruart',
+                        coords: [-38.7450, -72.6020],
+                        styles: ['Neo Tradicional', 'Tradicional'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'aflordepielchile',
+                        name: 'A Flor de Piel Chile',
+                        location: 'Temuco',
+                        experience: 5,
+                        price: 'Accesible',
+                        bio: 'Estudio de tatuajes y arte corporal enfocado en Fine Line, botánica y diseños minimalistas con trazos limpios y delicados.',
+                        instagram: 'https://www.instagram.com/aflordepielchile',
+                        coords: [-38.7350, -72.5900],
+                        styles: ['Fine Line', 'Acuarela'],
+                        inks: ['Dynamic Ink', 'Silverback Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'andresblacktattoostudios',
+                        name: 'Andres Black Tattoo',
+                        location: 'Temuco',
+                        experience: 7,
+                        price: 'Premium',
+                        bio: 'Especialista en estilos oscuros, Blackwork denso, realismo y lettering de alto impacto.',
+                        instagram: 'https://www.instagram.com/andres_blacktattoostudios',
+                        coords: [-38.7420, -72.6100],
+                        styles: ['Blackwork', 'Lettering', 'Realismo'],
+                        inks: ['Dynamic Ink', 'Intenze Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'rumeltatuajes',
+                        name: 'Rumel Tatuajes',
                         location: 'Temuco',
                         experience: 8,
+                        price: 'Intermedio',
+                        bio: 'Especialista en tatuajes de realismo en sombras y color, con énfasis en retratos y diseños personalizados.',
+                        instagram: 'https://www.instagram.com/rumel_tatuajes',
+                        coords: [-38.7390, -72.5970],
+                        styles: ['Realismo', 'Black & Grey'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'rodrigovillaart',
+                        name: 'Rodrigo Villa Art',
+                        location: 'Victoria',
+                        experience: 9,
                         price: 'Especialista',
-                        bio: 'Estudio de tatuajes anime y full color inspirado en la cultura geek en pleno centro de Temuco.',
-                        instagram: 'https://instagram.com/kametattoo',
-                        coords: [-38.7200, -72.5800],
-                        styles: ['Acuarela', 'Full Color', 'Anime'],
-                        inks: ['Eternal Ink', 'Fusion Ink'],
-                        needles: ['Cheyenne Safety Cartridges'],
+                        bio: 'Tatuador con una destacada trayectoria nacional. Especialista en realismo a color, retratos y covers complejos.',
+                        instagram: 'https://www.instagram.com/rodrigovilla_art',
+                        coords: [-38.2333, -72.3333],
+                        styles: ['Realismo', 'Full Color', 'Cover-up'],
+                        inks: ['Dynamic Ink', 'Intenze Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'pablogtatuajes',
+                        name: 'Pablog Tatuajes',
+                        location: 'Temuco',
+                        experience: 5,
+                        price: 'Intermedio',
+                        bio: 'Artista enfocado en el estilo ilustrativo, dotwork y Blackwork, entregando piezas originales basadas en tus ideas.',
+                        instagram: 'https://www.instagram.com/Pablog_tatuajes',
+                        coords: [-38.7405, -72.6080],
+                        styles: ['Ilustrativo', 'Puntillismo', 'Blackwork'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'medusatattoochile',
+                        name: 'Medusa Tattoo Chile',
+                        location: 'Temuco',
+                        experience: 6,
+                        price: 'Accesible',
+                        bio: 'Estudio integrado por artistas emergentes. Diseños personalizados de anime, pop culture y Fine Line.',
+                        instagram: 'https://www.instagram.com/medusatattoochile/',
+                        coords: [-38.7360, -72.5950],
+                        styles: ['Anime', 'Fine Line', 'Full Color'],
+                        inks: ['Eternal Ink', 'Solid Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'estudiothelake',
+                        name: 'Estudio The Lake',
+                        location: 'Villarrica',
+                        experience: 7,
+                        price: 'Premium',
+                        bio: 'Estudio boutique a orillas del lago. Tatuajes de autor en Black & Grey, naturaleza y realismo botánico.',
+                        instagram: 'https://www.instagram.com/estudio.thelake/',
+                        coords: [-39.2820, -72.2310],
+                        styles: ['Black & Grey', 'Fine Line', 'Ilustrativo'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'tattoopucon',
+                        name: 'Tattoo Pucón',
+                        location: 'Pucón',
+                        experience: 11,
+                        price: 'Especialista',
+                        bio: 'El estudio pionero en Pucón. Realismo, puntillismo, acuarela y piezas tribales de gran envergadura.',
+                        instagram: 'https://www.instagram.com/tattoopucon/',
+                        coords: [-39.2736, -71.9744],
+                        styles: ['Realismo', 'Puntillismo', 'Tribal'],
+                        inks: ['Dynamic Ink', 'Intenze Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'damiencarrasco',
+                        name: 'Damien Carrasco',
+                        location: 'Villarrica',
+                        experience: 6,
+                        price: 'Intermedio',
+                        bio: 'Especialista en biomecánico, surrealismo oscuro y Blackwork con técnicas de sombreado avanzadas.',
+                        instagram: 'https://www.instagram.com/damien.carrasco',
+                        coords: [-39.2770, -72.2220],
+                        styles: ['Blackwork', 'Surrealismo', 'Biomecánico'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1489980508314-941910ded1f4?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'francistattoocolor',
+                        name: 'Francis Tattoo Color',
+                        location: 'Victoria',
+                        experience: 5,
+                        price: 'Accesible',
+                        bio: 'Especialista en tatuajes de acuarela, ilustración botánica y piezas full color con trazos delicados.',
+                        instagram: 'https://www.instagram.com/francis_tattoo_color/',
+                        coords: [-38.2310, -72.3360],
+                        styles: ['Acuarela', 'Full Color', 'Fine Line'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'koteknt',
+                        name: 'Knt Tattoos',
+                        location: 'Cunco',
+                        experience: 8,
+                        price: 'Intermedio',
+                        bio: 'Diseños de autor en estilo tradicional americano, neotradicional y japonés, con colores vibrantes y líneas sólidas.',
+                        instagram: 'https://www.instagram.com/koteknt',
+                        coords: [-38.9242, -72.0333],
+                        styles: ['Tradicional', 'Neo Tradicional', 'Japonés'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'abnerjacob',
+                        name: 'Abner Jacob',
+                        location: 'Lautaro',
+                        experience: 7,
+                        price: 'Intermedio',
+                        bio: 'Piezas realistas y detalladas en Black & Grey, retratos y arte sacro adaptado para la piel.',
+                        instagram: 'https://www.instagram.com/abnerjacob_/',
+                        coords: [-38.5303, -72.4475],
+                        styles: ['Realismo', 'Black & Grey'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'gotapiedratatoo',
+                        name: 'Gota Piedra Tattoo',
+                        location: 'Victoria',
+                        experience: 4,
+                        price: 'Accesible',
+                        bio: 'Estudio local enfocado en tatuaje comercial, lettering, tribal y piezas minimalistas con excelente higiene.',
+                        instagram: 'https://www.instagram.com/gota_piedra_tatoo_victoria/reels/',
+                        coords: [-38.2350, -72.3410],
+                        styles: ['Lettering', 'Tribal', 'Fine Line'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'puertotinta',
+                        name: 'Puerto Tinta',
+                        location: 'Saavedra',
+                        experience: 6,
+                        price: 'Intermedio',
+                        bio: 'Estudio independiente a orillas de la costa. Diseños inspirados en la naturaleza marina y cultura tradicional.',
+                        instagram: 'https://www.instagram.com/puertotinta/',
+                        coords: [-38.7906, -73.3986],
+                        styles: ['Tradicional', 'Blackwork'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'tattooantu',
+                        name: 'Antu Tattoo',
+                        location: 'Carahue',
+                        experience: 4,
+                        price: 'Accesible',
+                        bio: 'Tatuajes de autor inspirados en la flora y fauna local de Carahue. Especialidad en sombras y dotwork.',
+                        instagram: 'https://www.instagram.com/tattoo_antu/',
+                        coords: [-38.7058, -73.1678],
+                        styles: ['Blackwork', 'Puntillismo'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
                         billing_status: 'paid',
                         plan: 'basic',
                         avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face'
                     },
                     {
-                        id: 'sombra',
-                        name: 'Sombra Negra',
-                        location: 'Villarrica',
+                        id: 'tattooandroses',
+                        name: 'Tattoo & Roses',
+                        location: 'Lonquimay',
                         experience: 6,
-                        price: 'Premium',
-                        bio: 'Especialistas en Blackwork tribal de gran cobertura y puntillismo geométrico.',
-                        instagram: 'https://instagram.com/sombranegratattoo',
-                        coords: [-39.2783, -72.2272],
-                        styles: ['Blackwork', 'Puntillismo'],
-                        inks: ['Dynamic Ink', 'Solid Ink'],
-                        needles: ['Cheyenne Hawk Cartridges'],
+                        price: 'Intermedio',
+                        bio: 'Tatuajes delicados, rosas detalladas, Fine Line y Lettering elegante en la cordillera de Lonquimay.',
+                        instagram: 'https://www.instagram.com/tattooandroses/?hl=es-la',
+                        coords: [-38.4411, -71.2403],
+                        styles: ['Fine Line', 'Lettering'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
                         billing_status: 'paid',
                         plan: 'premium',
-                        avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
+                        avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'emiliosftattoos',
+                        name: 'Emilio SF Tattoos',
+                        location: 'Freire',
+                        experience: 5,
+                        price: 'Intermedio',
+                        bio: 'Especialista en estilos tradicionales, líneas gruesas y colores sólidos. Tatuando desde Freire para toda la región.',
+                        instagram: 'https://www.instagram.com/emili0_sf_t4tt0s_/',
+                        coords: [-38.9564, -72.6567],
+                        styles: ['Tradicional', 'Full Color'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'blasphemytattoo',
+                        name: 'Blasphemy Tattoo',
+                        location: 'Curarrehue',
+                        experience: 7,
+                        price: 'Premium',
+                        bio: 'Estudio privado en Curarrehue. Blackwork oscuro, neotradicional y piezas ilustrativas de gran escala.',
+                        instagram: 'https://www.instagram.com/blasphemy_tattoo/?hl=es-la',
+                        coords: [-39.3622, -71.5878],
+                        styles: ['Blackwork', 'Neo Tradicional', 'Ilustrativo'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'oskargutierreztattoos',
+                        name: 'Oskar Gutierrez Tattoos',
+                        location: 'Galvarino',
+                        experience: 9,
+                        price: 'Especialista',
+                        bio: 'Artista del tatuaje con trayectoria internacional. Especialista en realismo black & grey de alta gama en Galvarino.',
+                        instagram: 'https://www.instagram.com/oskargutierrez.tattoos/?hl=es',
+                        coords: [-38.4069, -72.7831],
+                        styles: ['Realismo', 'Black & Grey'],
+                        inks: ['Dynamic Ink', 'Intenze Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'dannatattoo',
+                        name: 'Danna Tattoo',
+                        location: 'Loncoche',
+                        experience: 4,
+                        price: 'Accesible',
+                        bio: 'Tatuadora especializada en trazos finos, diseños florales, minimalismo y puntillismo en Loncoche.',
+                        instagram: 'https://www.instagram.com/danna.tattoo_/?hl=es-la',
+                        coords: [-39.3667, -72.7833],
+                        styles: ['Fine Line', 'Puntillismo'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'tatuajesaraucania',
+                        name: 'Tatuajes Araucanía',
+                        location: 'Melipeuco',
+                        experience: 6,
+                        price: 'Intermedio',
+                        bio: 'Tatuajes inspirados en la cordillera de Melipeuco y el Parque Conguillío. Realismo, naturaleza y blackwork.',
+                        instagram: 'https://www.instagram.com/tatuajes_araucania/',
+                        coords: [-38.8981, -71.6967],
+                        styles: ['Realismo', 'Blackwork', 'Ilustrativo'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'yesstattoo',
+                        name: 'Yess Tattoo',
+                        location: 'Nueva Imperial',
+                        experience: 5,
+                        price: 'Accesible',
+                        bio: 'Estudio de tatuaje higiénico y acogedor en Nueva Imperial. Todo tipo de diseños, covers y lettering personalizado.',
+                        instagram: 'https://www.instagram.com/yesstattoo._/',
+                        coords: [-38.7439, -72.9511],
+                        styles: ['Lettering', 'Fine Line', 'Cover-up'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'basic',
+                        avatar_url: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'jacketattoos',
+                        name: 'Jacke Tattoos',
+                        location: 'Pitrufquén',
+                        experience: 8,
+                        price: 'Intermedio',
+                        bio: 'Artista enfocado en el estilo tradicional japonés y neotradicional. Diseños a color y sombras en Pitrufquén.',
+                        instagram: 'https://www.instagram.com/jacke_tattoos/',
+                        coords: [-38.9833, -72.6333],
+                        styles: ['Japonés', 'Neo Tradicional'],
+                        inks: ['Solid Ink', 'Eternal Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&h=150&fit=crop&crop=face'
+                    },
+                    {
+                        id: 'nelsonvergaratatuajes',
+                        name: 'Nelson Vergara Tattoos',
+                        location: 'Renaico',
+                        experience: 8,
+                        price: 'Premium',
+                        bio: 'Especialista en realismo, retratos familiares y cubrimientos complejos en Renaico y alrededores.',
+                        instagram: 'https://www.instagram.com/nelsonvergaratatuajes/',
+                        coords: [-37.6692, -72.5897],
+                        styles: ['Realismo', 'Black & Grey', 'Cover-up'],
+                        inks: ['Solid Ink', 'Dynamic Ink'],
+                        needles: ['Kwadron Cartridges'],
+                        billing_status: 'paid',
+                        plan: 'premium',
+                        avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&h=150&fit=crop&crop=face'
                     }
                 ];
 
+                // Map avatars to real Instagram ones dynamically
+                const processedProfiles = defaultProfiles.map(p => {
+                    if (p.id !== 'pipo') {
+                        let username = p.id;
+                        try {
+                            const urlStr = p.instagram.replace(/\/+$/, '');
+                            username = urlStr.substring(urlStr.lastIndexOf('/') + 1);
+                            if (username.indexOf('?') > -1) {
+                                username = username.substring(0, username.indexOf('?'));
+                            }
+                        } catch (e) {}
+                        p.avatar_url = `https://unavatar.io/instagram/${username}`;
+                    }
+                    return p;
+                });
+
                 const { error: insertError } = await supabaseClient
                     .from('profiles')
-                    .insert(defaultProfiles);
+                    .insert(processedProfiles);
 
                 if (insertError) {
                     console.error("Error seeding default profiles", insertError);
@@ -1519,11 +2060,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Insert default portfolio items
                 const defaultPortfolio = [
-                    { artist_id: 'pipo', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
-                    { artist_id: 'pipo', title: 'Geometría Sagrada', style: 'Blackwork', body_part: 'Espalda', image_url: 'assets/tattoo_flower.png' },
-                    { artist_id: 'lara', title: 'León Realista en Sombras', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
-                    { artist_id: 'kame', title: 'Goku Super Saiyajin Full Color', style: 'Anime', body_part: 'Piernas', image_url: 'assets/tattoo_goku.png' },
-                    { artist_id: 'sombra', title: 'Mandala Puntillista', style: 'Puntillismo', body_part: 'Brazos', image_url: 'assets/tattoo_mandala.png' }
+                    { artist_id: 'pipo', title: 'Trabajo mano', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp' },
+                    { artist_id: 'pipo', title: 'Diseño geométrico', style: 'Blackwork', body_part: 'Espalda', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4595_wspfa6.webp' },
+                    { artist_id: 'pipo', title: 'Tatuaje líneas', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_WhatsApp_Image_2026-07-07_at_10.14.53_PM_ntqzyz.webp' },
+                    { artist_id: 'pipo', title: 'Línea fina floral', style: 'Fine Line', body_part: 'Piernas', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4314_kezisl.webp' },
+                    { artist_id: 'pipo', title: 'Blackwork abstract', style: 'Blackwork', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4495_bdmmfp.webp' },
+                    { artist_id: 'pipo', title: 'Trazos continuos', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4125_uuvbwh.webp' },
+                    { artist_id: 'pipo', title: 'Tatuaje ornamental', style: 'Blackwork', body_part: 'Espalda', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4144_fir9qv.webp' },
+                    { artist_id: 'pipo', title: 'Puntillismo flor', style: 'Puntillismo', body_part: 'Piernas', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_4075_mfide8.webp' },
+                    { artist_id: 'pipo', title: 'Composición botánica', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3997_k5nt4b.webp' },
+                    { artist_id: 'pipo', title: 'Silueta minimalista', style: 'Fine Line', body_part: 'Torso', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3861_wa3yyf.webp' },
+                    { artist_id: 'pipo', title: 'Tatuaje lineal', style: 'Fine Line', body_part: 'Manos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3179_fvx7ev.webp' },
+                    { artist_id: 'pipo', title: 'Diseño lineal fino', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3168_zcazow.webp' },
+                    { artist_id: 'pipo', title: 'Blackwork flor', style: 'Blackwork', body_part: 'Piernas', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2512_vwcl9a.webp' },
+                    { artist_id: 'pipo', title: 'Geometría lineal', style: 'Blackwork', body_part: 'Espalda', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2638_klaumh.webp' },
+                    { artist_id: 'pipo', title: 'Ornamento floral', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2014_jxqfuj.webp' },
+                    { artist_id: 'pipo', title: 'Trabajo brazo', style: 'Fine Line', body_part: 'Brazos', image_url: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_brazo_bswodc.webp' },
+                    { artist_id: 'danilobravotattoo', title: 'Composición de Mariposas', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_butterfly.png' },
+                    { artist_id: 'wentruart', title: 'Ilustración Alien Sketch', style: 'Blackwork', body_part: 'Piernas', image_url: 'assets/tattoo_alien.png' },
+                    { artist_id: 'aflordepielchile', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'andresblacktattoostudios', title: 'Mandala Puntillista', style: 'Blackwork', body_part: 'Brazos', image_url: 'assets/tattoo_mandala.png' },
+                    { artist_id: 'rumeltatuajes', title: 'León Realista', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'rodrigovillaart', title: 'León Realista en Sombras', style: 'Realismo', body_part: 'Espalda', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'pablogtatuajes', title: 'Ilustración Alien Sketch', style: 'Blackwork', body_part: 'Piernas', image_url: 'assets/tattoo_alien.png' },
+                    { artist_id: 'medusatattoochile', title: 'Anime Goku Color', style: 'Anime', body_part: 'Piernas', image_url: 'assets/tattoo_anime.png' },
+                    { artist_id: 'estudiothelake', title: 'Mandala Puntillista', style: 'Black & Grey', body_part: 'Brazos', image_url: 'assets/tattoo_mandala.png' },
+                    { artist_id: 'tattoopucon', title: 'León Realista', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'damiencarrasco', title: 'Ilustración Alien Sketch', style: 'Blackwork', body_part: 'Piernas', image_url: 'assets/tattoo_alien.png' },
+                    { artist_id: 'francistattoocolor', title: 'Flor de Loto Fina', style: 'Acuarela', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'koteknt', title: 'Composición de Mariposas', style: 'Tradicional', body_part: 'Brazos', image_url: 'assets/tattoo_butterfly.png' },
+                    { artist_id: 'abnerjacob', title: 'León Realista', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'gotapiedratatoo', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'puertotinta', title: 'Ilustración Alien Sketch', style: 'Blackwork', body_part: 'Piernas', image_url: 'assets/tattoo_alien.png' },
+                    { artist_id: 'tattooantu', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'tattooandroses', title: 'Composición de Mariposas', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_butterfly.png' },
+                    { artist_id: 'emiliosftattoos', title: 'Ilustración Alien Sketch', style: 'Blackwork', body_part: 'Piernas', image_url: 'assets/tattoo_alien.png' },
+                    { artist_id: 'blasphemytattoo', title: 'Mandala Puntillista', style: 'Blackwork', body_part: 'Brazos', image_url: 'assets/tattoo_mandala.png' },
+                    { artist_id: 'oskargutierreztattoos', title: 'León Realista', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'dannatattoo', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'tatuajesaraucania', title: 'León Realista en Sombras', style: 'Realismo', body_part: 'Espalda', image_url: 'assets/tattoo_lion.png' },
+                    { artist_id: 'yesstattoo', title: 'Flor de Loto Fina', style: 'Fine Line', body_part: 'Brazos', image_url: 'assets/tattoo_flower.png' },
+                    { artist_id: 'jacketattoos', title: 'Composición de Mariposas', style: 'Neo Tradicional', body_part: 'Brazos', image_url: 'assets/tattoo_butterfly.png' },
+                    { artist_id: 'nelsonvergaratatuajes', title: 'León Realista', style: 'Realismo', body_part: 'Brazos', image_url: 'assets/tattoo_lion.png' }
                 ];
 
                 await supabaseClient.from('portfolio').insert(defaultPortfolio);
@@ -1532,8 +2110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const defaultComments = [
                     { artist_id: 'pipo', client_name: 'Martina Rojas', text: 'Increíble trabajo de trazo fino. Muy higiénico y detallista.', status: 'approved' },
                     { artist_id: 'pipo', client_name: 'Lucas Valenzuela', text: 'Excelente atención. Me encantó el diseño de Blackwork que armamos.', status: 'approved' },
-                    { artist_id: 'pipo', client_name: 'Sofía Muñoz', text: '¿Tienen disponibilidad para este sábado? Me gustaría cotizar.', status: 'pending' },
-                    { artist_id: 'lara', client_name: 'Ignacio Fuentes', text: 'El realismo de león quedó brutal. Lo recomiendo 100%.', status: 'approved' }
+                    { artist_id: 'pipo', client_name: 'Sofía Muñoz', text: '¿Tienen disponibilidad para este sábado? Me gustaría cotizar.', status: 'pending' }
                 ];
 
                 await supabaseClient.from('comments').insert(defaultComments);
@@ -1541,9 +2118,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Insert stats
                 const defaultStats = [
                     { artist_id: 'pipo', impressions: 1240, clicks: 340, messages: 18 },
-                    { artist_id: 'lara', impressions: 980, clicks: 210, messages: 12 },
-                    { artist_id: 'kame', impressions: 850, clicks: 190, messages: 8 },
-                    { artist_id: 'sombra', impressions: 1100, clicks: 290, messages: 14 }
+                    { artist_id: 'danilobravotattoo', impressions: 1540, clicks: 420, messages: 24 },
+                    { artist_id: 'wentruart', impressions: 930, clicks: 220, messages: 11 },
+                    { artist_id: 'aflordepielchile', impressions: 780, clicks: 180, messages: 8 },
+                    { artist_id: 'andresblacktattoostudios', impressions: 1150, clicks: 310, messages: 19 },
+                    { artist_id: 'rumeltatuajes', impressions: 1220, clicks: 340, messages: 21 },
+                    { artist_id: 'rodrigovillaart', impressions: 1410, clicks: 390, messages: 26 },
+                    { artist_id: 'pablogtatuajes', impressions: 690, clicks: 150, messages: 6 },
+                    { artist_id: 'medusatattoochile', impressions: 840, clicks: 190, messages: 9 },
+                    { artist_id: 'estudiothelake', impressions: 1300, clicks: 360, messages: 22 },
+                    { artist_id: 'tattoopucon', impressions: 1620, clicks: 450, messages: 31 },
+                    { artist_id: 'damiencarrasco', impressions: 790, clicks: 180, messages: 8 },
+                    { artist_id: 'francistattoocolor', impressions: 710, clicks: 160, messages: 7 },
+                    { artist_id: 'koteknt', impressions: 980, clicks: 230, messages: 12 },
+                    { artist_id: 'abnerjacob', impressions: 1040, clicks: 260, messages: 14 },
+                    { artist_id: 'gotapiedratatoo', impressions: 610, clicks: 120, messages: 4 },
+                    { artist_id: 'puertotinta', impressions: 890, clicks: 200, messages: 10 },
+                    { artist_id: 'tattooantu', impressions: 640, clicks: 130, messages: 5 },
+                    { artist_id: 'tattooandroses', impressions: 950, clicks: 210, messages: 9 },
+                    { artist_id: 'emiliosftattoos', impressions: 720, clicks: 160, messages: 7 },
+                    { artist_id: 'blasphemytattoo', impressions: 1120, clicks: 290, messages: 15 },
+                    { artist_id: 'oskargutierreztattoos', impressions: 1450, clicks: 380, messages: 23 },
+                    { artist_id: 'dannatattoo', impressions: 590, clicks: 110, messages: 4 },
+                    { artist_id: 'tatuajesaraucania', impressions: 830, clicks: 190, messages: 10 },
+                    { artist_id: 'yesstattoo', impressions: 690, clicks: 140, messages: 6 },
+                    { artist_id: 'jacketattoos', impressions: 1020, clicks: 240, messages: 13 },
+                    { artist_id: 'nelsonvergaratatuajes', impressions: 1250, clicks: 310, messages: 18 }
                 ];
                 
                 await supabaseClient.from('stats').insert(defaultStats);
@@ -1573,6 +2173,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Fetch portfolio to get cover images
+            const { data: portfolioItems, error: portError } = await supabaseClient
+                .from('portfolio')
+                .select('*');
+
+            const portfolioCovers = {};
+            if (!portError && portfolioItems) {
+                portfolioItems.forEach(item => {
+                    if (!portfolioCovers[item.artist_id]) {
+                        portfolioCovers[item.artist_id] = item.image_url;
+                    }
+                });
+            }
+
             // Silent DB updates for static demo profiles
             try {
                 const pipoProfile = profiles.find(p => p.id === 'pipo');
@@ -1585,30 +2199,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         })
                         .eq('id', 'pipo')
                         .then(() => console.log("Supabase: pipo profile corrected in database"));
-                }
-                const laraProfile = profiles.find(p => p.id === 'lara');
-                if (laraProfile && laraProfile.avatar_url === 'assets/logo_pipo.png') {
-                    supabaseClient
-                        .from('profiles')
-                        .update({ avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face' })
-                        .eq('id', 'lara')
-                        .then(() => console.log("Supabase: lara avatar corrected"));
-                }
-                const kameProfile = profiles.find(p => p.id === 'kame');
-                if (kameProfile && kameProfile.avatar_url === 'assets/logo_pipo.png') {
-                    supabaseClient
-                        .from('profiles')
-                        .update({ avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face' })
-                        .eq('id', 'kame')
-                        .then(() => console.log("Supabase: kame avatar corrected"));
-                }
-                const sombraProfile = profiles.find(p => p.id === 'sombra');
-                if (sombraProfile && sombraProfile.avatar_url === 'assets/logo_pipo.png') {
-                    supabaseClient
-                        .from('profiles')
-                        .update({ avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' })
-                        .eq('id', 'sombra')
-                        .then(() => console.log("Supabase: sombra avatar corrected"));
                 }
             } catch (err) {
                 console.error("Database self-healing update failed", err);
@@ -1633,16 +2223,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     bio: p.bio || '',
                     instagram: p.id === 'pipo' ? 'https://www.instagram.com/pipo.tattooo/' : (p.instagram || ''),
                     avatar: p.id === 'pipo' ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp' : 
-                            (p.id === 'lara') ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face' :
-                            (p.id === 'kame') ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face' :
-                            (p.id === 'sombra') ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' :
                             (p.avatar_url || 'assets/logo_pipo.png'),
                     coords: p.coords,
                     experience: p.experience,
                     price: p.price,
                     styles: p.styles || [],
                     inks: p.inks || [],
-                    needles: p.needles || []
+                    needles: p.needles || [],
+                    coverImage: portfolioCovers[p.id] || 'assets/tattoo_flower.png'
                 };
 
                 artistCoordinates[p.id] = p.coords;
@@ -1702,6 +2290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 5. Update UI Grid from Supabase records
             renderPublicArtistCardsFromSupabase();
+            updateLocationDropdowns();
 
             // 6. Refresh workspace UI panels
             refreshTatuadorWorkspace();
@@ -1733,7 +2322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         Object.keys(artistsDetails).forEach(id => {
             const artist = artistsDetails[id];
-            addNewArtistCardToGrid(artist.name, artist.location, artist.experience || 5, artist.styles, id, artist.avatar);
+            addNewArtistCardToGrid(artist.name, artist.location, artist.experience || 5, artist.styles, id, artist.avatar, artist.coverImage);
         });
 
         // Set card click handlers & favorites setup
@@ -1778,18 +2367,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateCarouselDOM() {
         const totalItems = carouselItems.length;
+        if (totalItems === 0) return;
         
         carouselItems.forEach((item, index) => {
             item.className = 'carousel-3d-item'; // Reset class names
             
             if (index === state.carouselIndex) {
                 item.classList.add('active');
-            } else if (index === (state.carouselIndex - 1 + totalItems) % totalItems) {
-                item.classList.add('prev');
-            } else if (index === (state.carouselIndex + 1) % totalItems) {
-                item.classList.add('next');
+            } else if (totalItems >= 3) {
+                if (index === (state.carouselIndex - 1 + totalItems) % totalItems) {
+                    item.classList.add('prev');
+                } else if (index === (state.carouselIndex + 1) % totalItems) {
+                    item.classList.add('next');
+                }
+            } else if (totalItems === 2) {
+                if (index !== state.carouselIndex) {
+                    item.classList.add('next');
+                }
             }
         });
+    }
+
+    function rebuildCarouselDOM() {
+        const container = document.getElementById('carousel-3d');
+        if (!container) return;
+        
+        container.innerHTML = ''; // Clear static ones
+        
+        const itemsToUse = state.portfolioItems.slice(0, 5);
+        if (itemsToUse.length === 0) return;
+        
+        itemsToUse.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'carousel-3d-item';
+            div.innerHTML = `<img src="${escapeHTML(item.src)}" alt="${escapeHTML(item.title)}">`;
+            
+            div.addEventListener('click', () => {
+                if (state.carouselIndex !== index) {
+                    state.carouselIndex = index;
+                    updateCarouselDOM();
+                } else {
+                    openLightbox(item.src, item.title);
+                }
+            });
+            
+            container.appendChild(div);
+        });
+        
+        state.carouselIndex = 0;
+        carouselItems = container.querySelectorAll('.carousel-3d-item');
+        updateCarouselDOM();
     }
 
     if (btnCarouselPrev) {
@@ -2288,7 +2915,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save plans configs
     document.querySelectorAll('.btn-save-plan').forEach(btn => {
         btn.addEventListener('click', () => {
-            showToast('¡Configuración de tarifas guardada!');
+            const pricingBasicInput = document.getElementById('pricing-basic-val');
+            const pricingPremiumInput = document.getElementById('pricing-premium-val');
+            
+            if (pricingBasicInput && pricingPremiumInput) {
+                const basicVal = pricingBasicInput.value.trim();
+                const premiumVal = pricingPremiumInput.value.trim();
+                
+                if (basicVal !== '' && premiumVal !== '') {
+                    localStorage.setItem('pricing_basic', basicVal);
+                    localStorage.setItem('pricing_premium', premiumVal);
+                    
+                    updateDynamicPricingUI();
+                    showToast('¡Configuración de tarifas guardada y aplicada!');
+                } else {
+                    showToast('Por favor, ingresa tarifas válidas.');
+                }
+            }
         });
     });
 
@@ -2316,13 +2959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     nameEl.textContent = 'Plan Máster (Premium)';
                 }
             }
-            if (priceEl) {
-                if (plan === 'basic') {
-                    priceEl.textContent = '$14.990/mes';
-                } else {
-                    priceEl.textContent = '$29.990/mes';
-                }
-            }
+            updateDynamicPricingUI();
             
             const step1 = document.getElementById('onb-step-1');
             const step2 = document.getElementById('onb-step-2');
@@ -2462,13 +3099,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add Leaflet map marker
             addOrUpdateArtistMarker(safeId, artName, coords, loc);
 
+            // Update location dropdowns dynamically based on active locations
+            updateLocationDropdowns();
+
             showToast('¡Perfil creado exitosamente! Bienvenido a Tinta Conectada.');
             refreshTatuadorWorkspace();
         });
     }
 
     // Helper to dynamically inject new artist card
-    function addNewArtistCardToGrid(name, loc, exp, styles, artistId, avatarUrl) {
+    function addNewArtistCardToGrid(name, loc, exp, styles, artistId, avatarUrl, coverImage) {
         const grid = document.getElementById('artist-grid');
         // Use explicit artistId if provided, else derive from name
         const safeId = artistId || name.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -2490,9 +3130,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const instagram = (artistInfo && artistInfo.instagram) ? artistInfo.instagram : 'https://instagram.com';
         const instagramHandle = instagram.substring(instagram.lastIndexOf('/') + 1) || 'instagram';
         
+        const safeCover = coverImage || (artistInfo && artistInfo.coverImage) || 'assets/tattoo_flower.png';
+        
         card.innerHTML = `
             <div class="card-image-wrapper">
-                <img src="assets/tattoo_flower.png" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img">
+                <img src="${escapeHTML(safeCover)}" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img">
                 <button class="btn-favorite" aria-label="Agregar a favoritos">
                      <i data-lucide="heart" class="icon-heart"></i>
                 </button>
@@ -2588,11 +3230,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (planTypeEl) {
                 planTypeEl.textContent = state.selectedSubscriptionPlan === 'basic' ? 'Plan Básico' : 'Plan Premium';
             }
-            const amountEl = document.getElementById('billing-amount');
-            if (amountEl) {
-                amountEl.textContent = state.selectedSubscriptionPlan === 'basic' ? '$14.990 CLP' : '$29.990 CLP';
-            }
             updateBillingUI();
+            updateDynamicPricingUI();
             
             document.getElementById('workspace-sidebar-name').textContent = state.tatuadorProfile.name;
             document.getElementById('workspace-sidebar-plan').textContent = state.selectedSubscriptionPlan === 'basic' ? 'Plan Básico' : 'Plan Premium';
@@ -2600,6 +3239,21 @@ document.addEventListener('DOMContentLoaded', () => {
             renderWorkspacePortfolio();
             renderWorkspaceAppointments();
             renderDashboardComments();
+
+            // Refresh Leaflet map size to avoid grey container when workspace goes visible
+            if (window.artistProfileMapInstance) {
+                setTimeout(() => {
+                    window.artistProfileMapInstance.invalidateSize();
+                    if (state.tatuadorProfile.coords) {
+                        window.artistProfileMapInstance.setView(state.tatuadorProfile.coords, 13);
+                        if (window.artistProfileMarkerInstance) {
+                            window.artistProfileMarkerInstance.setLatLng(state.tatuadorProfile.coords);
+                        }
+                        // Reverse-geocode coordinates to load correct street address on screen refresh!
+                        reverseGeocodeMock(state.tatuadorProfile.coords[0], state.tatuadorProfile.coords[1]);
+                    }
+                }, 150);
+            }
         } else {
             onboardingPanel.style.display = 'block';
             workspacePanel.style.display = 'none';
@@ -2867,6 +3521,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formTatuadorProfile) {
         formTatuadorProfile.addEventListener('submit', (e) => {
             e.preventDefault();
+            console.log("Profile form submit event triggered.");
+            showToast('Guardando y sincronizando datos...');
             const name = document.getElementById('edit-art-name').value.trim();
             const loc = document.getElementById('edit-art-location').value;
             const exp = document.getElementById('edit-art-exp').value;
@@ -2928,11 +3584,15 @@ document.addEventListener('DOMContentLoaded', () => {
             addOrUpdateArtistMarker(artistId, name, coords, loc);
 
             // Sync workspace sidebar details
-            document.getElementById('workspace-sidebar-name').textContent = name;
+            const sidebarNameEl = document.getElementById('workspace-sidebar-name');
+            if (sidebarNameEl) sidebarNameEl.textContent = name;
             
             // Sync drawer details on active profile if it matches first card
-            document.getElementById('profile-bio-text').textContent = bio;
-            document.getElementById('profile-exp-text').textContent = `${exp}+ Años de trayectoria profesional`;
+            const bioTextEl = document.getElementById('profile-bio-text');
+            if (bioTextEl) bioTextEl.textContent = bio;
+            
+            const expTextEl = document.getElementById('profile-exp-text');
+            if (expTextEl) expTextEl.textContent = `${exp}+ Años de trayectoria profesional`;
             
             const inkList = document.getElementById('profile-inks-list');
             if (inkList) inkList.innerHTML = inks.map(ink => `<li><strong>${escapeHTML(ink)}</strong></li>`).join('');
@@ -2954,15 +3614,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const stylesStr = JSON.stringify(selectedStyles).replace(/"/g, "'");
                 card.setAttribute('data-styles', stylesStr);
                 
-                card.querySelector('.artist-name').textContent = name;
-                card.querySelector('.artist-loc').innerHTML = `<i data-lucide="map-pin"></i> ${escapeHTML(loc)}`;
-                card.querySelector('.meta-exp').textContent = `${escapeHTML(exp)}+ años tatuando`;
+                const cardNameEl = card.querySelector('.artist-name');
+                if (cardNameEl) cardNameEl.textContent = name;
+
+                const cardLocEl = card.querySelector('.artist-loc');
+                if (cardLocEl) cardLocEl.innerHTML = `<i data-lucide="map-pin"></i> ${escapeHTML(loc)}`;
+
+                const cardExpEl = card.querySelector('.meta-exp');
+                if (cardExpEl) cardExpEl.textContent = `${escapeHTML(exp)}+ años tatuando`;
                 
-                let priceSymbols = '$$';
-                if (price === 'Accesible') priceSymbols = '$';
-                else if (price === 'Premium') priceSymbols = '$$$';
-                else if (price === 'Especialista') priceSymbols = '$$$$';
-                card.querySelector('.meta-price').innerHTML = `<span class="price-highlight">${priceSymbols}</span> ${escapeHTML(price)}`;
+                const priceEl = card.querySelector('.meta-price');
+                if (priceEl) {
+                    let priceSymbols = '$$';
+                    if (price === 'Accesible') priceSymbols = '$';
+                    else if (price === 'Premium') priceSymbols = '$$$';
+                    else if (price === 'Especialista') priceSymbols = '$$$$';
+                    priceEl.innerHTML = `<span class="price-highlight">${priceSymbols}</span> ${escapeHTML(price)}`;
+                }
                 
                 // Re-generate tags in card
                 const tagsContainer = card.querySelector('.artist-tags');
@@ -2976,6 +3644,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Immediately apply filters to update map markers visibility and search grid
             applyFilters();
+
+            // Update location dropdowns dynamically based on active locations
+            updateLocationDropdowns();
 
             // Persist to Supabase
             if (supabaseClient) {
@@ -2997,8 +3668,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         plan: state.selectedSubscriptionPlan
                     })
                     .then(({ error }) => {
-                        if (error) console.error("Error saving profile to Supabase:", error);
-                        else showToast('¡Ficha guardada y sincronizada con la nube!');
+                        if (error) {
+                            console.error("Error saving profile to Supabase:", error);
+                            showToast(`Error al guardar en Supabase: ${error.message || 'Sin autorización o RLS'}`);
+                        } else {
+                            console.log(`Supabase: Profile updated successfully for ${artistId}`);
+                            showToast('¡Ficha guardada y sincronizada con la nube!');
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Supabase upsert rejected:", err);
+                        showToast(`Fallo de conexión o consulta: ${err.message || err}`);
                     });
             } else {
                 showToast('¡Ficha del perfil del estudio guardada!');
@@ -3116,6 +3796,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                     
                     if (window.artistProfileMapInstance && window.artistProfileMarkerInstance) {
+                        window.artistProfileMapInstance.invalidateSize();
                         window.artistProfileMapInstance.setView([lat, lng], 13);
                         window.artistProfileMarkerInstance.setLatLng([lat, lng]);
                     }
@@ -3171,10 +3852,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 planTypeEl.className = 'badge';
                 planTypeEl.style.background = '#4a5568';
             }
-            const amountEl = document.getElementById('billing-amount');
-            if (amountEl) {
-                amountEl.textContent = '$14.990 CLP';
-            }
+            updateDynamicPricingUI();
 
             // Persist plan change to Supabase
             if (supabaseClient) {
@@ -3221,10 +3899,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 planTypeEl.className = 'badge badge-premium';
                 planTypeEl.style.background = '';
             }
-            const amountEl = document.getElementById('billing-amount');
-            if (amountEl) {
-                amountEl.textContent = '$29.990 CLP';
-            }
+            updateDynamicPricingUI();
 
             // Persist plan change to Supabase
             if (supabaseClient) {
@@ -4348,7 +5023,116 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2500);
     }
 
+    // 12. DYNAMIC LOCATION DROPDOWN UPDATER
+    function updateLocationDropdowns() {
+        const activeLocations = new Set(Object.values(artistsDetails).map(artist => artist.location));
 
-    
+        // 1. Populate/Update the public search filter dropdown (#filter-location-select)
+        const filterSelect = document.getElementById('filter-location-select');
+        if (filterSelect) {
+            const currentValue = filterSelect.value;
+            filterSelect.innerHTML = '<option value="Todos">Ubicación (Todas)</option>';
+            
+            COMUNAS_LIST.forEach(comuna => {
+                const opt = document.createElement('option');
+                opt.value = comuna;
+                const hasArtist = activeLocations.has(comuna);
+                if (hasArtist) {
+                    opt.textContent = comuna;
+                } else {
+                    opt.textContent = `${comuna} (Sin artistas)`;
+                    opt.disabled = true;
+                }
+                filterSelect.appendChild(opt);
+            });
+            // Re-set current selection if it exists and is not disabled
+            const selectedOpt = filterSelect.querySelector(`option[value="${currentValue}"]`);
+            if (selectedOpt && !selectedOpt.disabled) {
+                filterSelect.value = currentValue;
+            } else {
+                filterSelect.value = 'Todos';
+                state.activeFilters.locationName = 'Todos';
+            }
+        }
+
+        // 2. Populate/Update the artist registration dropdown (#reg-art-location)
+        const regSelect = document.getElementById('reg-art-location');
+        if (regSelect) {
+            const currentValue = regSelect.value;
+            regSelect.innerHTML = '';
+            COMUNAS_LIST.forEach(comuna => {
+                const opt = document.createElement('option');
+                opt.value = comuna;
+                opt.textContent = comuna;
+                regSelect.appendChild(opt);
+            });
+            if (currentValue && regSelect.querySelector(`option[value="${currentValue}"]`)) {
+                regSelect.value = currentValue;
+            } else {
+                regSelect.value = 'Temuco';
+            }
+        }
+
+        // 3. Populate/Update the artist dashboard edit profile dropdown (#edit-art-location)
+        const editSelect = document.getElementById('edit-art-location');
+        if (editSelect) {
+            const currentValue = editSelect.value;
+            editSelect.innerHTML = '';
+            COMUNAS_LIST.forEach(comuna => {
+                const opt = document.createElement('option');
+                opt.value = comuna;
+                opt.textContent = comuna;
+                editSelect.appendChild(opt);
+            });
+            if (currentValue && editSelect.querySelector(`option[value="${currentValue}"]`)) {
+                editSelect.value = currentValue;
+            } else if (state.tatuadorProfile && state.tatuadorProfile.location) {
+                editSelect.value = state.tatuadorProfile.location;
+            } else {
+                editSelect.value = 'Teodoro Schmidt';
+            }
+        }
+    }
+
+    // Dynamic pricing manager
+    function updateDynamicPricingUI() {
+        const priceBasic = localStorage.getItem('pricing_basic') || '14990';
+        const pricePremium = localStorage.getItem('pricing_premium') || '29990';
+
+        const formatCLP = (val) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(parseInt(val));
+
+        // 1. Update Admin inputs
+        const pricingBasicInput = document.getElementById('pricing-basic-val');
+        const pricingPremiumInput = document.getElementById('pricing-premium-val');
+        if (pricingBasicInput) pricingBasicInput.value = priceBasic;
+        if (pricingPremiumInput) pricingPremiumInput.value = pricePremium;
+
+        // 2. Update Onboarding plan cards text
+        const onboardingBasicPrice = document.querySelector('.plans-container .plan-card:nth-child(1) .plan-price');
+        if (onboardingBasicPrice) onboardingBasicPrice.innerHTML = `${formatCLP(priceBasic)} <small>/mes</small>`;
+        const onboardingPremiumPrice = document.querySelector('.plans-container .plan-card:nth-child(2) .plan-price');
+        if (onboardingPremiumPrice) onboardingPremiumPrice.innerHTML = `${formatCLP(pricePremium)} <small>/mes</small>`;
+
+        // 3. Update Onboarding step 3 price details
+        const paymentPlanPriceEl = document.getElementById('payment-plan-price');
+        if (paymentPlanPriceEl) {
+            paymentPlanPriceEl.textContent = `${formatCLP(state.selectedSubscriptionPlan === 'basic' ? priceBasic : pricePremium)}/mes`;
+        }
+
+        // 4. Update Tatuador Dashboard "Mi Plan" comparison cards
+        const comparisonBasicPrice = document.querySelector('#tatuador-my-plan .pricing-comparison-grid .pricing-plan-card:nth-child(1) .price-tag');
+        if (comparisonBasicPrice) comparisonBasicPrice.innerHTML = `${formatCLP(priceBasic)} <span style="font-size: 1rem; font-weight: 700;">CLP / mes</span>`;
+        const comparisonPremiumPrice = document.querySelector('#tatuador-my-plan .pricing-comparison-grid .pricing-plan-card:nth-child(2) .price-tag');
+        if (comparisonPremiumPrice) comparisonPremiumPrice.innerHTML = `${formatCLP(pricePremium)} <span style="font-size: 1rem; font-weight: 700; color: #000000;">CLP / mes</span>`;
+
+        // 5. Update Billing amount text
+        const billingAmountEl = document.getElementById('billing-amount');
+        if (billingAmountEl) {
+            billingAmountEl.textContent = `${formatCLP(state.selectedSubscriptionPlan === 'basic' ? priceBasic : pricePremium)} CLP`;
+        }
+    }
+
+    // Initial pricing sync
+    updateDynamicPricingUI();
 
 });
