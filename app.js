@@ -338,6 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-sabias-que').forEach(item => item.classList.add('active'));
         } else if (targetViewId === 'history-view') {
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-historia').forEach(item => item.classList.add('active'));
+        } else if (targetViewId === 'eventos-view') {
+            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-eventos').forEach(item => item.classList.add('active'));
         }
         
         // If switching to home view, refresh map rendering
@@ -519,6 +521,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 switchView('history-view');
                 const worldTabBtn = document.querySelector('[data-history-tab="history-world"]');
                 if (worldTabBtn) worldTabBtn.click();
+            });
+        }
+
+        const eventos = menu.querySelector('.btn-sidebar-eventos');
+        if (eventos) {
+            eventos.addEventListener('click', () => {
+                switchView('eventos-view');
             });
         }
 
@@ -5134,5 +5143,267 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial pricing sync
     updateDynamicPricingUI();
+
+    // ==========================================================================
+    // LANDING EVENTOS Y COMUNIDAD
+    // ==========================================================================
+
+    const eventsData = {
+        'temuco-fest': {
+            badge: 'MEGA EVENTO',
+            badgeClass: 'highlight',
+            title: 'Temuco Tattoo Fest 2026',
+            meta: [
+                { icon: 'calendar', text: 'Sábado 01 de Agosto, 2026' },
+                { icon: 'clock', text: '10:00 a 21:00 hrs' },
+                { icon: 'map-pin', text: 'Plaza Central, Portal Temuco' }
+            ],
+            body: `
+                <p><strong>¡El evento del año en La Araucanía!</strong> Temuco Tattoo Fest 2026 llega a la plaza central de Portal Temuco para reunir a los mejores talentos del arte corporal de nuestra región en una jornada dedicada a la creatividad, la música y la cultura del tatuaje.</p>
+                <p>Este festival es de <strong>entrada liberada</strong> y tiene como objetivo principal potenciar y visibilizar el trabajo de artistas de Temuco, Padre Las Casas, Villarrica y alrededores, creando un espacio seguro y profesional para que el público general interactúe con esta disciplina.</p>
+                <h4>¿Qué encontrarás en la jornada?</h4>
+                <ul class="detail-features-list">
+                    <li><strong>Tatuajes en Vivo:</strong> Más de 15 tatuadores locales destacados tatuando en tiempo real. ¡Reserva con anticipación o elige diseños flash en el momento!</li>
+                    <li><strong>Música y Escenario:</strong> DJs en vivo durante todo el día y bandas invitadas a partir de las 18:00 hrs.</li>
+                    <li><strong>Concursos y Categorías:</strong> Premiación especial al "Mejor Tatuaje del Evento" elegida por un jurado de artistas consagrados.</li>
+                    <li><strong>Regalos y Merchandising:</strong> Sorteos rápidos cada hora de poleras, productos de cuidado post-tatuaje y stickers de Tinta Conectada.</li>
+                </ul>
+                <p><em>Patrocinado oficialmente por marcas de insumos veganos y el centro comercial Portal Temuco.</em></p>
+            `,
+            actionText: 'Agendar con Artistas Participantes',
+            actionClass: 'primary-btn',
+            actionHandler: 'goToHome'
+        },
+        'whatsapp-chat': {
+            badge: 'COMUNIDAD',
+            badgeClass: 'whatsapp',
+            title: 'Red de Tatuadores Araucanía',
+            meta: [
+                { icon: 'users', text: 'Grupo de WhatsApp Oficial' },
+                { icon: 'globe', text: 'Coordinación Regional' },
+                { icon: 'shield-check', text: 'Solo Artistas Certificados' }
+            ],
+            body: `
+                <p><strong>¡Fortalezcamos el gremio local!</strong> Hemos creado el canal de comunicación oficial para todos los tatuadores y perforadores que residen y trabajan en la región de La Araucanía.</p>
+                <p>Este grupo tiene el propósito de colaborar activamente para resolver problemas comunes del rubro, como la compra coordinada de insumos médicos de alta calidad, la difusión de ofertas, la organización de eventos benéficos y la discusión de normativas de salud pública regionales.</p>
+                <h4>Normas de la Comunidad</h4>
+                <ul class="detail-features-list">
+                    <li><strong>Profesionalismo:</strong> Exclusivo para compartir portafolios, técnicas, dudas y novedades del arte del tatuaje.</li>
+                    <li><strong>Colaboración:</strong> Compras al por mayor compartidas de tintas homologadas (Solid, Dynamic, Eternal) y cartuchos premium.</li>
+                    <li><strong>Ética Laboral:</strong> Espacio libre de spam para mantener una comunicación fluida y respetuosa.</li>
+                </ul>
+            `,
+            actionText: 'Unirse al Grupo de WhatsApp',
+            actionClass: 'whatsapp-btn',
+            actionUrl: 'https://wa.me/56900000000?text=Hola,%20quiero%20unirme%20al%20grupo%20de%20Tatuadores%20de%20la%20Araucania'
+        },
+        'newsletter-discount': {
+            badge: 'BENEFICIO',
+            badgeClass: 'discount',
+            title: 'Club Tinta Conectada',
+            meta: [
+                { icon: 'ticket', text: '15% Descuento en tu Cita' },
+                { icon: 'mail', text: 'Novedades Mensuales' }
+            ],
+            body: `
+                <p>¡Queremos acompañarte en tu próximo proyecto en la piel! Al unirte a nuestro boletín mensual, no solo recibirás inspiración y los portafolios destacados de los mejores artistas de La Araucanía, sino también promociones exclusivas en estudios colaboradores.</p>
+                <p>Ingresa tu correo abajo y te enviaremos de inmediato un <strong>código de descuento del 15%</strong> para que lo uses en tu próxima sesión con cualquiera de los artistas adheridos en la plataforma.</p>
+                
+                <div class="newsletter-form-container">
+                    <h5>Inscríbete y obtén tu cupón de inmediato:</h5>
+                    <form id="newsletter-event-form">
+                        <div class="newsletter-input-group">
+                            <input type="email" id="newsletter-event-email" placeholder="tu-correo@gmail.com" required autocomplete="email">
+                            <button type="submit" id="btn-newsletter-event-submit">Reclamar</button>
+                        </div>
+                    </form>
+                    <div id="newsletter-event-result"></div>
+                </div>
+            `,
+            actionText: '',
+            actionClass: 'hidden'
+        },
+        'flash-weekend': {
+            badge: 'SOLIDARIDAD',
+            badgeClass: 'solidarity',
+            title: 'Flash Weekend Araucanía',
+            meta: [
+                { icon: 'calendar', text: '12 y 13 de Septiembre, 2026' },
+                { icon: 'heart', text: 'A Beneficio Rescate Animal' },
+                { icon: 'map-pin', text: 'Estudios Adheridos de la Región' }
+            ],
+            body: `
+                <p><strong>¿Buscas un tatuaje pequeño con sentido?</strong> El "Flash Weekend Araucanía" es un evento coordinado donde múltiples estudios en Temuco, Villarrica y Pucón abren sus puertas simultáneamente con catálogos de diseños 'Flash' (diseños listos para tatuar rápidos de realizar, entre 5 y 10 cm).</p>
+                <p>Todos los diseños tendrán un precio preferencial y fijo. Lo más importante: <strong>el 30% de todo lo recaudado será donado directamente a fundaciones locales</strong> dedicadas al rescate, esterilización y adopción de perritos y gatitos abandonados en La Araucanía.</p>
+                <h4>¿Cómo participar?</h4>
+                <ul class="detail-features-list">
+                    <li><strong>Diseños Listos:</strong> Los artistas publicarán sus catálogos una semana antes del evento en Tinta Conectada.</li>
+                    <li><strong>Atención Directa:</strong> Sin cita previa. Se atenderá por orden de llegada durante ambos días.</li>
+                    <li><strong>Estudios Aliados:</strong> Studio Tattoo Pipo, Wentruart y Tattoo Pucón ya confirmaron su participación.</li>
+                </ul>
+            `,
+            actionText: 'Ver Estudios Participantes',
+            actionClass: 'primary-btn',
+            actionHandler: 'goToHome'
+        },
+        'seminario-bioseguridad': {
+            badge: 'PROFESIONAL',
+            badgeClass: 'education',
+            title: 'Workshop de Bioseguridad',
+            meta: [
+                { icon: 'graduation-cap', text: 'Seminario Certificado' },
+                { icon: 'shield-alert', text: 'Prevención de Infecciones' },
+                { icon: 'calendar', text: '24 de Agosto, 2026' }
+            ],
+            body: `
+                <p><strong>El resguardo de la salud es lo primero.</strong> Tinta Conectada, en conjunto con profesionales del área de salud de la región, organiza un seminario de capacitación intensivo enfocado en las normas sanitarias vigentes y técnicas modernas de asepsia aplicadas a la micropigmentación y el tatuaje.</p>
+                <p>Este workshop entregará certificación de aprobación válida para la renovación de permisos ante el SEREMI de Salud de La Araucanía.</p>
+                <h4>Temas Clave del Seminario:</h4>
+                <ul class="detail-features-list">
+                    <li><strong>Contaminación Cruzada:</strong> Métodos rigurosos de barrera física y desinfección del área de trabajo.</li>
+                    <li><strong>Química de Pigmentos:</strong> Tintas veganas premium vs. tintas tradicionales, y manejo de alergias en clientes.</li>
+                    <li><strong>Manejo de Desechos:</strong> Protocolo REAS para el almacenamiento y descarte seguro de agujas y material contaminado.</li>
+                </ul>
+                <p><em>Cupos limitados a 30 participantes para asegurar el correcto aprendizaje y la parte práctica.</em></p>
+            `,
+            actionText: 'Inscribirse al Workshop (Cupos Limitados)',
+            actionClass: 'primary-btn',
+            actionHandler: 'openRegisterModal'
+        }
+    };
+
+    function initEventosView() {
+        const detailsContainer = document.getElementById('evento-details-display');
+        if (!detailsContainer) return;
+
+        // Render default (Temuco Fest)
+        renderEventDetails('temuco-fest');
+
+        // Bind clicks on cards
+        const cards = document.querySelectorAll('#eventos-view .evento-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active class from all
+                cards.forEach(c => c.classList.remove('active'));
+                // Add active class to clicked card
+                card.classList.add('active');
+
+                const eventId = card.getAttribute('data-event');
+                renderEventDetails(eventId);
+
+                // Responsive scroll to details on small screens
+                if (window.innerWidth <= 991) {
+                    const detailEl = document.getElementById('evento-details-display');
+                    if (detailEl) {
+                        detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Bind home banner CTA button click
+        const btnBannerVerMas = document.getElementById('btn-banner-ver-mas');
+        if (btnBannerVerMas) {
+            btnBannerVerMas.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchView('eventos-view');
+                // Select first card
+                const defaultCard = document.querySelector('#eventos-view .evento-card[data-event="temuco-fest"]');
+                if (defaultCard) {
+                    defaultCard.click();
+                }
+            });
+        }
+    }
+
+    function renderEventDetails(eventId) {
+        const detailsContainer = document.getElementById('evento-details-display');
+        if (!detailsContainer) return;
+
+        const data = eventsData[eventId];
+        if (!data) return;
+
+        // Render meta items html
+        let metaHtml = '';
+        data.meta.forEach(item => {
+            metaHtml += `
+                <div class="detail-meta-item">
+                    <i data-lucide="${item.icon}"></i>
+                    <span>${item.text}</span>
+                </div>
+            `;
+        });
+
+        // Action button html
+        let actionBtnHtml = '';
+        if (data.actionText) {
+            let onclickAttr = '';
+            if (data.actionUrl) {
+                onclickAttr = `onclick="window.open('${data.actionUrl}', '_blank')"`;
+            } else if (data.actionHandler === 'goToHome') {
+                onclickAttr = `onclick="switchView('home-view')"`;
+            } else if (data.actionHandler === 'openRegisterModal') {
+                onclickAttr = `onclick="switchView('dashboard-tatuador-view')"`;
+            }
+            actionBtnHtml = `
+                <div class="detail-footer">
+                    <button class="btn-detail-action ${data.actionClass || ''}" ${onclickAttr}>
+                        ${data.actionText} <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        // Render detailed content
+        detailsContainer.innerHTML = `
+            <div class="detail-header">
+                <span class="detail-badge ${data.badgeClass}">${data.badge}</span>
+                <h2 class="detail-title">${data.title}</h2>
+                <div class="detail-meta-list">
+                    ${metaHtml}
+                </div>
+            </div>
+            <div class="detail-body">
+                ${data.body}
+            </div>
+            ${actionBtnHtml}
+        `;
+
+        // Recreate Lucide icons for the newly injected HTML
+        lucide.createIcons();
+
+        // Bind interactive form if it's the newsletter discount
+        if (eventId === 'newsletter-discount') {
+            const form = document.getElementById('newsletter-event-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('newsletter-event-email');
+                    const resultContainer = document.getElementById('newsletter-event-result');
+                    if (emailInput && resultContainer) {
+                        const email = emailInput.value;
+                        const randomNum = Math.floor(1000 + Math.random() * 9000);
+                        const couponCode = `TINTA-ARAU-${randomNum}`;
+                        
+                        resultContainer.innerHTML = `
+                            <div class="coupon-generated-box">
+                                <p style="color: #276749; font-weight: 700; margin: 0; font-size: 1rem;">¡Registro Exitoso!</p>
+                                <p style="font-size: 0.85rem; color: #4a5568; margin: 0; line-height: 1.4;">Hemos registrado tu correo <strong>${escapeHTML(email)}</strong>. Aquí tienes tu cupón de 15% de descuento en tu próxima sesión:</p>
+                                <div class="coupon-code-text">${couponCode}</div>
+                                <p style="font-size: 0.75rem; color: #718096; margin: 4px 0 0 0;">Presenta este código a tu tatuador seleccionado al agendar.</p>
+                            </div>
+                        `;
+                        
+                        // Hide form
+                        form.style.display = 'none';
+                        showToast('¡Cupón generado con éxito!');
+                    }
+                });
+            }
+        }
+    }
+
+    // Initialize Eventos view logic
+    initEventosView();
 
 });

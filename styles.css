@@ -5438,6 +5438,16 @@ h5 {
         width: 100% !important;
         box-sizing: border-box;
     }
+    .eventos-layout {
+        display: flex !important;
+        gap: 32px !important;
+        max-width: 100% !important;
+        margin: 40px 0 !important;
+        padding: 0 40px 0 20px !important;
+        align-items: flex-start !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
 
     .sabias-que-layout > :not(.floating-sidebar-menu) {
         flex: 1 !important;
@@ -5451,11 +5461,20 @@ h5 {
         flex-direction: column !important;
         align-items: center !important;
     }
+
+    .eventos-layout > .eventos-content-wrapper {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
 }
 
 @media (max-width: 768px) {
     .sabias-que-layout,
-    .history-layout {
+    .history-layout,
+    .eventos-layout {
         display: flex !important;
         flex-direction: column !important;
         gap: 20px !important;
@@ -5752,4 +5771,651 @@ h5 {
     height: 24px;
     color: #000000 !important;
     stroke-width: 3px;
+}
+
+/* ==========================================================================
+   LANDING EVENTOS Y COMUNIDAD
+   ========================================================================== */
+
+/* Banner interactivo en Home */
+.evento-promo-banner {
+    background-color: #5d32a8;
+    color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.evento-promo-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 0px #000000;
+}
+
+.banner-badge-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+}
+
+.banner-badge {
+    background-color: #FFC82C;
+    color: #000000;
+    font-weight: 800;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1.5px solid #000000;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.banner-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+.banner-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.banner-tagline {
+    font-size: 0.9rem;
+    color: #e5def2;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.banner-title {
+    font-family: 'Ghosthey', sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 2.8rem;
+    color: #FFC82C;
+    margin: 4px 0;
+    letter-spacing: 1.5px;
+    line-height: 1;
+}
+
+.banner-description {
+    font-size: 1rem;
+    color: #f7f4fd;
+    margin: 4px 0 0 0;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+.banner-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 4px;
+}
+
+.banner-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e5def2;
+}
+
+.banner-meta .meta-item i {
+    width: 16px;
+    height: 16px;
+    color: #FFC82C !important;
+}
+
+.btn-banner-cta {
+    background-color: #FFC82C !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 4px 4px 0px #000000 !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    padding: 12px 28px !important;
+    font-size: 1rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    white-space: nowrap;
+}
+
+.btn-banner-cta:hover {
+    background-color: #ffd64a !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 6px 6px 0px #000000 !important;
+}
+
+.btn-banner-cta:active {
+    background-color: #e5b020 !important;
+    transform: translateY(0) !important;
+    box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.eventos-title {
+    font-family: 'Ghosthey', sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 3.5rem;
+    color: #000000;
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+}
+
+/* Layout de la sección Eventos */
+.eventos-layout {
+    display: flex;
+    gap: 32px;
+    max-width: 100%;
+    margin: 40px 0;
+    padding: 0 40px 0 20px;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.eventos-content-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.eventos-grid-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 28px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 16px;
+}
+
+.eventos-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comunidad-cards-subgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Estilos de las tarjetas de evento */
+.evento-card {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.evento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 8px 8px 0px #000000;
+}
+
+.evento-card.active {
+    border-color: #5d32a8;
+    background-color: #f7f4fd;
+    box-shadow: 6px 6px 0px #5d32a8;
+}
+
+.evento-card.active:hover {
+    box-shadow: 8px 8px 0px #5d32a8;
+}
+
+/* Tarjeta destacada grande */
+.evento-card.big-card {
+    background: linear-gradient(135deg, #ffffff 60%, #f6f0ff 100%);
+    padding: 28px;
+    border-width: 3.5px;
+}
+
+.evento-card.big-card.active {
+    border-color: #5d32a8;
+    background: linear-gradient(135deg, #f7f4fd 70%, #efe7fc 100%);
+}
+
+.card-glow-bg {
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(93,50,168,0.06) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none;
+}
+
+.evento-card .card-badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1.5px solid #000000;
+    text-transform: uppercase;
+    box-shadow: 1.5px 1.5px 0px #000000;
+}
+
+.evento-card .card-badge.highlight { background-color: #ff5e97; color: #ffffff; }
+.evento-card .card-badge.whatsapp { background-color: #25d366; color: #ffffff; }
+.evento-card .card-badge.discount { background-color: #FFC82C; color: #000000; }
+.evento-card .card-badge.solidarity { background-color: #ff5e97; color: #ffffff; }
+.evento-card .card-badge.education { background-color: #00bcd4; color: #ffffff; }
+
+.evento-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.evento-card.big-card .card-title {
+    font-size: 1.8rem;
+    font-family: var(--font-stack);
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.evento-card .card-summary {
+    font-size: 0.9rem;
+    color: #4a5568;
+    margin: 0;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.evento-card .card-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    border-top: 1.5px dashed #e2e8f0;
+    padding-top: 12px;
+    margin-top: 4px;
+}
+
+.evento-card .card-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #718096;
+    font-weight: 600;
+}
+
+.evento-card .card-tag i {
+    width: 14px;
+    height: 14px;
+}
+
+.evento-card .card-action-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #5d32a8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* Panel de detalles en la derecha */
+.evento-details-panel-container {
+    position: sticky;
+    top: calc(var(--header-height) + 20px);
+    width: 100%;
+}
+
+.evento-details-panel {
+    background-color: #ffffff;
+    border: 3.5px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    border-radius: 20px;
+    padding: 32px;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.detail-view-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 400px;
+    text-align: center;
+    color: #718096;
+    gap: 16px;
+}
+
+.detail-view-loading i {
+    width: 48px;
+    height: 48px;
+    color: #5d32a8 !important;
+    animation: spin 2s linear infinite;
+}
+
+.detail-header {
+    border-bottom: 2.5px solid #000000;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-header .detail-badge {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 2px solid #000000;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.detail-header .detail-badge.highlight { background-color: #ff5e97; color: #ffffff; }
+.detail-header .detail-badge.whatsapp { background-color: #25d366; color: #ffffff; }
+.detail-header .detail-badge.discount { background-color: #FFC82C; color: #000000; }
+.detail-header .detail-badge.solidarity { background-color: #ff5e97; color: #ffffff; }
+.detail-header .detail-badge.education { background-color: #00bcd4; color: #ffffff; }
+
+.detail-header .detail-title {
+    font-size: 2.2rem;
+    font-family: var(--font-stack);
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #000000;
+    margin: 4px 0;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.detail-meta-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.detail-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #4a5568;
+    background-color: #f7fafc;
+    padding: 6px 12px;
+    border: 1.5px solid #000000;
+    border-radius: 8px;
+}
+
+.detail-meta-item i {
+    width: 14px;
+    height: 14px;
+    color: #5d32a8 !important;
+}
+
+.detail-body {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #2d3748;
+}
+
+.detail-body p {
+    margin: 0 0 16px 0;
+}
+
+.detail-body h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 24px 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-features-list li {
+    position: relative;
+    padding-left: 24px;
+}
+
+.detail-features-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #5d32a8;
+    font-weight: 900;
+}
+
+.detail-footer {
+    margin-top: 24px;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 20px;
+}
+
+.btn-detail-action {
+    background-color: #5d32a8 !important;
+    color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 4px 4px 0px #000000 !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    padding: 14px 28px !important;
+    font-size: 1rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100%;
+    justify-content: center;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-detail-action:hover {
+    background-color: #6b3eb9 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 6px 6px 0px #000000 !important;
+}
+
+.btn-detail-action:active {
+    background-color: #4c288b !important;
+    transform: translateY(0) !important;
+    box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.btn-detail-action.whatsapp-btn {
+    background-color: #25d366 !important;
+}
+.btn-detail-action.whatsapp-btn:hover {
+    background-color: #20ba5a !important;
+}
+.btn-detail-action.whatsapp-btn:active {
+    background-color: #1a9e4b !important;
+}
+
+/* Formulario Newsletter Interactivo */
+.newsletter-form-container {
+    background-color: #f7fafc;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.newsletter-form-container h5 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+}
+
+.newsletter-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.newsletter-input-group input {
+    flex: 1;
+    border: 2px solid #000000;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.newsletter-input-group input:focus {
+    border-color: #5d32a8;
+}
+
+.newsletter-input-group button {
+    background-color: #FFC82C;
+    color: #000000;
+    border: 2px solid #000000;
+    font-weight: 800;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.newsletter-input-group button:hover {
+    background-color: #ffd64a;
+}
+
+.coupon-generated-box {
+    background-color: #f0fff4;
+    border: 2.5px dashed #38a169;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.coupon-code-text {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #276749;
+    background-color: #ffffff;
+    padding: 6px 16px;
+    border: 2px solid #38a169;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   EVENTOS RESPONSIVE STYLING
+   ========================================================================== */
+
+@media (max-width: 991px) {
+    .eventos-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .evento-details-panel-container {
+        position: relative;
+        top: 0;
+    }
+    
+    .evento-details-panel {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .evento-promo-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 24px;
+        gap: 16px;
+    }
+    
+    .banner-badge-wrapper {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .banner-description {
+        max-width: 100%;
+    }
+    
+    .banner-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .comunidad-cards-subgrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .evento-card.big-card .card-title {
+        font-size: 1.4rem;
+    }
 }
