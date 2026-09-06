@@ -342,11 +342,14 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-eventos').forEach(item => item.classList.add('active'));
         }
         
-        // If switching to home view, refresh map rendering
-        if (targetViewId === 'home-view' && mapInstance) {
-            setTimeout(() => {
-                mapInstance.invalidateSize();
-            }, 100);
+        // If switching to home view, refresh map rendering and ensure data is synced
+        if (targetViewId === 'home-view') {
+            if (mapInstance) {
+                setTimeout(() => {
+                    mapInstance.invalidateSize();
+                }, 100);
+            }
+            loadSupabaseData();
         }
         
         // If switching to artist view, render default tab
@@ -414,7 +417,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Landing view CTAs
     const btnLandingEnter = document.getElementById('btn-landing-enter-magnetic');
     if (btnLandingEnter) {
-        btnLandingEnter.addEventListener('click', () => switchView('home-view'));
+        btnLandingEnter.addEventListener('click', () => {
+            switchView('home-view');
+            loadSupabaseData();
+        });
     }
     const btnLandingArtist = document.getElementById('btn-landing-artist');
     if (btnLandingArtist) {
@@ -2168,8 +2174,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadSupabaseData() {
         if (!supabaseClient) return;
 
-        // 1. Seed database if it is empty
-        await seedDatabaseIfEmpty();
+        // 1. Seed database if it is empty (safe non-blocking check)
+        try {
+            await seedDatabaseIfEmpty();
+        } catch (seedErr) {
+            console.warn("Seeding check skipped:", seedErr);
+        }
 
         try {
             // 2. Fetch all profiles
@@ -2319,6 +2329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateQuickFicha('pipo');
             document.querySelectorAll('.artist-card').forEach(card => card.classList.remove('active'));
+            console.log(`✅ Supabase: Sincronizados ${profiles.length} tatuadores en el sistema.`);
         } catch (e) {
             console.error("Supabase data loading failed", e);
         }
@@ -2333,23 +2344,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const artist = artistsDetails[id];
             addNewArtistCardToGrid(artist.name, artist.location, artist.experience || 5, artist.styles, id, artist.avatar, artist.coverImage);
         });
-
-        // Set card click handlers & favorites setup
-        document.querySelectorAll('.artist-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-favorite')) return;
-                const cardId = card.getAttribute('data-id');
-                updateQuickFicha(cardId);
-                
-                const drawer = document.getElementById('artist-quick-sheet');
-                if (drawer) drawer.classList.add('active');
-                
-                const homeLayout = document.querySelector('.home-layout');
-                if (homeLayout) homeLayout.classList.add('has-sidebar-open');
-            });
-        });
         
         lucide.createIcons();
+        if (typeof applyFilters === 'function') {
+            applyFilters();
+        }
     }
 
     // Initialize Map on start
@@ -3143,7 +3142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         card.innerHTML = `
             <div class="card-image-wrapper">
-                <img src="${escapeHTML(safeCover)}" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img">
+                <img src="${escapeHTML(safeCover)}" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img" onerror="this.onerror=null;this.src='assets/tattoo_flower.png';">
                 <button class="btn-favorite" aria-label="Agregar a favoritos">
                      <i data-lucide="heart" class="icon-heart"></i>
                 </button>
@@ -3151,7 +3150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-info">
                 <div class="artist-brand-row">
                     <div class="artist-avatar-circle">
-                        <img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)} Avatar">
+                        <img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)} Avatar" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';">
                     </div>
                     <div class="artist-brand-text">
                         <h3 class="artist-name">${escapeHTML(name)}</h3>
