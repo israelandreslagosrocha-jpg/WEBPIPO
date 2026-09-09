@@ -38,8 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
 
 
-    // Initialize Lucide Icons
-    lucide.createIcons();
+    // Safe Lucide Icons initialiser (defends against CDN latency or network drops)
+    function safeCreateIcons() {
+        try {
+            if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        } catch (e) {
+            console.warn('Lucide icons warning:', e);
+        }
+    }
+    window.safeCreateIcons = safeCreateIcons;
+    safeCreateIcons();
 
     // All 32 communes of La Araucanía and their central coordinates
     const COMUNAS_COORDS = {
@@ -4156,7 +4166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Re-create lucide icons for the newly injected icon
-                if (window.lucide) lucide.createIcons();
+                safeCreateIcons();
             }
         });
     });
@@ -4206,7 +4216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ytModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (window.lucide) lucide.createIcons();
+        safeCreateIcons();
     }
 
     function closeYouTubeModal() {
@@ -4474,7 +4484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (eduApplication) eduApplication.textContent = 'Descubre qué tipo de trazos, agujas, tintas y zonas del cuerpo se adaptan mejor a cada técnica antes de cotizar.';
             if (eduFooterNote) {
                 eduFooterNote.innerHTML = '<i data-lucide="check-circle-2"></i> Artistas disponibles con este estilo en La Araucanía';
-                lucide.createIcons();
+                safeCreateIcons();
             }
             return;
         }
@@ -4490,7 +4500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 eduFooterNote.innerHTML = `<i data-lucide="sparkles"></i> Próximamente más tatuadores con este estilo en La Araucanía`;
             }
-            lucide.createIcons();
+            safeCreateIcons();
         }
     }
 
@@ -4636,9 +4646,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stylesListGrid.appendChild(card);
         });
 
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-        }
+        safeCreateIcons();
     }
 
     function openStylesModal() {
@@ -4828,9 +4836,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (icon) {
                     icon.setAttribute('data-lucide', isMobileLegendCollapsed ? 'chevron-down' : 'chevron-up');
-                    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-                        window.lucide.createIcons();
-                    }
+                    safeCreateIcons();
                 }
             });
         }
@@ -4844,9 +4850,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-        }
+        safeCreateIcons();
     }
 
     function renderActiveChips() {
@@ -4913,7 +4917,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Bind Modal Open & Close Listeners
@@ -5054,7 +5058,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         state.activeFilters.userCoords = [lat, lng];
                         
                         locationStatus.innerHTML = `<span style="color: #48bb78; font-weight: 500;"><i data-lucide="check-circle" style="width:12px;height:12px;display:inline;"></i> Ubicación compartida</span>`;
-                        lucide.createIcons();
+                        safeCreateIcons();
                         
                         // Add marker for user on interactive map
                         if (mapInstance) {
@@ -5665,7 +5669,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure MapLibre map is ready, resized and centered
         ensureQuickSheetMap(artistId);
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Ensures MapLibre GL map is resized and focused on active artist
@@ -5909,7 +5913,7 @@ document.addEventListener('DOMContentLoaded', () => {
             initProfileMap(details.coords, details.name, details.location);
         }
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
     window.loadArtistProfile = loadArtistProfile;
 
@@ -5937,7 +5941,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </a>
                 </div>
             `;
-            lucide.createIcons();
+            safeCreateIcons();
             return;
         }
 
@@ -6132,7 +6136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         window.addEventListener('keydown', window._pubCarouselKeyHandler);
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Ficha View Portfolio Button (Navigates to full portfolio view)
@@ -6214,7 +6218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnToggleMapExpand.innerHTML = '<i data-lucide="map-flat"></i> Contraer mapa';
             }
             
-            lucide.createIcons();
+            safeCreateIcons();
             
             // Re-align MapLibre canvas
             setTimeout(() => {
@@ -7107,7 +7111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addNewArtistCardToGrid(artist.name, artist.location, artist.experience || 5, artist.styles, id, artist.avatar, artist.coverImage);
         });
         
-        lucide.createIcons();
+        safeCreateIcons();
         if (typeof applyFilters === 'function') {
             applyFilters();
         }
@@ -7323,7 +7327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Lightbox modal creator
@@ -7353,7 +7357,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.body.appendChild(lightbox);
         setTimeout(() => lightbox.style.opacity = '1', 50);
-        lucide.createIcons();
+        safeCreateIcons();
 
         // Close on click or close button click
         const closeLightbox = () => {
@@ -7553,7 +7557,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.floating-sidebar-menu .sidebar-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-historia').forEach(i => i.classList.add('active'));
             
-            lucide.createIcons();
+            safeCreateIcons();
         });
     });
 
@@ -8033,7 +8037,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('active');
         });
         
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Refresh active workspace panels
@@ -8185,7 +8189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Render client appointment list
@@ -8268,7 +8272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Render comments list inside Dashboard Comments Moderation tab
@@ -8355,7 +8359,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Edit profile submit handler
@@ -8526,7 +8530,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('¡Ficha del perfil del estudio guardada!');
             }
 
-            lucide.createIcons();
+            safeCreateIcons();
         });
     }
 
@@ -9232,7 +9236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const attemptPlay = (video) => {
-            if (!video) return;
+            if (!video || typeof video.play !== 'function') return;
             video.muted = true;
             video.defaultMuted = true;
             const p = video.play();
@@ -9342,7 +9346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = loading;
         btn.querySelector('.btn-text').style.display = loading ? 'none' : 'inline';
         btn.querySelector('.btn-loader').style.display = loading ? 'inline-flex' : 'none';
-        lucide.createIcons();
+        safeCreateIcons();
     }
 
     // Helper: show auth error
@@ -9488,7 +9492,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isPassword = input.type === 'password';
             input.type = isPassword ? 'text' : 'password';
             btn.querySelector('i').setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
-            lucide.createIcons();
+            safeCreateIcons();
         });
     });
 
@@ -9647,7 +9651,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Updated logout to use Supabase signOut
     const btnTatuadorLogoutEl = document.getElementById('btn-tatuador-logout');
-    if (btnTatuadorLogoutEl) {
+    if (btnTatuadorLogoutEl && btnTatuadorLogoutEl.parentNode) {
         // Remove any existing listener by cloning the node
         const freshLogout = btnTatuadorLogoutEl.cloneNode(true);
         btnTatuadorLogoutEl.parentNode.replaceChild(freshLogout, btnTatuadorLogoutEl);
@@ -9713,7 +9717,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tatuadorOnboardingPanel) tatuadorOnboardingPanel.style.display = 'none';
             if (tatuadorWorkspacePanel) tatuadorWorkspacePanel.style.display = 'none';
             switchAuthTab('login');
-            lucide.createIcons();
+            safeCreateIcons();
         }, { capture: true }); // capture: true so this runs before other click handlers
     }
 
@@ -9891,18 +9895,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!modal) return;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-        }
+        safeCreateIcons();
     }
     window.openUpcomingEventsModal = openUpcomingEventsModal;
 
     function closeUpcomingEventsModal() {
         const modal = document.getElementById('upcoming-events-modal');
-        if (!modal) return;
-        modal.style.display = 'none';
+        if (modal) {
+            modal.style.display = 'none';
+        }
         const lightbox = document.getElementById('events-lightbox-modal');
-        if (!lightbox || lightbox.style.display === 'none') {
+        const stylesOverlay = document.getElementById('styles-modal-overlay');
+        const ytModal = document.getElementById('youtube-video-modal');
+        const isAnyOtherModalOpen = (lightbox && lightbox.style.display !== 'none') ||
+                                    (stylesOverlay && stylesOverlay.style.display !== 'none') ||
+                                    (ytModal && ytModal.style.display !== 'none');
+        if (!isAnyOtherModalOpen) {
             document.body.style.overflow = '';
         }
     }
@@ -9921,17 +9929,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-        }
+        safeCreateIcons();
     }
 
     function closeEventsLightbox() {
         const lightbox = document.getElementById('events-lightbox-modal');
-        if (!lightbox) return;
-        lightbox.style.display = 'none';
+        if (lightbox) {
+            lightbox.style.display = 'none';
+        }
         const upcomingModal = document.getElementById('upcoming-events-modal');
-        if (!upcomingModal || upcomingModal.style.display === 'none') {
+        const stylesOverlay = document.getElementById('styles-modal-overlay');
+        const ytModal = document.getElementById('youtube-video-modal');
+        const isAnyOtherModalOpen = (upcomingModal && upcomingModal.style.display !== 'none') ||
+                                    (stylesOverlay && stylesOverlay.style.display !== 'none') ||
+                                    (ytModal && ytModal.style.display !== 'none');
+        if (!isAnyOtherModalOpen) {
             document.body.style.overflow = '';
         }
     }
@@ -9957,7 +9969,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Overlay click outside window closes upcoming modal
+        // Overlay click/tap outside window closes upcoming modal
         const upcomingModal = document.getElementById('upcoming-events-modal');
         if (upcomingModal) {
             upcomingModal.addEventListener('click', (e) => {
@@ -9965,6 +9977,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeUpcomingEventsModal();
                 }
             });
+            upcomingModal.addEventListener('touchend', (e) => {
+                if (e.target === upcomingModal) {
+                    e.preventDefault();
+                    closeUpcomingEventsModal();
+                }
+            }, { passive: false });
         }
 
         // 2. Home announcement bar click -> opens Upcoming Events modal
