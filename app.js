@@ -8814,39 +8814,108 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initLandingVideos() {
-        const logoVideo = document.querySelector('.landing-logo-video');
+        const bgVideo = document.getElementById('global-bg-video') || document.querySelector('.global-video-bg');
+        const logoVideo = document.getElementById('landing-logo-video') || document.querySelector('.landing-logo-video');
         const logoFallback = document.querySelector('.landing-logo-fallback');
         const maskContainer = document.querySelector('.landing-logo-mask-container');
-        const bgVideo = document.querySelector('.landing-bg-video');
-        
+
         // Browser security policies (Same-Origin) block CSS masks of local files under file://
-        // If loaded locally via folder double-click, we hide the video elements to fallback cleanly.
         if (window.location.protocol === 'file:') {
             if (logoVideo) logoVideo.style.display = 'none';
             if (bgVideo) bgVideo.style.display = 'none';
             if (logoFallback) logoFallback.style.opacity = '1';
             return;
         }
-        
-        if (logoVideo && logoFallback && maskContainer) {
-            // When the video actually starts playing, transition opacity to show the ink effect inside the mask
+
+        const allVideos = [bgVideo, logoVideo].filter(Boolean);
+
+        // Explicitly set WebKit mobile properties
+        allVideos.forEach(v => {
+            v.muted = true;
+            v.defaultMuted = true;
+            v.playsInline = true;
+            v.setAttribute('playsinline', '');
+            v.setAttribute('webkit-playsinline', '');
+            v.setAttribute('x5-playsinline', 'true');
+        });
+
+        const attemptPlay = (video) => {
+            if (!video) return;
+            video.muted = true;
+            video.defaultMuted = true;
+            const p = video.play();
+            if (p !== undefined && typeof p.then === 'function') {
+                p.then(() => {
+                    if (video === logoVideo && maskContainer && logoFallback) {
+                        maskContainer.style.opacity = '1';
+                        logoFallback.style.opacity = '0';
+                    }
+                }).catch(() => {
+                    // Mobile autoplay policy (e.g. iOS Low Power Mode) deferred playback.
+                    // Will automatically play on the very first touch, click, or scroll gesture.
+                });
+            }
+        };
+
+        // Try playing immediately
+        allVideos.forEach(attemptPlay);
+
+        // Lifecycle listeners to play as soon as data arrives
+        allVideos.forEach(video => {
+            video.addEventListener('loadedmetadata', () => attemptPlay(video));
+            video.addEventListener('canplay', () => attemptPlay(video));
+            video.addEventListener('canplaythrough', () => attemptPlay(video));
+            
+            // Loop fallback for mobile devices that freeze on video end
+            video.addEventListener('ended', () => {
+                video.currentTime = 0;
+                attemptPlay(video);
+            });
+        });
+
+        if (logoVideo && maskContainer && logoFallback) {
             logoVideo.addEventListener('playing', () => {
                 maskContainer.style.opacity = '1';
                 logoFallback.style.opacity = '0';
             });
-            
-            // If the video fails to load, stay on the fallback image
             logoVideo.addEventListener('error', () => {
                 maskContainer.style.opacity = '0';
                 logoFallback.style.opacity = '1';
             });
-            
-            // Fallback play trigger (in case browser blocks autoplay)
-            logoVideo.play().catch(() => {
-                maskContainer.style.opacity = '0';
-                logoFallback.style.opacity = '1';
-            });
         }
+
+        // Global Mobile User Gesture Unlocker:
+        // On iOS Safari (especially in Low Power Mode) and Android Data Saver,
+        // autoplay is suspended until ANY user touch or scroll occurs.
+        const unlockAllVideos = () => {
+            let allPlaying = true;
+            allVideos.forEach(v => {
+                if (v.paused) {
+                    allPlaying = false;
+                    attemptPlay(v);
+                }
+            });
+            if (allPlaying) {
+                ['touchstart', 'touchend', 'pointerdown', 'click', 'scroll', 'keydown'].forEach(evt => {
+                    window.removeEventListener(evt, unlockAllVideos);
+                    document.removeEventListener(evt, unlockAllVideos);
+                });
+            }
+        };
+
+        ['touchstart', 'touchend', 'pointerdown', 'click', 'scroll', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, unlockAllVideos, { passive: true });
+            document.addEventListener(evt, unlockAllVideos, { passive: true });
+        });
+
+        // Resume when user switches back to this browser tab/app on mobile
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                allVideos.forEach(attemptPlay);
+            }
+        });
+        window.addEventListener('focus', () => allVideos.forEach(attemptPlay));
+        window.addEventListener('pageshow', () => allVideos.forEach(attemptPlay));
     }
 
     // ==========================================================================

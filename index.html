@@ -24,7 +24,7 @@
         }
     </script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=56">
+    <link rel="stylesheet" href="styles.css?v=57">
     <!-- Unconditional Tattoo Machine Cursor Styles -->
     <style>
         html, body, *, *::before, *::after {
@@ -72,9 +72,36 @@
 <body>
     <!-- Global Video Background -->
     <div class="global-video-bg-container">
-        <video autoplay loop muted playsinline class="global-video-bg">
+        <video 
+            id="global-bg-video"
+            class="global-video-bg" 
+            autoplay 
+            loop 
+            muted 
+            defaultMuted
+            playsinline 
+            webkit-playsinline 
+            x5-playsinline="true"
+            preload="auto"
+            tabindex="-1"
+            aria-hidden="true">
             <source src="https://res.cloudinary.com/dhgifjpkh/video/upload/v1782507607/UX_CO%CC%81MO_DEBE_SENTIRSE_cada_compa%CC%81s_COMPA%CC%81S_texto_libre_aqui%CC%81..._comportamiento_click_escribes_directo_no_modales_no_friccio%CC%81n_REGLA_DE_ORO_debe_sentirse_como_escribir_en_un_cuade_cxuyvr.mp4" type="video/mp4">
         </video>
+        <script>
+            // Immediate synchronous autoplay trigger for mobile WebKit & Blink
+            (function() {
+                var v = document.getElementById('global-bg-video');
+                if (v) {
+                    v.muted = true;
+                    v.defaultMuted = true;
+                    v.playsInline = true;
+                    var p = v.play();
+                    if (p && typeof p.catch === 'function') {
+                        p.catch(function() {});
+                    }
+                }
+            })();
+        </script>
         <div class="global-video-bg-overlay"></div>
     </div>
 
@@ -106,7 +133,7 @@
                         <div class="landing-logo-container">
                             <img src="assets/logo_tinta_conectada.png" alt="Tinta Conectada" class="landing-logo-fallback">
                             <div class="landing-logo-mask-container">
-                                <video autoplay loop muted playsinline class="landing-logo-video">
+                                <video id="landing-logo-video" autoplay loop muted defaultMuted playsinline webkit-playsinline x5-playsinline="true" preload="auto" class="landing-logo-video">
                                     <source src="https://assets.mixkit.co/videos/preview/mixkit-purple-and-gold-ink-swirling-in-water-34433-large.mp4" type="video/mp4">
                                 </video>
                             </div>
@@ -3184,6 +3211,6 @@
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App Logic -->
-    <script src="app.js?v=56"></script>
+    <script src="app.js?v=57"></script>
 </body>
 </html>
