@@ -24,7 +24,7 @@
         }
     </script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=63">
+    <link rel="stylesheet" href="styles.css?v=65">
     <!-- Unconditional Tattoo Machine Cursor Styles -->
     <style>
         html, body, *, *::before, *::after {
@@ -1621,36 +1621,59 @@
                                 <p class="about-text" id="profile-detail-bio">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.</p>
                             </div>
 
-                            <!-- Studio Map Section -->
-                            <div class="profile-map-section" style="margin-top: 18px; border-top: 2.5px solid #000000; padding-top: 16px;">
-                                <h3 class="profile-map-heading" style="display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #000000;">
-                                    <i data-lucide="map-pin" style="width: 18px; height: 18px; color: #7b4ad8;"></i> Ubicación del Estudio
-                                </h3>
-                                <p class="profile-map-location-text" id="profile-map-location-text" style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">
-                                    Teodoro Schmidt, Región de La Araucanía
-                                </p>
-                                <div class="profile-detail-map-wrapper">
-                                    <div id="profile-detail-map"></div>
-                                </div>
-                            </div>
                         </div>
                     </aside>
                     
-                    <!-- RIGHT COLUMN: Portfolio (TattoosWizard High-Impact Gallery) -->
+                    <!-- RIGHT COLUMN: Portfolio & Artist Showcase -->
                     <div class="artist-portfolio-content">
                         
-                        <!-- Header inside Detail View -->
-                        <div class="portfolio-header">
-                            <div>
-                                <h2 class="section-title">Portafolio de Trabajos Reales</h2>
-                                <p class="portfolio-subtitle">Fotografías 100% auténticas de tatuajes realizados por el artista</p>
+                        <!-- 1. Carrusel de 3 Fotos Destacadas -->
+                        <section class="artist-carousel-showcase-section" id="artist-carousel-section">
+                            <div class="artist-carousel-3d-wrapper">
+                                <button class="artist-carousel-nav prev" id="artist-carousel-prev" type="button" aria-label="Foto anterior" title="Anterior">
+                                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Anterior">
+                                </button>
+                                <div class="artist-carousel-3d-stage" id="artist-carousel-stage">
+                                    <!-- 3 fotos dinámicas en carrusel -->
+                                </div>
+                                <button class="artist-carousel-nav next" id="artist-carousel-next" type="button" aria-label="Foto siguiente" title="Siguiente">
+                                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-07_f9nuup.svg" alt="Siguiente">
+                                </button>
                             </div>
-                        </div>
+                        </section>
 
-                        <!-- TattoosWizard High-Impact Gallery Grid -->
-                        <section class="tattooswizard-portfolio-section">
-                            <div class="tattooswizard-gallery-grid" id="tab-gallery-grid">
-                                <!-- Dynamically loaded real photos -->
+                        <!-- 2. Fotografías Sueltas en el Estilo de la Imagen con Filtros de Zona -->
+                        <section class="artist-gallery-mosaic-section" id="artist-gallery-section">
+                            <!-- Filtros de Zona Corporal -->
+                            <div class="artist-zone-filter-bar" id="artist-zone-filter-bar">
+                                <button type="button" class="zone-pill active" data-zone="todo">Todo</button>
+                                <button type="button" class="zone-pill" data-zone="cara">Cara</button>
+                                <button type="button" class="zone-pill" data-zone="cuello">Cuello</button>
+                                <button type="button" class="zone-pill" data-zone="torso">Torso</button>
+                                <button type="button" class="zone-pill" data-zone="brazos">Brazos</button>
+                                <button type="button" class="zone-pill" data-zone="manos">Manos</button>
+                                <button type="button" class="zone-pill" data-zone="piernas">Piernas</button>
+                            </div>
+
+                            <!-- Cuadrícula Asimétrica de Fotos Sueltas (Sin badges ni distintivos) -->
+                            <div class="artist-mosaic-grid" id="artist-mosaic-grid">
+                                <!-- Fotos sueltas cargadas dinámicamente -->
+                            </div>
+                        </section>
+
+                        <!-- 3. Mapa del Lugar Donde Está al Final -->
+                        <section class="artist-bottom-map-section" id="artist-bottom-map-section">
+                            <div class="artist-bottom-map-card">
+                                <div class="bottom-map-header">
+                                    <div class="bottom-map-title-row">
+                                        <i data-lucide="map-pin" class="bottom-map-icon"></i>
+                                        <h3 class="bottom-map-title">Ubicación del Estudio</h3>
+                                    </div>
+                                    <p class="bottom-map-location" id="profile-map-location-text">Teodoro Schmidt, Región de La Araucanía</p>
+                                </div>
+                                <div class="bottom-map-canvas-wrapper">
+                                    <div id="profile-detail-map" class="profile-map-container"></div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -1953,7 +1976,7 @@
                                 </div>
                             </div>
 
-                            <!-- Detail Section con Fotografía Real y Botón de Video -->
+                            <!-- Detail Section con Fotografía Real y Reproductor de Video -->
                             <div class="editorial-detail-block" id="editorial-detail-block" style="width: 100%; margin-top: 25px;">
                                 <div class="detail-header-row">
                                     <div class="editorial-card-icon-wrapper yellow" id="detail-icon-wrapper" style="margin-bottom: 0;">
@@ -1962,10 +1985,42 @@
                                     <h2 class="detail-title" id="detail-title">1. El origen de la palabra</h2>
                                 </div>
 
-                                <!-- Multimedia en el bloque de detalle -->
-                                <div class="editorial-detail-media" id="detail-media-container">
-                                    <img src="assets/cultura/sabias_tatau.jpg" alt="Sesión tradicional de Tatau en Samoa" id="detail-img" class="editorial-detail-img">
-                                    <p class="editorial-detail-caption" id="detail-caption"><i data-lucide="camera"></i> Archivo etnográfico: Ceremonia tradicional de Tatau en Samoa utilizando herramientas ancestrales de hueso y madera.</p>
+                                <!-- Selector de Multimedia: Video Documental o Fotografía Histórica -->
+                                <div class="editorial-media-wrapper">
+                                    <div class="editorial-media-tabs" role="tablist" aria-label="Contenido multimedia">
+                                        <button type="button" class="editorial-media-tab active" id="tab-media-video" role="tab" aria-selected="true">
+                                            <i data-lucide="play-circle"></i> Video Documental (<span id="media-tab-source">TED-Ed</span>)
+                                        </button>
+                                        <button type="button" class="editorial-media-tab" id="tab-media-photo" role="tab" aria-selected="false">
+                                            <i data-lucide="camera"></i> Fotografía Histórica
+                                        </button>
+                                    </div>
+
+                                    <!-- Contenedor de Video YouTube Integrado -->
+                                    <div class="editorial-detail-media editorial-video-container" id="detail-video-container">
+                                        <div class="editorial-video-aspect">
+                                            <iframe 
+                                                id="detail-inline-iframe"
+                                                src="https://www.youtube.com/embed/MYn15yDBvxM?rel=0" 
+                                                title="The History of Tattoos - Addison Anderson (TED-Ed)" 
+                                                loading="lazy"
+                                                referrerpolicy="strict-origin-when-cross-origin"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                        <p class="editorial-detail-caption" id="detail-video-caption">
+                                            <i data-lucide="film"></i> Documental educativo: <strong id="detail-video-title-display">The History of Tattoos - Addison Anderson (TED-Ed)</strong>
+                                        </p>
+                                    </div>
+
+                                    <!-- Contenedor de Fotografía Histórica Real -->
+                                    <div class="editorial-detail-media editorial-photo-container" id="detail-photo-container" style="display: none;">
+                                        <img src="assets/cultura/sabias_tatau.jpg" alt="Sesión tradicional de Tatau en Samoa" id="detail-img" class="editorial-detail-img">
+                                        <p class="editorial-detail-caption" id="detail-caption">
+                                            <i data-lucide="camera"></i> Archivo etnográfico: Ceremonia tradicional de Tatau en Samoa utilizando herramientas ancestrales de hueso y madera.
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div class="detail-body-text" id="detail-body">
@@ -1974,8 +2029,8 @@
 
                                 <div class="detail-video-action" id="detail-video-action">
                                     <button type="button" class="btn-timeline-video" id="detail-video-btn" data-video-id="MYn15yDBvxM" data-video-title="The History of Tattoos - Addison Anderson (TED-Ed)" data-video-source="TED-Ed">
-                                        <i data-lucide="play-circle"></i> Ver Documental Relacionado (YouTube)
-                                        <span class="video-badge-pill">TED-Ed</span>
+                                        <i data-lucide="maximize-2"></i> Ver en Pantalla Completa (Modal)
+                                        <span class="video-badge-pill" id="detail-video-badge-source">TED-Ed</span>
                                     </button>
                                 </div>
                             </div>
@@ -3359,6 +3414,6 @@
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App Logic -->
-    <script src="app.js?v=63"></script>
+    <script src="app.js?v=65"></script>
 </body>
 </html>

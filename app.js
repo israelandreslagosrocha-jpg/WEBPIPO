@@ -4137,6 +4137,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const iconWrapper = document.getElementById('detail-icon-wrapper');
                 const imgEl = document.getElementById('detail-img');
                 const captionEl = document.getElementById('detail-caption');
+                const inlineIframe = document.getElementById('detail-inline-iframe');
+                const videoTitleDisplay = document.getElementById('detail-video-title-display');
+                const mediaTabSource = document.getElementById('media-tab-source');
+                const videoBadgeSource = document.getElementById('detail-video-badge-source');
                 const videoBtn = document.getElementById('detail-video-btn');
                 const videoAction = document.getElementById('detail-video-action');
                 
@@ -4156,6 +4160,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     captionEl.innerHTML = `<i data-lucide="camera"></i> ${data.caption}`;
                 }
 
+                if (inlineIframe && data.videoId) {
+                    inlineIframe.src = `https://www.youtube.com/embed/${data.videoId}?rel=0`;
+                    inlineIframe.title = data.videoTitle || data.title;
+                }
+                if (videoTitleDisplay) {
+                    videoTitleDisplay.textContent = data.videoTitle || data.title;
+                }
+                if (mediaTabSource) {
+                    mediaTabSource.textContent = data.videoSource || 'YouTube';
+                }
+                if (videoBadgeSource) {
+                    videoBadgeSource.textContent = data.videoSource || 'YouTube';
+                }
+
                 if (videoBtn && data.videoId) {
                     videoBtn.setAttribute('data-video-id', data.videoId);
                     videoBtn.setAttribute('data-video-title', data.videoTitle || data.title);
@@ -4170,6 +4188,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Switcher de pestañas multimedia (Video vs Fotografía) en ¿Sabías que?
+    const tabMediaVideo = document.getElementById('tab-media-video');
+    const tabMediaPhoto = document.getElementById('tab-media-photo');
+    const containerVideo = document.getElementById('detail-video-container');
+    const containerPhoto = document.getElementById('detail-photo-container');
+
+    function switchDetailMediaTab(target) {
+        if (!tabMediaVideo || !tabMediaPhoto || !containerVideo || !containerPhoto) return;
+        if (target === 'video') {
+            tabMediaVideo.classList.add('active');
+            tabMediaVideo.setAttribute('aria-selected', 'true');
+            tabMediaPhoto.classList.remove('active');
+            tabMediaPhoto.setAttribute('aria-selected', 'false');
+            containerVideo.style.display = 'block';
+            containerPhoto.style.display = 'none';
+        } else {
+            tabMediaPhoto.classList.add('active');
+            tabMediaPhoto.setAttribute('aria-selected', 'true');
+            tabMediaVideo.classList.remove('active');
+            tabMediaVideo.setAttribute('aria-selected', 'false');
+            containerPhoto.style.display = 'block';
+            containerVideo.style.display = 'none';
+        }
+        safeCreateIcons();
+    }
+
+    if (tabMediaVideo) {
+        tabMediaVideo.addEventListener('click', () => switchDetailMediaTab('video'));
+    }
+    if (tabMediaPhoto) {
+        tabMediaPhoto.addEventListener('click', () => switchDetailMediaTab('photo'));
+    }
 
     // Curiosidades Slide Navigation Buttons
     const slideContainer = document.getElementById('editorial-slide-container');
@@ -4206,9 +4257,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Inyecta iframe responsive con autoplay=1&rel=0
         ytIframeContainer.innerHTML = `
             <iframe 
-                src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" 
+                src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" 
                 title="${title || 'Reproductor de video educativo'}" 
                 frameborder="0" 
+                referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                 allowfullscreen>
             </iframe>
@@ -5917,224 +5969,213 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.loadArtistProfile = loadArtistProfile;
 
-    // Render Portfolio Publication Carousel (Social Post Format + Neobrutalist Carrusel)
-    function renderTattoosWizardGallery(details) {
-        const galleryContainer = document.getElementById('tab-gallery-grid');
-        if (!galleryContainer) return;
+    // ==========================================================================
+    // REGLA GENERAL PERFILES DE TATUADOR:
+    // 1. Carrusel de 3 fotos destacadas (3D/Coverflow)
+    // 2. Fotografías sueltas en cuadrícula asimétrica (estilo Figma) con filtros
+    // 3. Mapa del lugar donde está al final
+    // ==========================================================================
+    function detectBodyZone(item) {
+        if (item.zone) return item.zone.toLowerCase();
+        const text = ((item.title || '') + ' ' + (item.style || '')).toLowerCase();
+        if (/cara|facial|rostro|ojo/.test(text)) return 'cara';
+        if (/cuello|garganta|neck/.test(text)) return 'cuello';
+        if (/torso|pecho|espalda|costilla|abdomen|clavicula/.test(text)) return 'torso';
+        if (/brazo|manga|antebrazo|biceps|hombro|muñeca/.test(text)) return 'brazos';
+        if (/mano|dedo|palma|hand/.test(text)) return 'manos';
+        if (/pierna|pantorrilla|muslo|tobillo|pie|rodilla|leg/.test(text)) return 'piernas';
+        return 'brazos';
+    }
 
-        galleryContainer.innerHTML = '';
+    function renderTattoosWizardGallery(details) {
+        const carouselSection = document.getElementById('artist-carousel-section');
+        const carouselStage = document.getElementById('artist-carousel-stage');
+        const btnPrev = document.getElementById('artist-carousel-prev');
+        const btnNext = document.getElementById('artist-carousel-next');
+
+        const gallerySection = document.getElementById('artist-gallery-section');
+        const mosaicGrid = document.getElementById('artist-mosaic-grid');
+        const zoneFilterBar = document.getElementById('artist-zone-filter-bar');
+
         const portfolio = details.portfolio || [];
 
+        // ----------------------------------------------------------------------
+        // Caso sin fotos verificadas (Regla Cero Imágenes IA)
+        // ----------------------------------------------------------------------
         if (portfolio.length === 0) {
-            const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
-            galleryContainer.innerHTML = `
-                <div class="empty-portfolio-notice" style="text-align: center; padding: 50px 24px; background: #ffffff; border: 3px solid #000000; border-radius: 16px; box-shadow: 5px 5px 0px #000000; margin: 30px auto; max-width: 620px; width: 100%;">
-                    <div style="font-size: 2.8rem; margin-bottom: 12px;">🛡️</div>
-                    <h3 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 10px; color: #000000;">
-                        No logré capturar info real de este perfil
-                    </h3>
-                    <p style="font-family: 'Outfit', sans-serif; font-size: 0.98rem; color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
-                        Cumpliendo con la regla estricta de <strong>Cero Imágenes IA o de stock</strong>, sólo se visualizan fotografías verificadas. Puedes explorar todo el portafolio auténtico de <strong>${escapeHTML(details.name)}</strong> directamente en su cuenta oficial de Instagram.
-                    </p>
-                    <a href="${escapeHTML(details.instagram)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #7B4AD8; color: #ffffff; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; text-decoration: none; padding: 12px 24px; border: 2.5px solid #000000; border-radius: 100px; box-shadow: 3px 3px 0px #000000; transition: transform 0.15s ease;">
-                        ${INSTAGRAM_ICON_SVG} Ver trabajos en ${escapeHTML(handle)}
-                    </a>
-                </div>
-            `;
+            if (carouselSection) carouselSection.style.display = 'none';
+            if (zoneFilterBar) zoneFilterBar.style.display = 'none';
+            if (mosaicGrid) {
+                const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+                mosaicGrid.style.display = 'block';
+                mosaicGrid.innerHTML = `
+                    <div class="empty-portfolio-notice">
+                        <div style="font-size: 2.6rem; margin-bottom: 12px;">🛡️</div>
+                        <h3 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 10px; color: #000000;">
+                            No logré capturar info real de este perfil
+                        </h3>
+                        <p style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #4b5563; line-height: 1.6; margin-bottom: 22px;">
+                            Cumpliendo con la regla estricta de <strong>Cero Imágenes IA o de stock</strong>, sólo se visualizan fotografías verificadas. Puedes explorar todo el portafolio auténtico de <strong>${escapeHTML(details.name)}</strong> directamente en su cuenta oficial de Instagram.
+                        </p>
+                        <a href="${escapeHTML(details.instagram)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #7B4AD8; color: #ffffff; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; text-decoration: none; padding: 12px 24px; border: 2.5px solid #000000; border-radius: 100px; box-shadow: 3px 3px 0px #000000; transition: transform 0.15s ease;">
+                            ${INSTAGRAM_ICON_SVG} Ver trabajos en ${escapeHTML(handle)}
+                        </a>
+                    </div>
+                `;
+            }
             safeCreateIcons();
             return;
         }
 
-        let currentIndex = 0;
-        const total = portfolio.length;
-        const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+        // ----------------------------------------------------------------------
+        // 1. Carrusel de 3 Fotos Destacadas (3D CoverFlow)
+        // ----------------------------------------------------------------------
+        if (carouselSection && carouselStage) {
+            carouselSection.style.display = 'block';
+            carouselStage.innerHTML = '';
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'portfolio-publication-wrapper';
+            // Se toman 3 fotos (o hasta 5 para rotación completa)
+            let carouselPhotos = portfolio.slice(0, Math.min(5, portfolio.length));
+            if (carouselPhotos.length === 1) {
+                carouselPhotos = [carouselPhotos[0], carouselPhotos[0], carouselPhotos[0]];
+            } else if (carouselPhotos.length === 2) {
+                carouselPhotos = [carouselPhotos[0], carouselPhotos[1], carouselPhotos[0]];
+            }
 
-        wrapper.innerHTML = `
-            <div class="portfolio-publication-card">
-                <!-- Publication Header -->
-                <div class="pub-card-header">
-                    <div class="pub-artist-info">
-                        <div class="pub-avatar-circle">
-                            <img src="${escapeHTML(details.avatar)}" alt="${escapeHTML(details.name)}" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';">
-                        </div>
-                        <div class="pub-artist-meta">
-                            <span class="pub-artist-name">${escapeHTML(details.name)}</span>
-                            <span class="pub-artist-handle">${escapeHTML(handle)} • ${escapeHTML(details.location)}</span>
-                        </div>
-                    </div>
-                    <div class="pub-header-badges">
-                        <span class="pub-style-badge" id="pub-current-style">${escapeHTML(portfolio[0].style || 'Tatuaje')}</span>
-                        <span class="pub-counter-badge" id="pub-current-counter">1 / ${total}</span>
-                    </div>
-                </div>
+            const totalCards = carouselPhotos.length;
+            let carouselIndex = 0;
 
-                <!-- Publication Stage (Carrusel) -->
-                <div class="pub-stage-wrapper" id="pub-stage-wrapper">
-                    <button class="pub-nav-btn pub-nav-prev" id="pub-btn-prev" type="button" aria-label="Foto anterior" title="Anterior">
-                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Anterior">
-                    </button>
+            carouselPhotos.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'artist-carousel-card';
+                card.setAttribute('data-index', idx);
+                card.innerHTML = `<img src="${escapeHTML(item.src)}" alt="${escapeHTML(item.title || 'Tatuaje')}">`;
 
-                    <div class="pub-img-container" id="pub-img-container">
-                        <img src="${portfolio[0].src}" alt="${escapeHTML(portfolio[0].title)}" id="pub-main-img" class="pub-main-img">
-                        <div class="pub-zoom-indicator">
-                            <i data-lucide="zoom-in" style="width: 15px; height: 15px;"></i> Click para ampliar
-                        </div>
-                    </div>
-
-                    <button class="pub-nav-btn pub-nav-next" id="pub-btn-next" type="button" aria-label="Siguiente foto" title="Siguiente">
-                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-07_f9nuup.svg" alt="Siguiente">
-                    </button>
-                </div>
-
-                <!-- Dots Bar -->
-                <div class="pub-dots-bar" id="pub-dots-bar">
-                    ${portfolio.map((_, idx) => `
-                        <button class="pub-dot ${idx === 0 ? 'active' : ''}" data-index="${idx}" type="button" aria-label="Ir a foto ${idx + 1}"></button>
-                    `).join('')}
-                </div>
-
-                <!-- Publication Footer / Caption -->
-                <div class="pub-card-footer">
-                    <div class="pub-caption-content">
-                        <div class="pub-caption-title-row">
-                            <span class="pub-caption-author">${escapeHTML(details.name)}</span>
-                            <span class="pub-caption-text" id="pub-caption-title">${escapeHTML(portfolio[0].title)}</span>
-                        </div>
-                    </div>
-                    <div class="pub-actions-row">
-                        <button class="pub-action-btn pub-btn-zoom" id="pub-btn-zoom" type="button">
-                            <i data-lucide="maximize-2" style="width: 14px; height: 14px;"></i> Ampliar
-                        </button>
-                        <a href="${escapeHTML(details.instagram)}" target="_blank" rel="noopener noreferrer" class="pub-action-btn pub-btn-insta">
-                            ${INSTAGRAM_ICON_SVG} Ver en Instagram
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Thumbnails Strip -->
-            <div class="pub-thumbs-strip" id="pub-thumbs-strip">
-                ${portfolio.map((item, idx) => `
-                    <button class="pub-thumb-item ${idx === 0 ? 'active' : ''}" data-index="${idx}" type="button" title="${escapeHTML(item.title)}">
-                        <img src="${item.src}" alt="${escapeHTML(item.title)}" loading="lazy">
-                    </button>
-                `).join('')}
-            </div>
-        `;
-
-        galleryContainer.appendChild(wrapper);
-
-        // References
-        const mainImg = wrapper.querySelector('#pub-main-img');
-        const styleBadge = wrapper.querySelector('#pub-current-style');
-        const counterBadge = wrapper.querySelector('#pub-current-counter');
-        const captionTitle = wrapper.querySelector('#pub-caption-title');
-        const btnPrev = wrapper.querySelector('#pub-btn-prev');
-        const btnNext = wrapper.querySelector('#pub-btn-next');
-        const btnZoom = wrapper.querySelector('#pub-btn-zoom');
-        const dots = wrapper.querySelectorAll('.pub-dot');
-        const thumbs = wrapper.querySelectorAll('.pub-thumb-item');
-        const stageWrapper = wrapper.querySelector('#pub-stage-wrapper');
-
-        function goToSlide(newIndex) {
-            if (newIndex < 0) newIndex = total - 1;
-            if (newIndex >= total) newIndex = 0;
-            currentIndex = newIndex;
-            const item = portfolio[currentIndex];
-
-            // Smooth fade transition
-            mainImg.style.opacity = '0.3';
-            mainImg.src = item.src;
-            mainImg.alt = item.title;
-            mainImg.onload = () => { mainImg.style.opacity = '1'; };
-
-            styleBadge.textContent = item.style || 'Tatuaje';
-            counterBadge.textContent = `${currentIndex + 1} / ${total}`;
-            captionTitle.textContent = item.title;
-
-            dots.forEach((d, i) => {
-                if (i === currentIndex) d.classList.add('active');
-                else d.classList.remove('active');
+                card.addEventListener('click', () => {
+                    if (carouselIndex === idx) {
+                        openLightbox(item.src, `${item.title || 'Tatuaje'} — ${details.name} (${details.location})`);
+                    } else {
+                        goToCarousel(idx);
+                    }
+                });
+                carouselStage.appendChild(card);
             });
 
-            thumbs.forEach((th, i) => {
-                if (i === currentIndex) {
-                    th.classList.add('active');
-                    th.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                } else {
-                    th.classList.remove('active');
+            const cards = carouselStage.querySelectorAll('.artist-carousel-card');
+
+            function updateCarousel() {
+                cards.forEach((card, idx) => {
+                    card.classList.remove('prev', 'active', 'next', 'hidden');
+                    if (idx === carouselIndex) {
+                        card.classList.add('active');
+                    } else if (idx === (carouselIndex - 1 + totalCards) % totalCards) {
+                        card.classList.add('prev');
+                    } else if (idx === (carouselIndex + 1) % totalCards) {
+                        card.classList.add('next');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            }
+
+            function goToCarousel(newIdx) {
+                carouselIndex = (newIdx + totalCards) % totalCards;
+                updateCarousel();
+            }
+
+            if (btnPrev) {
+                btnPrev.onclick = (e) => {
+                    e.stopPropagation();
+                    goToCarousel(carouselIndex - 1);
+                };
+            }
+            if (btnNext) {
+                btnNext.onclick = (e) => {
+                    e.stopPropagation();
+                    goToCarousel(carouselIndex + 1);
+                };
+            }
+
+            // Deslizamiento táctil en móviles
+            let touchStartX = 0;
+            carouselStage.ontouchstart = (e) => {
+                if (e.touches && e.touches[0]) touchStartX = e.touches[0].clientX;
+            };
+            carouselStage.ontouchend = (e) => {
+                if (e.changedTouches && e.changedTouches[0]) {
+                    const diff = e.changedTouches[0].clientX - touchStartX;
+                    if (Math.abs(diff) > 35) {
+                        if (diff < 0) goToCarousel(carouselIndex + 1);
+                        else goToCarousel(carouselIndex - 1);
+                    }
                 }
-            });
+            };
+
+            updateCarousel();
         }
 
-        btnPrev.addEventListener('click', (e) => {
-            e.stopPropagation();
-            goToSlide(currentIndex - 1);
-        });
+        // ----------------------------------------------------------------------
+        // 2. Fotografías Sueltas en Cuadrícula Asimétrica con Filtros de Zona
+        // ----------------------------------------------------------------------
+        if (gallerySection && mosaicGrid) {
+            gallerySection.style.display = 'block';
+            mosaicGrid.style.display = 'grid';
 
-        btnNext.addEventListener('click', (e) => {
-            e.stopPropagation();
-            goToSlide(currentIndex + 1);
-        });
+            // Ritmo asimétrico de alturas (emulando la maqueta Figma de referencia)
+            const rhythm = ['', 'span-tall', '', 'span-tall', 'span-wide', '', 'span-tall', ''];
 
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const idx = parseInt(dot.getAttribute('data-index'));
-                goToSlide(idx);
-            });
-        });
+            function renderMosaic(zoneFilter = 'todo') {
+                mosaicGrid.innerHTML = '';
+                const filtered = portfolio.filter(item => {
+                    if (zoneFilter === 'todo') return true;
+                    return detectBodyZone(item) === zoneFilter;
+                });
 
-        thumbs.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                const idx = parseInt(thumb.getAttribute('data-index'));
-                goToSlide(idx);
-            });
-        });
-
-        // Zoom / Lightbox
-        const triggerZoom = () => {
-            const item = portfolio[currentIndex];
-            openLightbox(item.src, `${item.title} — ${details.name} (${details.location})`);
-        };
-        mainImg.addEventListener('click', triggerZoom);
-        btnZoom.addEventListener('click', triggerZoom);
-
-        // Touch swipe for mobile
-        let touchStartX = 0;
-        stageWrapper.addEventListener('touchstart', (e) => {
-            if (e.touches && e.touches[0]) {
-                touchStartX = e.touches[0].clientX;
-            }
-        }, { passive: true });
-
-        stageWrapper.addEventListener('touchend', (e) => {
-            if (e.changedTouches && e.changedTouches[0]) {
-                const touchEndX = e.changedTouches[0].clientX;
-                const diff = touchEndX - touchStartX;
-                if (Math.abs(diff) > 40) {
-                    if (diff < 0) goToSlide(currentIndex + 1);
-                    else goToSlide(currentIndex - 1);
+                if (filtered.length === 0) {
+                    mosaicGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 16px; font-family: 'Outfit', sans-serif; color: #64748b; font-weight: 600;">
+                            No hay fotografías registradas para la zona seleccionada.
+                        </div>
+                    `;
+                    return;
                 }
-            }
-        }, { passive: true });
 
-        // Global keyboard arrows listener (single instance cleanup)
-        if (window._pubCarouselKeyHandler) {
-            window.removeEventListener('keydown', window._pubCarouselKeyHandler);
-        }
-        window._pubCarouselKeyHandler = (e) => {
-            const stage = document.getElementById('pub-stage-wrapper');
-            if (!stage || !stage.isConnected) return;
-            if (e.key === 'ArrowLeft') {
-                goToSlide(currentIndex - 1);
-            } else if (e.key === 'ArrowRight') {
-                goToSlide(currentIndex + 1);
+                filtered.forEach((item, idx) => {
+                    const spanClass = rhythm[idx % rhythm.length];
+                    const card = document.createElement('div');
+                    card.className = `artist-mosaic-item ${spanClass}`.trim();
+                    card.setAttribute('title', item.title || 'Ver tatuaje');
+                    // Fotos sueltas limpias, sin ningún badge ni distintivo superpuesto
+                    card.innerHTML = `<img src="${escapeHTML(item.src)}" alt="${escapeHTML(item.title || 'Tatuaje')}" loading="lazy">`;
+
+                    card.addEventListener('click', () => {
+                        openLightbox(item.src, `${item.title || 'Tatuaje'} — ${details.name} (${details.location})`);
+                    });
+
+                    mosaicGrid.appendChild(card);
+                });
             }
-        };
-        window.addEventListener('keydown', window._pubCarouselKeyHandler);
+
+            // Configurar botones de filtros de zona
+            if (zoneFilterBar) {
+                zoneFilterBar.style.display = 'flex';
+                const pills = zoneFilterBar.querySelectorAll('.zone-pill');
+                pills.forEach(pill => {
+                    pill.onclick = () => {
+                        pills.forEach(p => p.classList.remove('active'));
+                        pill.classList.add('active');
+                        const zone = pill.getAttribute('data-zone') || 'todo';
+                        renderMosaic(zone);
+                    };
+                });
+                // Reset a 'Todo'
+                pills.forEach(p => p.classList.remove('active'));
+                const firstPill = zoneFilterBar.querySelector('.zone-pill[data-zone="todo"]');
+                if (firstPill) firstPill.classList.add('active');
+            }
+
+            renderMosaic('todo');
+        }
 
         safeCreateIcons();
     }
