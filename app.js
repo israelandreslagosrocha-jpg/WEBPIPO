@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    // ==========================================================================
+    const INSTAGRAM_ICON_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
 
     // 1. STATE & STATIC DATABASE CONFIGURATIONS
 
@@ -82,14 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // App state
     const state = {
         currentView: 'landing-view', // Starts on the exclusive landing page!
-        favorites: new Set(),
         activeFilters: {
             userCoords: null,
             styles: new Set(),
             availability: new Set(),
             category: 'Todos',
-            distance: 150,
-            onlyFavorites: false
+            distance: 150
         },
         carouselIndex: 1, // Start at active image
         
@@ -110,11 +108,98 @@ document.addEventListener('DOMContentLoaded', () => {
         // Admin dynamic state
         suspendedArtists: new Set(),
         artistsData: [
-            { id: 'pipo', name: 'Studio tatto pipo', location: 'Teodoro Schmidt', plan: 'Premium', status: 'Verificado' },
-            { id: 'wentruart', name: 'Wentruart', location: 'Temuco', plan: 'Premium', status: 'Verificado' },
-            { id: 'tattoopucon', name: 'Tattoo Pucón', location: 'Pucón', plan: 'Premium', status: 'Verificado' },
-            { id: 'puertotinta', name: 'Puerto Tinta', location: 'Saavedra', plan: 'Premium', status: 'Verificado' }
-        ],
+            {
+                        "id": "pipo",
+                        "name": "Studio tatto pipo",
+                        "location": "Teodoro Schmidt",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "connaink",
+                        "name": "Connaink",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "nowss",
+                        "name": "nowss.ttt",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tatto_zimple",
+                        "name": "Tatto Zimple",
+                        "location": "Padre Las Casas",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "majesus",
+                        "name": "majesus.ink",
+                        "location": "Villarrica",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "sasori",
+                        "name": "sasori.tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "milenkorn",
+                        "name": "milenkorn",
+                        "location": "Puc\u00f3n",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "neblink",
+                        "name": "Neblink Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "anima",
+                        "name": "\u00c1nima Artist",
+                        "location": "Angol",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "balentina",
+                        "name": "balentina.ttt",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "dulcedelimon",
+                        "name": "Dulce de Lim\u00f3n Ink",
+                        "location": "Villarrica",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "pandetinta",
+                        "name": "Pan de Tinta",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "denussa",
+                        "name": "Denussa Tatua",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            }
+],
 
         // Tatuador dashboard dynamic state (Pre-logged in demo mode active by default)
         selectedSubscriptionPlan: 'premium',
@@ -146,41 +231,377 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    // Artist details database for the Quick Ficha ( Araucanía region )
-    const artistsDetails = {
-        'pipo': {
-            name: 'Studio tatto pipo',
-            location: 'Teodoro Schmidt',
-            bio: 'Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la Araucanía.',
-            instagram: 'https://www.instagram.com/pipo.tattooo/',
-            avatar: 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp',
-            coords: [-39.2045, -73.0538]
+    // Artist details database for the Quick Ficha & Catalog (Araucanía region)
+    // Absolute Rule: Zero AI / Stock photos. Only real Cloudinary photos.
+    const TINTA_CONECTADA_BRAND_LOGO = 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';
+    const PIPO_OFFICIAL_LOGO = 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp';
+
+    let artistsDetails = {
+        "pipo": {
+            "name": "Studio tatto pipo",
+            "location": "Teodoro Schmidt",
+            "bio": "Tatuador profesional en Teodoro Schmidt, La Araucanía. Especialista en Fine Line, Blackwork, Puntillismo, Botanica, Geometrico.",
+            "instagram": "https://www.instagram.com/pipo.tattooo/",
+            "handle": "@pipo.tattooo",
+            "avatar": PIPO_OFFICIAL_LOGO,
+            "coords": [-39.2045, -73.0538],
+            "experience": "5 años",
+            "price": "Intermedio",
+            "styles": ["Fine Line", "Blackwork", "Puntillismo", "Botanica", "Geometrico"],
+            "inks": "Dynamic Ink, Eternal Ink, Solid Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp",
+            "portfolio": [
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp", "title": "Trabajo Mano", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4595_wspfa6.webp", "title": "Diseño Geométrico Espalda", "style": "Blackwork" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_WhatsApp_Image_2026-07-07_at_10.14.53_PM_ntqzyz.webp", "title": "Tatuaje Líneas Continuas", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4314_kezisl.webp", "title": "Línea Fina Floral Pierna", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4495_bdmmfp.webp", "title": "Blackwork Abstracto Brazo", "style": "Blackwork" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4125_uuvbwh.webp", "title": "Trazos Continuos Delicados", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4144_fir9qv.webp", "title": "Tatuaje Ornamental Espalda", "style": "Blackwork" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_4075_mfide8.webp", "title": "Puntillismo Botánico Flor", "style": "Puntillismo" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3997_k5nt4b.webp", "title": "Composición Botánica Brazo", "style": "Botanica" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3861_wa3yyf.webp", "title": "Silueta Minimalista Torso", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3179_fvx7ev.webp", "title": "Tatuaje Lineal Manos", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3168_zcazow.webp", "title": "Diseño Lineal Fino Brazo", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2512_vwcl9a.webp", "title": "Blackwork Flor Pierna", "style": "Blackwork" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2638_klaumh.webp", "title": "Geometría Lineal Espalda", "style": "Geometrico" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2014_jxqfuj.webp", "title": "Ornamento Floral Brazo", "style": "Fine Line" },
+                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_brazo_bswodc.webp", "title": "Composición Completa Brazo", "style": "Fine Line" }
+            ]
+        },        "connaink": {
+            "name": "Connaink",
+            "location": "Temuco",
+            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
+            "instagram": "https://www.instagram.com/connaink/",
+            "handle": "@connaink",
+            "avatar": "assets/artists_real/connaink/avatar.jpg",
+            "coords": [-38.7396, -72.5984],
+            "experience": "Menos de 1 año",
+            "price": "Intermedio",
+            "styles": ["Fine Line", "Puntillismo"],
+            "inks": "Dynamic",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/connaink/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/connaink/tattoo_1.jpg", "title": "Composición Floral Delicada", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_2.jpg", "title": "Trazo Continuo y Sombra Fina", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_3.jpg", "title": "Diseño de Autor a Pedido", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_4.jpg", "title": "Puntillismo Botánico Fino", "style": "Puntillismo" },
+                { "src": "assets/artists_real/connaink/tattoo_5.jpg", "title": "Línea Minimalista en Brazo", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_6.jpg", "title": "Detalle Botánico en Pierna", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_7.jpg", "title": "Lirios Artísticos", "style": "Fine Line" },
+                { "src": "assets/artists_real/connaink/tattoo_8.jpg", "title": "Composición Fine Line", "style": "Fine Line" }
+            ]
         },
-        'wentruart': {
-            name: 'Wentruart',
-            location: 'Temuco',
-            bio: 'Taller de tatuajes enfocado en el arte tradicional y neotradicional. Diseños de autor que cuentan historias en la piel.',
-            instagram: 'https://www.instagram.com/wentruart',
-            avatar: 'https://unavatar.io/instagram/wentruart',
-            coords: [-38.7450, -72.6020]
+        "nowss": {
+            "name": "nowss.ttt",
+            "location": "Temuco",
+            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line, Realismo y Puntillismo.",
+            "instagram": "https://www.instagram.com/nowss.ttt/",
+            "handle": "@nowss.ttt",
+            "avatar": "assets/artists_real/nowss/avatar.jpg",
+            "coords": [-38.7346, -72.6024],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Fine Line", "Realismo", "Puntillismo"],
+            "inks": "Dynamic, Eternal Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/nowss/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/nowss/tattoo_1.jpg", "title": "Texturas y Contrastes en Blackwork", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_2.jpg", "title": "Puro Blackwork Geométrico", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_3.jpg", "title": "Sombreado Opaco Profundo", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_4.jpg", "title": "Pieza Blackwork en Brazo", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_5.jpg", "title": "Tatuaje Realista y Textura", "style": "Realismo" },
+                { "src": "assets/artists_real/nowss/tattoo_6.jpg", "title": "Detalle Dark Ornamental", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_7.jpg", "title": "Blackwork Pecho y Cuello", "style": "Blackwork" },
+                { "src": "assets/artists_real/nowss/tattoo_8.jpg", "title": "Composición Tonal Fina", "style": "Fine Line" }
+            ]
         },
-        'tattoopucon': {
-            name: 'Tattoo Pucón',
-            location: 'Pucón',
-            bio: 'El estudio pionero en Pucón. Realismo, puntillismo, acuarela y piezas tribales de gran envergadura.',
-            instagram: 'https://www.instagram.com/tattoopucon/',
-            avatar: 'https://unavatar.io/instagram/tattoopucon',
-            coords: [-39.2736, -71.9744]
+        "tatto_zimple": {
+            "name": "Tatto Zimple",
+            "location": "Padre Las Casas",
+            "bio": "Tatuador profesional en Padre Las Casas, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line, Puntillismo.",
+            "instagram": "https://www.instagram.com/tatto_zimple/",
+            "handle": "@tatto_zimple",
+            "avatar": TINTA_CONECTADA_BRAND_LOGO,
+            "coords": [-38.7612, -72.5991],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Black and Gray", "Fine Line", "Puntillismo"],
+            "inks": "Dynamic, Solid Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "",
+            "portfolio": []
         },
-        'puertotinta': {
-            name: 'Puerto Tinta',
-            location: 'Saavedra',
-            bio: 'Estudio independiente a orillas de la costa. Diseños inspirados en la naturaleza marina y cultura tradicional.',
-            instagram: 'https://www.instagram.com/puertotinta/',
-            avatar: 'https://unavatar.io/instagram/puertotinta',
-            coords: [-38.7906, -73.3986]
+        "majesus": {
+            "name": "majesus.ink",
+            "location": "Villarrica",
+            "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Fine Line y Lettering.",
+            "instagram": "https://www.instagram.com/majesus.ink/",
+            "handle": "@majesus.ink",
+            "avatar": "assets/artists_real/majesus/avatar.jpg",
+            "coords": [-39.2821, -72.2268],
+            "experience": "1–3 años",
+            "price": "Intermedio",
+            "styles": ["Fine Line", "Lettering"],
+            "inks": "Dynamic, Radiant",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/majesus/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/majesus/tattoo_1.jpg", "title": "Tatuaje Floral Delicado", "style": "Fine Line" },
+                { "src": "assets/artists_real/majesus/tattoo_2.jpg", "title": "Lettering Personalizado en Brazo", "style": "Lettering" },
+                { "src": "assets/artists_real/majesus/tattoo_3.jpg", "title": "Fine Line Botánico Clavícula", "style": "Fine Line" },
+                { "src": "assets/artists_real/majesus/tattoo_4.jpg", "title": "Trazos Finos y Sutiles", "style": "Fine Line" },
+                { "src": "assets/artists_real/majesus/tattoo_5.jpg", "title": "Tipografía Exclusiva Mano", "style": "Lettering" },
+                { "src": "assets/artists_real/majesus/tattoo_6.jpg", "title": "Ornamento Lineal en Espalda", "style": "Fine Line" },
+                { "src": "assets/artists_real/majesus/tattoo_7.jpg", "title": "Mini Tatuaje Lineal", "style": "Fine Line" },
+                { "src": "assets/artists_real/majesus/tattoo_8.jpg", "title": "Composición Fine Line Tobillo", "style": "Fine Line" }
+            ]
+        },
+        "sasori": {
+            "name": "sasori.tattoo",
+            "location": "Temuco",
+            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Neotribal, Cybersigilism, Dark Ornamental.",
+            "instagram": "https://www.instagram.com/sasori.tattoo.cl/",
+            "handle": "@sasori.tattoo.cl",
+            "avatar": TINTA_CONECTADA_BRAND_LOGO,
+            "coords": [-38.7312, -72.5854],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Neotribal", "Cybersigilism", "Dark Ornamental"],
+            "inks": "Dynamic, Eternal Ink, Radiant",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "",
+            "portfolio": []
+        },
+        "milenkorn": {
+            "name": "milenkorn",
+            "location": "Pucón",
+            "bio": "Tatuadora profesional en Pucón, La Araucanía. Especialista en Blackwork y Black and Gray.",
+            "instagram": "https://www.instagram.com/milenkorn/",
+            "handle": "@milenkorn",
+            "avatar": "assets/artists_real/milenkorn/avatar.jpg",
+            "coords": [-39.2789, -71.9754],
+            "experience": "1–3 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Black and Gray"],
+            "inks": "Dynamic",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/milenkorn/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/milenkorn/tattoo_1.jpg", "title": "Metal Gear Solid Arte Playstation", "style": "Blackwork" },
+                { "src": "assets/artists_real/milenkorn/tattoo_2.jpg", "title": "Blackwork Ilustrativo Espalda", "style": "Blackwork" },
+                { "src": "assets/artists_real/milenkorn/tattoo_3.jpg", "title": "Black and Gray Contrastes", "style": "Black and Gray" },
+                { "src": "assets/artists_real/milenkorn/tattoo_4.jpg", "title": "Ilustración Oscura en Brazo", "style": "Blackwork" },
+                { "src": "assets/artists_real/milenkorn/tattoo_5.jpg", "title": "Composición Blackwork Pierna", "style": "Blackwork" },
+                { "src": "assets/artists_real/milenkorn/tattoo_6.jpg", "title": "Sombreado Black and Gray", "style": "Black and Gray" },
+                { "src": "assets/artists_real/milenkorn/tattoo_7.jpg", "title": "Diseño de Personaje en Tinta", "style": "Blackwork" },
+                { "src": "assets/artists_real/milenkorn/tattoo_8.jpg", "title": "Pieza Completa Blackwork", "style": "Blackwork" }
+            ]
+        },
+        "neblink": {
+            "name": "Neblink Tattoo",
+            "location": "Temuco",
+            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line y Realismo.",
+            "instagram": "https://www.instagram.com/nebl.ink/",
+            "handle": "@nebl.ink",
+            "avatar": TINTA_CONECTADA_BRAND_LOGO,
+            "coords": [-38.7380, -72.5940],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Black and Gray", "Fine Line", "Realismo"],
+            "inks": "Dynamic, Solid Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "",
+            "portfolio": []
+        },
+        "anima": {
+            "name": "Ánima Artist",
+            "location": "Angol",
+            "bio": "Tatuador profesional en Angol, La Araucanía. Especialista en Blackwork, Fine Line y Ornamental.",
+            "instagram": "https://www.instagram.com/anima.artist/",
+            "handle": "@anima.artist",
+            "avatar": "assets/artists_real/anima/avatar.jpg",
+            "coords": [-37.7975, -72.7153],
+            "experience": "Más de 5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Fine Line", "Ornamental"],
+            "inks": "Dynamic, World Famous Tattoo Ink, Intenze, Radiant",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/anima/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/anima/tattoo_1.jpg", "title": "Composición Floral y Ornamental", "style": "Ornamental" },
+                { "src": "assets/artists_real/anima/tattoo_2.jpg", "title": "Ornamental en Antebrazo", "style": "Ornamental" },
+                { "src": "assets/artists_real/anima/tattoo_3.jpg", "title": "Fine Line y Textura Mística", "style": "Fine Line" },
+                { "src": "assets/artists_real/anima/tattoo_4.jpg", "title": "Patrón Ornamental Pecho", "style": "Ornamental" },
+                { "src": "assets/artists_real/anima/tattoo_5.jpg", "title": "Blackwork Botánico Delicado", "style": "Blackwork" },
+                { "src": "assets/artists_real/anima/tattoo_6.jpg", "title": "Diseño Ornamental Espalda", "style": "Ornamental" },
+                { "src": "assets/artists_real/anima/tattoo_7.jpg", "title": "Líneas Florales y Acentos", "style": "Fine Line" },
+                { "src": "assets/artists_real/anima/tattoo_8.jpg", "title": "Composición Artística Pierna", "style": "Blackwork" }
+            ]
+        },
+        "balentina": {
+            "name": "balentina.ttt",
+            "location": "Temuco",
+            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Blackwork y Puntillismo.",
+            "instagram": "https://www.instagram.com/balentina.ttt/",
+            "handle": "@balentina.ttt",
+            "avatar": "assets/artists_real/balentina/avatar.jpg",
+            "coords": [-38.7456, -72.6034],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Puntillismo"],
+            "inks": "Dynamic",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/balentina/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/balentina/tattoo_1.jpg", "title": "Diseño de Autor en Puntillismo", "style": "Puntillismo" },
+                { "src": "assets/artists_real/balentina/tattoo_2.jpg", "title": "Blackwork Textura y Sombras", "style": "Blackwork" },
+                { "src": "assets/artists_real/balentina/tattoo_3.jpg", "title": "Puntillismo Botánico Detallado", "style": "Puntillismo" },
+                { "src": "assets/artists_real/balentina/tattoo_4.jpg", "title": "Ilustración en Blackwork", "style": "Blackwork" },
+                { "src": "assets/artists_real/balentina/tattoo_5.jpg", "title": "Pieza Floral con Puntillismo", "style": "Puntillismo" },
+                { "src": "assets/artists_real/balentina/tattoo_6.jpg", "title": "Composición en Brazo", "style": "Blackwork" },
+                { "src": "assets/artists_real/balentina/tattoo_7.jpg", "title": "Puntillismo Ornamental", "style": "Puntillismo" },
+                { "src": "assets/artists_real/balentina/tattoo_8.jpg", "title": "Diseño Personalizado en Pierna", "style": "Blackwork" }
+            ]
+        },
+        "dulcedelimon": {
+            "name": "Dulce de Limón Ink",
+            "location": "Villarrica",
+            "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
+            "instagram": "https://www.instagram.com/dulcedelimon.ink/",
+            "handle": "@dulcedelimon.ink",
+            "avatar": "assets/artists_real/dulcedelimon/avatar.jpg",
+            "coords": [-39.2733, -72.2312],
+            "experience": "1–3 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Fine Line", "Puntillismo"],
+            "inks": "Dynamic",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/dulcedelimon/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/dulcedelimon/tattoo_1.jpg", "title": "Zapatito Outdoor Estilizado", "style": "Blackwork" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_2.jpg", "title": "Ave Fénix en Blackwork Fino", "style": "Blackwork" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_3.jpg", "title": "Puntillismo y Trazos Suaves", "style": "Puntillismo" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_4.jpg", "title": "Mini Ilustración en Tinta", "style": "Fine Line" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_5.jpg", "title": "Diseño Botánico Fine Line", "style": "Fine Line" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_6.jpg", "title": "Blackwork con Toque Divertido", "style": "Blackwork" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_7.jpg", "title": "Composición Fina en Tobillo", "style": "Fine Line" },
+                { "src": "assets/artists_real/dulcedelimon/tattoo_8.jpg", "title": "Ilustración Dulce de Limón", "style": "Fine Line" }
+            ]
+        },
+        "pandetinta": {
+            "name": "Pan de Tinta",
+            "location": "Temuco",
+            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
+            "instagram": "https://www.instagram.com/pan.detinta/",
+            "handle": "@pan.detinta",
+            "avatar": "assets/artists_real/pandetinta/avatar.jpg",
+            "coords": [-38.7366, -72.5914],
+            "experience": "Más de 5 años",
+            "price": "Intermedio",
+            "styles": ["Blackwork", "Fine Line", "Puntillismo"],
+            "inks": "Dynamic, World Famous Tattoo Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/pandetinta/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/pandetinta/tattoo_1.jpg", "title": "Ilustración Gráfica y Tinta Negra", "style": "Blackwork" },
+                { "src": "assets/artists_real/pandetinta/tattoo_2.jpg", "title": "Blackwork Conceptual Brazo", "style": "Blackwork" },
+                { "src": "assets/artists_real/pandetinta/tattoo_3.jpg", "title": "Puntillismo Texturizado", "style": "Puntillismo" },
+                { "src": "assets/artists_real/pandetinta/tattoo_4.jpg", "title": "Diseño Artístico de Autor", "style": "Fine Line" },
+                { "src": "assets/artists_real/pandetinta/tattoo_5.jpg", "title": "Pieza en Sombra y Contraste", "style": "Blackwork" },
+                { "src": "assets/artists_real/pandetinta/tattoo_6.jpg", "title": "Líneas Fuertes y Fondo Negro", "style": "Blackwork" },
+                { "src": "assets/artists_real/pandetinta/tattoo_7.jpg", "title": "Composición Gráfica en Pierna", "style": "Blackwork" },
+                { "src": "assets/artists_real/pandetinta/tattoo_8.jpg", "title": "Arte Original Pan de Tinta", "style": "Fine Line" }
+            ]
+        },
+        "denussa": {
+            "name": "Denussa Tatua",
+            "location": "Temuco",
+            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
+            "instagram": "https://www.instagram.com/denussatatua/",
+            "handle": "@denussatatua",
+            "avatar": "assets/artists_real/denussa/avatar.jpg",
+            "coords": [-38.7446, -72.5964],
+            "experience": "3–5 años",
+            "price": "Intermedio",
+            "styles": ["Fine Line", "Puntillismo"],
+            "inks": "Dynamic, Panthera Black Ink",
+            "needles": "Kwadron, Cheyenne",
+            "coverImage": "assets/artists_real/denussa/tattoo_1.jpg",
+            "portfolio": [
+                { "src": "assets/artists_real/denussa/tattoo_1.jpg", "title": "Fine Line Floral y Sutil", "style": "Fine Line" },
+                { "src": "assets/artists_real/denussa/tattoo_2.jpg", "title": "Puntillismo Botánico en Brazo", "style": "Puntillismo" },
+                { "src": "assets/artists_real/denussa/tattoo_3.jpg", "title": "Trazos Finos en Clavícula", "style": "Fine Line" },
+                { "src": "assets/artists_real/denussa/tattoo_4.jpg", "title": "Composición Delicada de Autor", "style": "Fine Line" },
+                { "src": "assets/artists_real/denussa/tattoo_5.jpg", "title": "Ilustración Floral Lineal", "style": "Fine Line" },
+                { "src": "assets/artists_real/denussa/tattoo_6.jpg", "title": "Puntillismo Suave en Mano", "style": "Puntillismo" },
+                { "src": "assets/artists_real/denussa/tattoo_7.jpg", "title": "Detalle Botánico Pierna", "style": "Fine Line" },
+                { "src": "assets/artists_real/denussa/tattoo_8.jpg", "title": "Pieza Minimalista en Espalda", "style": "Fine Line" }
+            ]
         }
     };
+    window.artistsDetails = artistsDetails;
+
+    let artistCoordinates = {
+        "pipo": [
+                -39.2045,
+                -73.0538
+        ],
+        "connaink": [
+                -38.7396,
+                -72.5984
+        ],
+        "nowss": [
+                -38.7346,
+                -72.6024
+        ],
+        "tatto_zimple": [
+                -38.7667,
+                -72.6
+        ],
+        "majesus": [
+                -39.2783,
+                -72.2272
+        ],
+        "sasori": [
+                -38.7436,
+                -72.5924
+        ],
+        "milenkorn": [
+                -39.2736,
+                -71.9744
+        ],
+        "neblink": [
+                -38.7326,
+                -72.5934
+        ],
+        "anima": [
+                -37.7975,
+                -72.7153
+        ],
+        "balentina": [
+                -38.7456,
+                -72.6034
+        ],
+        "dulcedelimon": [
+                -39.2733,
+                -72.2312
+        ],
+        "pandetinta": [
+                -38.7366,
+                -72.5914
+        ],
+        "denussa": [
+                -38.7446,
+                -72.5964
+        ]
+};
+    window.artistCoordinates = artistCoordinates;
+
+    
 
     
 
@@ -281,6 +702,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function executeSwitchView(targetViewId) {
+        let activateSabiasQueTab = false;
+        if (targetViewId === 'sabias-que-view') {
+            targetViewId = 'history-view';
+            activateSabiasQueTab = true;
+        }
+
         state.currentView = targetViewId;
         
         const appContainer = document.getElementById('app-container');
@@ -318,6 +745,19 @@ document.addEventListener('DOMContentLoaded', () => {
             targetPanel.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Handle unified landing double tabs activation
+        if (targetViewId === 'history-view') {
+            if (activateSabiasQueTab) {
+                const sabiasBtn = document.getElementById('btn-tab-sabias-que');
+                if (sabiasBtn) sabiasBtn.click();
+            } else {
+                const historiaBtn = document.getElementById('btn-tab-historia');
+                if (historiaBtn && !document.getElementById('panel-sabias-que').classList.contains('active')) {
+                    historiaBtn.click();
+                }
+            }
+        }
         
         // Sync header nav-links
         navLinks.forEach(link => {
@@ -334,12 +774,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (targetViewId === 'home-view') {
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-home').forEach(item => item.classList.add('active'));
-        } else if (targetViewId === 'sabias-que-view') {
-            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-sabias-que').forEach(item => item.classList.add('active'));
         } else if (targetViewId === 'history-view') {
             document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-historia').forEach(item => item.classList.add('active'));
-        } else if (targetViewId === 'eventos-view') {
-            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-eventos').forEach(item => item.classList.add('active'));
         }
         
         // If switching to home view, refresh map rendering and ensure data is synced
@@ -420,6 +856,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLandingEnter.addEventListener('click', () => {
             switchView('home-view');
             loadSupabaseData();
+            setTimeout(() => {
+                openUpcomingEventsModal();
+            }, 350);
         });
     }
     const btnLandingArtist = document.getElementById('btn-landing-artist');
@@ -504,8 +943,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const home = menu.querySelector('.btn-sidebar-home');
         if (home) {
             home.addEventListener('click', () => {
-                state.activeFilters.onlyFavorites = false;
-                document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => btn.classList.remove('active'));
                 switchView('home-view');
                 applyFilters();
             });
@@ -529,41 +966,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (worldTabBtn) worldTabBtn.click();
             });
         }
-
-        const eventos = menu.querySelector('.btn-sidebar-eventos');
-        if (eventos) {
-            eventos.addEventListener('click', () => {
-                switchView('eventos-view');
-            });
-        }
-
-        const guardados = menu.querySelector('.btn-sidebar-guardados');
-        if (guardados) {
-            guardados.addEventListener('click', () => {
-                state.activeFilters.onlyFavorites = !state.activeFilters.onlyFavorites;
-                document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => {
-                    if (state.activeFilters.onlyFavorites) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-                if (state.activeFilters.onlyFavorites) {
-                    showToast('Filtrando por favoritos');
-                } else {
-                    showToast('Mostrando todos los artistas');
-                }
-                applyFilters();
-            });
-        }
     });
 
-    // Trivia balloon "Ver más" link click
+    // Trivia bubble "Explorar historia" link click (Punto 7)
+    const btnBubbleExploreTrivia = document.getElementById('btn-bubble-explore-trivia');
+    if (btnBubbleExploreTrivia) {
+        btnBubbleExploreTrivia.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('sabias-que-view');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
     const btnTriviaVerMas = document.getElementById('btn-home-trivia-ver-mas');
     if (btnTriviaVerMas) {
         btnTriviaVerMas.addEventListener('click', (e) => {
             e.preventDefault();
             switchView('sabias-que-view');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -607,6 +1026,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    // Trivia interactive circular bubble dynamic cycle (Punto 7)
+    const SABIAS_QUE_CIRCULAR_SUMMARIES = [
+        "La palabra 'tatuaje' viene del samoano 'tatau': 'marcar o golpear dos veces'.",
+        "Ötzi (3300 a.C.) tenía 61 tatuajes que coinciden con puntos de acupuntura medicinal.",
+        "Las tintas modernas son 100% veganas, libres de carbón de hueso o gelatina animal.",
+        "Los glóbulos blancos atrapan la tinta en la dermis y la fijan de por vida en la piel.",
+        "En Arica (Chile) se halló el tatuaje más antiguo de América: un bigote de 2500 a.C.",
+        "En 1891 se patentó la máquina eléctrica adaptando una pluma de Thomas Edison."
+    ];
+
+    let currentTriviaIndex = 1; // Start with Ötzi
+    const btnCycleTrivia = document.getElementById('btn-cycle-trivia');
+    const bubbleTriviaText = document.getElementById('bubble-trivia-text');
+
+    function updateTriviaBubble(index, isAnimated = true) {
+        const snippet = SABIAS_QUE_CIRCULAR_SUMMARIES[index];
+        if (!snippet || !bubbleTriviaText) return;
+
+        if (isAnimated) {
+            bubbleTriviaText.classList.add('anim-fade');
+            setTimeout(() => {
+                bubbleTriviaText.textContent = snippet;
+                bubbleTriviaText.classList.remove('anim-fade');
+            }, 160);
+        } else {
+            bubbleTriviaText.textContent = snippet;
+        }
+    }
+
+    if (btnCycleTrivia) {
+        btnCycleTrivia.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentTriviaIndex = (currentTriviaIndex + 1) % SABIAS_QUE_CIRCULAR_SUMMARIES.length;
+            updateTriviaBubble(currentTriviaIndex, true);
+        });
+    }
+
     document.querySelectorAll('.editorial-slide-card').forEach(card => {
         card.addEventListener('click', () => {
             const index = parseInt(card.getAttribute('data-index'));
@@ -645,13 +1101,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideContainer && btnSlidePrev && btnSlideNext) {
         btnSlidePrev.addEventListener('click', () => {
-            // Scroll left by exactly one card (300px) + gap (20px) = 320px
-            slideContainer.scrollBy({ left: -320, behavior: 'smooth' });
+            // Scroll left by card (320px) + gap (20px) = 340px
+            slideContainer.scrollBy({ left: -340, behavior: 'smooth' });
         });
 
         btnSlideNext.addEventListener('click', () => {
-            // Scroll right by exactly one card (300px) + gap (20px) = 320px
-            slideContainer.scrollBy({ left: 320, behavior: 'smooth' });
+            // Scroll right by card (320px) + gap (20px) = 340px
+            slideContainer.scrollBy({ left: 340, behavior: 'smooth' });
         });
     }
 
@@ -664,18 +1120,528 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================================================
 
-    // Style pills row handlers
-    const stylePills = document.querySelectorAll('.style-pill');
-    stylePills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            stylePills.forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            
-            const selectedStyle = pill.getAttribute('data-style');
-            state.activeFilters.category = selectedStyle;
+    // ==========================================================================
+    // 5. SELECTOR DE 21 ESTILOS, MODAL MULTISELECCIÓN & GUÍA EDUCATIVA (PUNTO 3)
+    // ==========================================================================
+
+    const ESTILOS_CATALOGO = [
+        {
+            id: 'fine-line',
+            name: 'Fine Line',
+            subtitle: '(Línea fina)',
+            meaning: 'Técnica que utiliza trazos extremadamente delgados, sutiles y precisos. Se caracteriza por su ligereza visual, pulcritud geométrica y detalles diminutos sin bordes gruesos.',
+            application: 'Se aplica principalmente con agujas de una sola punta (1RL o 3RL) calibradas a baja penetración dérmica. Exige pulso milimétrico del artista y es ideal para muñecas, clavículas, antebrazos y costillas.',
+            artists: ['Studio tatto pipo (@pipo.tattooo)']
+        },
+        {
+            id: 'puntillismo',
+            name: 'Puntillismo',
+            subtitle: '(Dotwork)',
+            meaning: 'Estilo óptico que construye volúmenes, sombras profundas y figuras completas exclusivamente mediante miles de pequeños puntos de tinta agrupados con diferente densidad.',
+            application: 'El artista varía la presión y separación entre impactos de la aguja para generar degradados tridimensionales limpios sin arrastre continuo. Provoca menor trauma en la piel y excelente curación.',
+            artists: ['Studio tatto pipo (@pipo.tattooo)', 'Tattoo Pucón (@tattoopucon)']
+        },
+        {
+            id: 'blackwork',
+            name: 'Blackwork',
+            subtitle: '(Tinta negra)',
+            meaning: 'Enfoque audaz basado exclusivamente en tinta negra pura: bloques sólidos y densos, alto contraste visual, texturas gráficas y ausencia total de colores o diluciones intermedias.',
+            application: 'Emplea agujas de gran calibre (Magnum) con saturación intensa y homogénea en dermis profunda. Perfecto para siluetas contundentes, mangas completas y tapado de tatuajes antiguos (cover-ups).',
+            artists: ['Studio tatto pipo (@pipo.tattooo)', 'Puerto Tinta (@puertotinta)']
+        },
+        {
+            id: 'realismo',
+            name: 'Realismo',
+            subtitle: '(Fotográfico)',
+            meaning: 'Representación hiperfiel de personas, animales, esculturas o paisajes, emulando la textura, profundidad de campo, brillos y nitidez propios de una fotografía analógica de alta definición.',
+            application: 'Construcción minuciosa capa por capa sin líneas de contorno rígidas, valiéndose del modelado de luz, sombra y contraste tonal. Requiere sesiones prolongadas y máxima precisión de degradado.',
+            artists: ['Tattoo Pucón (@tattoopucon)']
+        },
+        {
+            id: 'black-and-gray',
+            name: 'Black and Gray',
+            subtitle: '(Negro y gris)',
+            meaning: 'Técnica legendaria que utiliza diluciones graduales de tinta negra pura con agua destilada (greywash) para lograr una transición sedosa de sombras, desde el gris humo hasta el negro azabache.',
+            application: 'El tatuador utiliza copas dosificadas con diferentes porcentajes de dilución (20%, 40%, 60%, 80%) trabajando de tonos claros a oscuros. Reconocido por su extraordinaria durabilidad a través de las décadas.',
+            artists: ['Tattoo Pucón (@tattoopucon)']
+        },
+        {
+            id: 'lettering',
+            name: 'Lettering',
+            subtitle: '(Letras & Caligrafía)',
+            meaning: 'Diseño artístico de tipografías originales, caligrafía gótica, cursiva chicana, inscripciones latinas y frases que transmiten mensajes con una fuerte identidad visual.',
+            application: 'Se diseña adaptando las curvas y ligaduras a los arcos musculares y zonas de flexión (pecho, antebrazos, cuello). Se modula el grosor de trazo mediante alternancia de agujas finas y gruesas.',
+            artists: ['Wentruart (@wentruart)']
+        },
+        {
+            id: 'neotribal',
+            name: 'Neotribal',
+            subtitle: '(Tribal contemporáneo)',
+            meaning: 'Evolución contemporánea del arte tribal que sintetiza líneas cinéticas fluidas, espinas dinámicas, curvas orgánicas y formas afiladas inspiradas en la biomecánica y el movimiento corporal.',
+            application: 'Diseñado frecuentemente a mano alzada (freehand) directamente con plumones sobre la piel para acompañar el ritmo del cuerpo, combinando contornos nítidos con rellenos de negro puro.',
+            artists: ['Wentruart (@wentruart)']
+        },
+        {
+            id: 'cybersigilism',
+            name: 'Cybersigilism',
+            subtitle: '(Ciber-sigilismo digital)',
+            meaning: 'Tendencia de vanguardia digital nacida en la cultura Y2K, que entrecruza símbolos místicos, sigilos esotéricos, espinas metálicas y circuitos informáticos estilizados.',
+            application: 'Líneas microfinas ultra nítidas con puntas puntiagudas que parecen flotar sobre la piel. Se ubica típicamente en columna vertebral, esternón, hombros y manos.',
+            artists: []
+        },
+        {
+            id: 'dark-ornamental',
+            name: 'Dark ornamental',
+            subtitle: '(Ornamental oscuro)',
+            meaning: 'Fusión de elementos decorativos barrocos, encajes victorianos, tracerías góticas y patrones geométricos con un aura sombría, enigmática y de alto impacto dramático.',
+            application: 'Utiliza contrastes contundentes entre piel negativa clara y fondos negros macizos con filigranas detalladas. Muy cotizado para pecheras, cuellos, espaldas completas y mangas.',
+            artists: []
+        },
+        {
+            id: 'ornamental',
+            name: 'Ornamental',
+            subtitle: '(Mandala & Geometría sagrada)',
+            meaning: 'Inspirado en la orfebrería, el arte textil ceremonial, mandalas sagrados y la joyería corporal, creado para armonizar y embellecer las formas naturales del cuerpo humano.',
+            application: 'Exige simetría matemática rigurosa y calado impecable de espacios en blanco. A menudo se combina con puntillismo de arrastre para dar un acabado sedoso y tridimensional.',
+            artists: ['Puerto Tinta (@puertotinta)']
+        },
+        {
+            id: 'old-school',
+            name: 'Old School',
+            subtitle: '(Tradicional americano)',
+            meaning: 'El estilo icónico del tatuaje marítimo occidental de mediados del siglo XX: bordes negros audaces, motivos atemporales (golondrinas, dagas, rosas, barcos) y paleta de colores primarios sólidos.',
+            application: 'Trazado con agujas gruesas (Round Liner 9-14) que garantizan legibilidad eterna. Los sombreados en abanico (whip shading) permiten que el tatuaje resista décadas bajo el sol con gran nitidez.',
+            artists: ['Wentruart (@wentruart)']
+        },
+        {
+            id: 'acuarela',
+            name: 'Acuarela',
+            subtitle: '(Watercolor)',
+            meaning: 'Recrea en la piel la frescura pictórica de las acuarelas sobre papel: manchas diluidas, salpicaduras aleatorias, veladuras de color traslúcidas y degradados pictóricos sin contorno estricto.',
+            application: 'Pigmentos de color altamente saturados combinados con capas diluidas de solución mezcladora. Frecuentemente respaldado por una estructura de líneas finas negras para otorgar durabilidad en el tiempo.',
+            artists: ['Tattoo Pucón (@tattoopucon)']
+        },
+        {
+            id: 'new-school',
+            name: 'New School',
+            subtitle: '(Nueva escuela)',
+            meaning: 'Estilo enérgico y vibrante originado en los años 90 e inspirado en los dibujos animados, el grafiti callejero y los cómics: dimensiones caricaturescas, ángulos exagerados y dinamismo extremo.',
+            application: 'Líneas marcadas de grosor variable con sombreados multidireccionales en colores flúor y contrastes complementarios agresivos para un efecto 3D vibrante.',
+            artists: []
+        },
+        {
+            id: 'tribales',
+            name: 'Tribales',
+            subtitle: '(Polinesio, Maorí, Borneo)',
+            meaning: 'Lenguaje visual ancestral que conecta a la persona con su linaje, tierra y espíritu guardián. Cada motivo geométrico, espiral y diente de tiburón tiene un significado jerárquico y protector.',
+            application: 'Bloques negros de alta densidad y patrones repetitivos sincronizados con la musculatura esquelética (hombros, bíceps, pantorrillas) para proyectar fuerza física y espiritual.',
+            artists: []
+        },
+        {
+            id: 'kawaii',
+            name: 'Tatuaje Estilo Kawaii',
+            subtitle: '(Tierno / Pastel)',
+            meaning: 'Subcultura japonesa caracterizada por la ternura, personajes adorables, expresiones de ojos brillantes, golosinas, criaturas mágicas y un universo de dulzura reconfortante.',
+            application: 'Paletas de color en tonos pastel (rosa chicle, lila, menta, amarillo vainilla) con delineados limpios de colores o negro suave y destellos en tinta blanca acrílica.',
+            artists: []
+        },
+        {
+            id: 'fine-line-minimalista',
+            name: 'Fine Line Minimalista',
+            subtitle: '(Microtatuajes & Síntesis)',
+            meaning: 'El arte de decir más con menos: símbolos de síntesis gráfica, siluetas despojadas, coordenadas o palabras microscópicas de máxima sutileza y discreción.',
+            application: 'Agujas microscópicas (1RL) aplicadas con pasadas sumamente precisas y controladas. Son perfectos para dedos, detrás de oreja, tobillos y muñecas en sesiones cortas y de bajo dolor.',
+            artists: ['Puerto Tinta (@puertotinta)']
+        },
+        {
+            id: 'anime',
+            name: 'Anime',
+            subtitle: '(Manga & Animación japonesa)',
+            meaning: 'Homenaje al arte gráfico del cómic japonés (manga) y series de animación de culto, capturando con fidelidad los rostros, expresiones intensas, tramas y efectos de movimiento.',
+            application: 'Líneas de entintado nítidas como las de una pluma G-pen sobre papel de dibujo, sombreados con tramas de rayado (hatching) o colores planos idénticos a los fotogramas de animación cel.',
+            artists: []
+        },
+        {
+            id: 'botanica',
+            name: 'Botanica',
+            subtitle: '(Flores & Naturaleza)',
+            meaning: 'Ilustración científica y artística inspirada en el reino vegetal: flores silvestres, hojas de helecho, plantas nativas, hierbas medicinales y frutos con delicadeza orgánica.',
+            application: 'Diseños envolventes que acompañan las líneas del cuerpo con armonía natural. Utiliza texturas finas de punteado y líneas ligeras que dan la sensación de lámina botánica de herbario.',
+            artists: ['Studio tatto pipo (@pipo.tattooo)', 'Puerto Tinta (@puertotinta)']
+        },
+        {
+            id: 'japones',
+            name: 'Japones',
+            subtitle: '(Irezumi tradicional)',
+            meaning: 'Una de las tradiciones más reverenciadas del arte corporal: mitología oriental con dragones ryu, carpas koi, samuráis, máscaras hanyas y flores de cerezo sobre fondos de olas y nubes.',
+            application: 'Composiciones integrales a gran escala con sólidas líneas de contorno y fondos negros y grises (bokashi) que contrastan con los tonos vivos de los personajes míticos.',
+            artists: []
+        },
+        {
+            id: 'geometrico',
+            name: 'Geometrico',
+            subtitle: '(Patrones & Simetría)',
+            meaning: 'Exploración de la geometría sagrada, proporciones doradas, teselados ópticos y polígonos complejos creando composiciones hipnóticas de exactitud matemática.',
+            application: 'Exige una calibración absoluta del stencil sobre la anatomía para evitar deformaciones con el movimiento muscular. Combina líneas precisas con degradados en puntillismo para generar relieve.',
+            artists: ['Studio tatto pipo (@pipo.tattooo)']
+        },
+        {
+            id: 'biomecanico',
+            name: 'Biomecanico',
+            subtitle: '(Fusión orgánica & máquina)',
+            meaning: 'Ilusión óptica de piel rasgada que expone engranajes de titanio, pistones hidráulicos, cables y fibra de carbono integrados quirúrgicamente con tendones y huesos humanos.',
+            application: 'Técnicas de aerógrafo y sombreado hiperrealista con brillos en blanco metálico y negros profundos que generan un impactante efecto tridimensional de piel mecánica viva.',
+            artists: []
+        }
+    ];
+
+    // DOM Elements for Styles Modal & Filters
+    const btnOpenStylesModal = document.getElementById('btn-open-styles-modal');
+    const btnCloseStylesModal = document.getElementById('btn-close-styles-modal');
+    const btnModalCancelStyles = document.getElementById('btn-modal-cancel-styles');
+    const btnModalApplyStyles = document.getElementById('btn-modal-apply-styles');
+    const stylesModalOverlay = document.getElementById('styles-modal-overlay');
+    const stylesModalWindow = document.getElementById('styles-modal-window');
+    const stylesListColumn = document.getElementById('styles-list-column');
+    const stylesEducationalColumn = document.getElementById('styles-educational-column');
+    const stylesListGrid = document.getElementById('styles-list-grid');
+    const stylesSearchInput = document.getElementById('styles-search-input');
+    const btnClearStylesSearch = document.getElementById('btn-clear-styles-search');
+    const btnSelectAllStyles = document.getElementById('btn-select-all-styles');
+    const btnUnselectAllStyles = document.getElementById('btn-unselect-all-styles');
+    const stylesModalCountText = document.getElementById('styles-modal-count-text');
+    const stylesBadgeCount = document.getElementById('styles-badge-count');
+    const btnQuickAllStyles = document.getElementById('btn-quick-all-styles');
+    const activeFiltersChipsBar = document.getElementById('active-filters-chips-bar');
+    const activeChipsList = document.getElementById('active-chips-list');
+    const btnClearAllChips = document.getElementById('btn-clear-all-chips');
+
+    // Educational Guide elements
+    const eduTitle = document.getElementById('edu-style-title');
+    const eduSubtitle = document.getElementById('edu-style-subtitle');
+    const eduMeaning = document.getElementById('edu-style-meaning');
+    const eduApplication = document.getElementById('edu-style-application');
+    const eduFooterNote = document.querySelector('.educational-footer-note');
+
+    // Temporary selection set inside modal before clicking "Aplicar Filtros"
+    let tempSelectedStyles = new Set();
+
+    function updateEducationalPanel(style) {
+        if (!style) {
+            if (eduTitle) eduTitle.textContent = 'Explora los Estilos';
+            if (eduSubtitle) eduSubtitle.textContent = 'Selección informada';
+            if (eduMeaning) eduMeaning.textContent = 'Posiciónate sobre cualquier estilo de la lista para conocer su origen, técnica y cómo se traduce visualmente en el arte corporal.';
+            if (eduApplication) eduApplication.textContent = 'Descubre qué tipo de trazos, agujas, tintas y zonas del cuerpo se adaptan mejor a cada técnica antes de cotizar.';
+            if (eduFooterNote) {
+                eduFooterNote.innerHTML = '<i data-lucide="check-circle-2"></i> Artistas disponibles con este estilo en La Araucanía';
+                lucide.createIcons();
+            }
+            return;
+        }
+
+        if (eduTitle) eduTitle.textContent = style.name;
+        if (eduSubtitle) eduSubtitle.textContent = style.subtitle;
+        if (eduMeaning) eduMeaning.textContent = style.meaning;
+        if (eduApplication) eduApplication.textContent = style.application;
+
+        if (eduFooterNote) {
+            if (style.artists && style.artists.length > 0) {
+                eduFooterNote.innerHTML = `${INSTAGRAM_ICON_SVG} Artistas en La Araucanía: ${style.artists.join(' · ')}`;
+            } else {
+                eduFooterNote.innerHTML = `<i data-lucide="sparkles"></i> Próximamente más tatuadores con este estilo en La Araucanía`;
+            }
+            lucide.createIcons();
+        }
+    }
+
+    function updateModalCountDisplay() {
+        if (stylesModalCountText) {
+            stylesModalCountText.textContent = `${tempSelectedStyles.size} de ${ESTILOS_CATALOGO.length} seleccionados`;
+        }
+    }
+
+    function renderStylesGrid(filterQuery = '') {
+        if (!stylesListGrid) return;
+        stylesListGrid.innerHTML = '';
+        const q = filterQuery.toLowerCase().trim();
+
+        const filteredList = ESTILOS_CATALOGO.filter(item => {
+            if (!q) return true;
+            return item.name.toLowerCase().includes(q) || 
+                   item.subtitle.toLowerCase().includes(q) ||
+                   item.meaning.toLowerCase().includes(q);
+        });
+
+        if (filteredList.length === 0) {
+            stylesListGrid.innerHTML = `
+                <div style="padding: 30px 10px; text-align: center; color: #666; font-family: 'Outfit', sans-serif;">
+                    <p style="font-weight: 700; margin-bottom: 5px;">No se encontró ningún estilo que coincida con "${filterQuery}"</p>
+                    <small>Prueba buscando por palabras como "line", "negro", "color", "flores"...</small>
+                </div>
+            `;
+            return;
+        }
+
+        filteredList.forEach(style => {
+            const isSelected = tempSelectedStyles.has(style.name);
+            const card = document.createElement('div');
+            card.className = `style-row-card ${isSelected ? 'selected' : ''}`;
+            card.setAttribute('data-id', style.id);
+            card.setAttribute('data-name', style.name);
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'checkbox');
+            card.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+
+            card.innerHTML = `
+                <div class="style-row-info">
+                    <span class="style-row-title">${style.name}</span>
+                    <span class="style-row-subtitle">${style.subtitle}</span>
+                </div>
+                <div class="style-row-checkbox">
+                    <i data-lucide="check"></i>
+                </div>
+            `;
+
+            // Hover / Focus: Live educational preview
+            const onFocusHover = () => {
+                document.querySelectorAll('.style-row-card').forEach(c => c.classList.remove('highlighted'));
+                card.classList.add('highlighted');
+                updateEducationalPanel(style);
+            };
+
+            card.addEventListener('mouseenter', onFocusHover);
+            card.addEventListener('focus', onFocusHover);
+
+            // Click: Toggle selection
+            card.addEventListener('click', () => {
+                if (tempSelectedStyles.has(style.name)) {
+                    tempSelectedStyles.delete(style.name);
+                    card.classList.remove('selected');
+                    card.setAttribute('aria-checked', 'false');
+                } else {
+                    tempSelectedStyles.add(style.name);
+                    card.classList.add('selected');
+                    card.setAttribute('aria-checked', 'true');
+                }
+                updateModalCountDisplay();
+                updateEducationalPanel(style);
+            });
+
+            // Keyboard Space / Enter support
+            card.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+
+            stylesListGrid.appendChild(card);
+        });
+
+        lucide.createIcons();
+    }
+
+    function openStylesModal() {
+        if (!stylesModalOverlay) return;
+        tempSelectedStyles = new Set(state.activeFilters.styles);
+        if (stylesSearchInput) stylesSearchInput.value = '';
+        if (btnClearStylesSearch) btnClearStylesSearch.style.display = 'none';
+        
+        renderStylesGrid();
+        updateModalCountDisplay();
+
+        // Highlight first selected or first in catalog
+        const firstSelected = ESTILOS_CATALOGO.find(s => tempSelectedStyles.has(s.name));
+        updateEducationalPanel(firstSelected || ESTILOS_CATALOGO[0]);
+
+        stylesModalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (stylesSearchInput) setTimeout(() => stylesSearchInput.focus(), 150);
+    }
+
+    function closeStylesModal() {
+        if (!stylesModalOverlay) return;
+        stylesModalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function applyStylesModalSelection() {
+        state.activeFilters.styles = new Set(tempSelectedStyles);
+        closeStylesModal();
+        updateStylesTriggerBadge();
+        renderActiveChips();
+        applyFilters();
+
+        const count = state.activeFilters.styles.size;
+        showToast(count > 0 ? `${count} estilo(s) seleccionado(s)` : 'Mostrando todos los estilos');
+    }
+
+    function updateStylesTriggerBadge() {
+        const count = state.activeFilters.styles.size;
+        if (stylesBadgeCount) stylesBadgeCount.textContent = `${count}/${ESTILOS_CATALOGO.length}`;
+        if (btnQuickAllStyles) {
+            if (count === 0) {
+                btnQuickAllStyles.classList.add('active');
+            } else {
+                btnQuickAllStyles.classList.remove('active');
+            }
+        }
+    }
+
+    function renderActiveChips() {
+        if (!activeChipsList || !activeFiltersChipsBar) return;
+        activeChipsList.innerHTML = '';
+
+        let hasAnyFilter = false;
+
+        // 1. Style chips
+        state.activeFilters.styles.forEach(styleName => {
+            hasAnyFilter = true;
+            const chip = document.createElement('div');
+            chip.className = 'active-filter-chip chip-style';
+            chip.innerHTML = `
+                <span>${styleName}</span>
+                <button type="button" class="active-filter-chip-remove" aria-label="Quitar filtro ${styleName}" data-remove-style="${styleName}">
+                    <i data-lucide="x"></i>
+                </button>
+            `;
+            activeChipsList.appendChild(chip);
+        });
+
+        // 2. Location chip (if not 'Todos')
+        if (state.activeFilters.locationName && state.activeFilters.locationName !== 'Todos') {
+            hasAnyFilter = true;
+            const locChip = document.createElement('div');
+            locChip.className = 'active-filter-chip chip-location';
+            locChip.innerHTML = `
+                <span><i data-lucide="map-pin"></i> ${state.activeFilters.locationName}</span>
+                <button type="button" class="active-filter-chip-remove" aria-label="Quitar filtro de ubicación" data-remove-location="true">
+                    <i data-lucide="x"></i>
+                </button>
+            `;
+            activeChipsList.appendChild(locChip);
+        }
+
+        if (hasAnyFilter) {
+            activeFiltersChipsBar.style.display = 'flex';
+        } else {
+            activeFiltersChipsBar.style.display = 'none';
+        }
+
+        // Attach event listeners to chips remove buttons
+        activeChipsList.querySelectorAll('[data-remove-style]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const st = btn.getAttribute('data-remove-style');
+                state.activeFilters.styles.delete(st);
+                updateStylesTriggerBadge();
+                renderActiveChips();
+                applyFilters();
+            });
+        });
+
+        activeChipsList.querySelectorAll('[data-remove-location]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                state.activeFilters.locationName = 'Todos';
+                state.activeFilters.userCoords = COMUNAS_COORDS['Todos'];
+                const locSelect = document.getElementById('filter-location-select');
+                if (locSelect) locSelect.value = 'Todos';
+                renderActiveChips();
+                applyFilters();
+            });
+        });
+
+        lucide.createIcons();
+    }
+
+    // Bind Modal Open & Close Listeners
+    if (btnOpenStylesModal) btnOpenStylesModal.addEventListener('click', openStylesModal);
+    if (btnCloseStylesModal) btnCloseStylesModal.addEventListener('click', closeStylesModal);
+    if (btnModalCancelStyles) btnModalCancelStyles.addEventListener('click', closeStylesModal);
+    if (btnModalApplyStyles) btnModalApplyStyles.addEventListener('click', applyStylesModalSelection);
+
+    if (stylesModalOverlay) {
+        stylesModalOverlay.addEventListener('click', (e) => {
+            if (e.target === stylesModalOverlay) closeStylesModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && stylesModalOverlay && stylesModalOverlay.style.display !== 'none') {
+            closeStylesModal();
+        }
+    });
+
+    // Modal Search Bar
+    if (stylesSearchInput) {
+        stylesSearchInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (btnClearStylesSearch) {
+                btnClearStylesSearch.style.display = val.length > 0 ? 'flex' : 'none';
+            }
+            renderStylesGrid(val);
+        });
+    }
+
+    if (btnClearStylesSearch && stylesSearchInput) {
+        btnClearStylesSearch.addEventListener('click', () => {
+            stylesSearchInput.value = '';
+            btnClearStylesSearch.style.display = 'none';
+            renderStylesGrid('');
+            stylesSearchInput.focus();
+        });
+    }
+
+    // Modal Quick Select All / Unselect All
+    if (btnSelectAllStyles) {
+        btnSelectAllStyles.addEventListener('click', () => {
+            ESTILOS_CATALOGO.forEach(s => tempSelectedStyles.add(s.name));
+            renderStylesGrid(stylesSearchInput ? stylesSearchInput.value : '');
+            updateModalCountDisplay();
+        });
+    }
+
+    if (btnUnselectAllStyles) {
+        btnUnselectAllStyles.addEventListener('click', () => {
+            tempSelectedStyles.clear();
+            renderStylesGrid(stylesSearchInput ? stylesSearchInput.value : '');
+            updateModalCountDisplay();
+        });
+    }
+
+    // Quick "Todos" Styles Button
+    if (btnQuickAllStyles) {
+        btnQuickAllStyles.addEventListener('click', () => {
+            state.activeFilters.styles.clear();
+            updateStylesTriggerBadge();
+            renderActiveChips();
             applyFilters();
         });
-    });
+    }
+
+    // Clear All Chips Button
+    if (btnClearAllChips) {
+        btnClearAllChips.addEventListener('click', () => {
+            clearAllFilters();
+        });
+    }
+
+    // Direct wheel scroll acceleration for PC on styles and educational columns
+    if (stylesListColumn) {
+        stylesListColumn.addEventListener('wheel', (e) => {
+            if (stylesListColumn.scrollHeight > stylesListColumn.clientHeight) {
+                stylesListColumn.scrollTop += e.deltaY;
+            }
+        }, { passive: true });
+    }
+    if (stylesEducationalColumn) {
+        stylesEducationalColumn.addEventListener('wheel', (e) => {
+            if (stylesEducationalColumn.scrollHeight > stylesEducationalColumn.clientHeight) {
+                stylesEducationalColumn.scrollTop += e.deltaY;
+            }
+        }, { passive: true });
+    }
 
     // Location and Radius Select Dropdowns
     const locationSelect = document.getElementById('filter-location-select');
@@ -686,6 +1652,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const locVal = locationSelect.value;
             state.activeFilters.userCoords = COMUNAS_COORDS[locVal] || COMUNAS_COORDS['Todos'];
             state.activeFilters.locationName = locVal;
+            renderActiveChips();
             applyFilters();
         });
     }
@@ -730,19 +1697,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         // Add marker for user on interactive map
                         if (mapInstance) {
+                            const userLngLat = [lng, lat];
                             if (window.userLocationMarker) {
-                                window.userLocationMarker.setLatLng([lat, lng]);
-                            } else {
-                                const userIcon = L.divIcon({
-                                    html: '<div style="background-color: #ff4a5a; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255, 74, 90, 0.6);"></div>',
-                                    className: 'user-map-pin',
-                                    iconSize: [14, 14],
-                                    iconAnchor: [7, 7]
-                                });
-                                window.userLocationMarker = L.marker([lat, lng], { icon: userIcon }).addTo(mapInstance);
-                                window.userLocationMarker.bindPopup("<strong>Tu ubicación actual</strong>");
+                                if (window.userLocationMarker.setLngLat) {
+                                    window.userLocationMarker.setLngLat(userLngLat);
+                                }
+                            } else if (typeof maplibregl !== 'undefined') {
+                                const userEl = document.createElement('div');
+                                userEl.className = 'user-map-pin';
+                                userEl.innerHTML = '<div style="background-color: #ff4a5a; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255, 74, 90, 0.8);"></div>';
+                                const userPopup = new maplibregl.Popup({ offset: 10 }).setHTML("<strong>Tu ubicación actual</strong>");
+                                window.userLocationMarker = new maplibregl.Marker({ element: userEl })
+                                    .setLngLat(userLngLat)
+                                    .setPopup(userPopup)
+                                    .addTo(mapInstance);
                             }
-                            mapInstance.setView([lat, lng], 10);
+                            if (mapInstance.flyTo) {
+                                mapInstance.flyTo({ center: userLngLat, zoom: 11 });
+                            }
                         }
                         
                         showToast("Permiso de ubicación concedido");
@@ -819,12 +1791,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Artist GPS Coordinates (La Araucanía region)
-    const artistCoordinates = {
-        'pipo': [-39.2045, -73.0538], // Teodoro Schmidt center
-        'lara': [-38.7500, -72.6300], // Padre Las Casas
-        'kame': [-38.7200, -72.5800], // Temuco
-        'sombra': [-39.2783, -72.2272]  // Villarrica
-    };
+    
 
     // Haversine geodesic distance helper (in km)
     function getHaversineDistance(coords1, coords2) {
@@ -848,8 +1815,8 @@ document.addEventListener('DOMContentLoaded', () => {
         state.activeFilters.userCoords = null;
         state.activeFilters.distance = 150;
         state.activeFilters.locationName = 'Todos';
-        state.activeFilters.onlyFavorites = false;
         state.activeFilters.category = 'Todos';
+        state.activeFilters.styles.clear();
         
         if (inputDistance) inputDistance.value = 100;
         if (valDistance) valDistance.textContent = '100 km';
@@ -861,16 +1828,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const radiusSelect = document.getElementById('filter-radius-select');
         if (radiusSelect) radiusSelect.value = '150';
 
-        const stylePills = document.querySelectorAll('.style-pill');
-        stylePills.forEach(pill => {
-            if (pill.getAttribute('data-style') === 'Todos') {
-                pill.classList.add('active');
-            } else {
-                pill.classList.remove('active');
-            }
-        });
-
-        document.querySelectorAll('.btn-sidebar-guardados').forEach(btn => btn.classList.remove('active'));
+        updateStylesTriggerBadge();
+        renderActiveChips();
 
         // Remove user marker from map
         if (window.userLocationMarker && mapInstance) {
@@ -879,7 +1838,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         if (btnStyles) btnStyles.forEach(b => b.classList.remove('active'));
-        state.activeFilters.styles.clear();
         
         if (checkAvailWeek) checkAvailWeek.checked = false;
         if (checkAvailMonth) checkAvailMonth.checked = false;
@@ -902,11 +1860,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentCards = document.querySelectorAll('.artist-card');
         
         currentCards.forEach(card => {
-            const cardLocation = card.getAttribute('data-location');
+            const cardLocation = card.getAttribute('data-location') || '';
             
-            // Read array-like style list string
-            const rawStyles = card.getAttribute('data-styles') || '';
-            const cardStyles = eval(rawStyles); // Convert string to Array
+            // Safe parse array-like style list string
+            const rawStyles = card.getAttribute('data-styles') || '[]';
+            let cardStyles = [];
+            try {
+                cardStyles = JSON.parse(rawStyles.replace(/'/g, '"'));
+            } catch (e) {
+                try {
+                    cardStyles = eval(rawStyles);
+                } catch (err) {
+                    cardStyles = [];
+                }
+            }
             
             let showCard = true;
 
@@ -920,7 +1887,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.activeFilters.locationName && state.activeFilters.locationName !== 'Todos') {
                 if (state.activeFilters.distance === 150) {
                     // Strict commune filter (default when no radius is set)
-                    if (cardLocation !== state.activeFilters.locationName) {
+                    if (cardLocation.toLowerCase() !== state.activeFilters.locationName.toLowerCase()) {
                         showCard = false;
                     }
                 } else {
@@ -937,18 +1904,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 2. Style filter
+            // 2. Style filter (Multi-selection from 21 Styles Modal)
             if (state.activeFilters.styles.size > 0) {
                 let hasMatchingStyle = false;
+                const activeLower = Array.from(state.activeFilters.styles).map(s => s.toLowerCase().trim());
                 cardStyles.forEach(s => {
-                    if (state.activeFilters.styles.has(s)) hasMatchingStyle = true;
+                    if (activeLower.includes(s.toLowerCase().trim())) {
+                        hasMatchingStyle = true;
+                    }
                 });
                 if (!hasMatchingStyle) showCard = false;
             }
 
-            // 3. Category Filter (from Horizontal Scrollbar)
-            if (state.activeFilters.category !== 'Todos') {
-                if (!cardStyles.includes(state.activeFilters.category)) {
+            // 3. Category Filter (fallback)
+            if (state.activeFilters.category && state.activeFilters.category !== 'Todos') {
+                const catLower = state.activeFilters.category.toLowerCase().trim();
+                if (!cardStyles.some(s => s.toLowerCase().trim() === catLower)) {
                     showCard = false;
                 }
             }
@@ -957,7 +1928,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchInput) {
                 const searchVal = searchInput.value.toLowerCase().trim();
                 if (searchVal !== '') {
-                    const cardName = card.querySelector('.artist-name').textContent.toLowerCase();
+                    const nameElem = card.querySelector('.artist-name');
+                    const cardName = nameElem ? nameElem.textContent.toLowerCase() : '';
                     const matchedStyle = cardStyles.some(s => s.toLowerCase().includes(searchVal));
                     const matchedLoc = cardLocation.toLowerCase().includes(searchVal);
                     if (!cardName.includes(searchVal) && !matchedStyle && !matchedLoc) {
@@ -980,14 +1952,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Handle empty state banner if no artists match current filters
+        const artistGrid = document.getElementById('artist-grid');
+        let emptyBanner = document.getElementById('artists-empty-filter-state');
+        if (visibleCount === 0) {
+            if (!emptyBanner && artistGrid) {
+                emptyBanner = document.createElement('div');
+                emptyBanner.id = 'artists-empty-filter-state';
+                emptyBanner.className = 'artists-empty-filter-state';
+                emptyBanner.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fff8f0; border: 3px solid #000; border-radius: 14px; box-shadow: 4px 4px 0 #000; margin: 15px 0;';
+                emptyBanner.innerHTML = `
+                    <div style="font-size: 2.2rem; margin-bottom: 10px;">🔍</div>
+                    <h4 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; margin-bottom: 8px; color: #000;">No se encontraron tatuadores con estos filtros</h4>
+                    <p style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #444; max-width: 480px; margin: 0 auto 18px auto;">Prueba seleccionando otros estilos o quitando comunas para ver más artistas en La Araucanía.</p>
+                    <button type="button" id="btn-reset-empty-filters" class="btn btn-primary" style="font-family: 'Outfit', sans-serif; font-weight: 800; border: 2px solid #000; box-shadow: 2px 2px 0 #000; border-radius: 8px; padding: 8px 20px;">
+                        Restablecer todos los filtros
+                    </button>
+                `;
+                artistGrid.appendChild(emptyBanner);
+                const btnReset = emptyBanner.querySelector('#btn-reset-empty-filters');
+                if (btnReset) btnReset.addEventListener('click', clearAllFilters);
+            } else if (emptyBanner) {
+                emptyBanner.style.display = 'block';
+            }
+        } else {
+            if (emptyBanner) emptyBanner.style.display = 'none';
+        }
+
         // Toggle map marker visibility based on current card visibility
         markersGroup.forEach(item => {
             const cardId = item.id;
             const matchingCard = document.querySelector(`.artist-card[data-id="${cardId}"]`);
-            if (matchingCard && matchingCard.style.display !== 'none') {
-                item.marker.addTo(mapInstance);
-            } else {
-                mapInstance.removeLayer(item.marker);
+            if (item.marker && item.marker.getElement) {
+                const el = item.marker.getElement();
+                if (el) {
+                    if (matchingCard && matchingCard.style.display !== 'none') {
+                        el.style.display = '';
+                    } else {
+                        el.style.display = 'none';
+                        if (item.popup && item.popup.isOpen && item.popup.isOpen()) {
+                            item.popup.remove();
+                        }
+                    }
+                }
             }
         });
     }
@@ -1050,24 +2057,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle artist card click to select and update Ficha card
     document.querySelectorAll('.artist-card').forEach(card => {
         card.addEventListener('click', (e) => {
-            if (e.target.closest('.btn-favorite')) {
+            const artistId = card.getAttribute('data-id');
+            const btnExplorar = e.target.closest('.btn-explorar-tag');
+            if (btnExplorar) {
+                e.stopPropagation();
+                switchView('artist-view');
+                loadArtistProfile(artistId);
                 return;
             }
-            
-            const artistId = card.getAttribute('data-id');
-            updateQuickFicha(artistId);
-            
-            // Open the slide-out quick-sheet drawer
+
+            // Open drawer and layout grid column first so map container has non-zero dimensions
             const drawer = document.getElementById('artist-quick-sheet');
             if (drawer) {
                 drawer.classList.add('active');
             }
-            
-            // Push layout grid column to accommodate the drawer
             const homeLayout = document.querySelector('.home-layout');
             if (homeLayout) {
                 homeLayout.classList.add('has-sidebar-open');
             }
+
+            updateQuickFicha(artistId);
         });
     });
 
@@ -1209,33 +2218,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // ==========================================================================
-    // 8. FAVORITES HEART TOGGLE
-    // ==========================================================================
-    const heartButtons = document.querySelectorAll('.btn-favorite');
-    heartButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Avoid triggering card navigation
-            const card = btn.closest('.artist-card');
-            const artistId = card.getAttribute('data-id');
-            const heartIcon = btn.querySelector('.icon-heart');
-            
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                state.favorites.delete(artistId);
-                showToast('Eliminado de tus favoritos');
-            } else {
-                btn.classList.add('active');
-                state.favorites.add(artistId);
-                showToast('¡Guardado en tus favoritos!');
-                
-                // Animate heart pump
-                btn.style.transform = 'scale(1.3)';
-                setTimeout(() => btn.style.transform = '', 200);
-            }
-        });
-    });
-
 
     
 
@@ -1267,18 +2249,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const avatarImg = document.getElementById('ficha-artist-avatar');
         if (avatarImg) {
             avatarImg.src = details.avatar;
-            if (details.avatarFilter) {
-                avatarImg.style.filter = details.avatarFilter;
-            } else {
-                avatarImg.style.filter = '';
-            }
+            avatarImg.alt = details.name;
+            avatarImg.style.filter = '';
         }
 
         const nameEl = document.getElementById('ficha-artist-name');
         if (nameEl) nameEl.textContent = details.name;
 
         const locEl = document.getElementById('ficha-artist-location');
-        if (locEl) locEl.innerHTML = `<i data-lucide="map-pin"></i> ${details.location}`;
+        if (locEl) locEl.innerHTML = `<i data-lucide="map-pin"></i> ${escapeHTML(details.location)}`;
 
         const bioEl = document.getElementById('ficha-artist-bio');
         if (bioEl) bioEl.textContent = details.bio;
@@ -1288,59 +2267,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const instaHandleEl = document.getElementById('ficha-artist-insta-handle');
         if (instaHandleEl) {
-            const handle = details.instagram.substring(details.instagram.lastIndexOf('/') + 1) || 'instagram';
-            instaHandleEl.innerHTML = `<i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @${escapeHTML(handle)}`;
+            const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+            instaHandleEl.innerHTML = `${INSTAGRAM_ICON_SVG} ${escapeHTML(handle)}`;
         }
 
-        // Render client reviews
-        renderFichaComments(artistId);
+        // Use authentic real portfolio items for this artist (zero IA)
+        state.portfolioItems = details.portfolio || [];
 
-        // Recreate icons
+        // Ensure MapLibre map is ready, resized and centered
+        ensureQuickSheetMap(artistId);
+
         lucide.createIcons();
+    }
 
-        // Fetch portfolio items for this artist dynamically
-        if (supabaseClient) {
-            supabaseClient
-                .from('portfolio')
-                .select('*')
-                .eq('artist_id', artistId)
-                .then(({ data: items, error }) => {
-                    if (!error && items && items.length > 0) {
-                        state.portfolioItems = items.map(item => ({
-                            src: item.image_url,
-                            title: item.title || 'Diseño',
-                            style: item.style || 'Fine Line',
-                            zone: (item.body_part || 'Brazos').toLowerCase().replace('brazos', 'brazo')
-                        }));
-                    } else {
-                        // Fallback static items
-                        state.portfolioItems = [
-                            { src: 'assets/tattoo_flower.png', title: 'Diseño Botánico', style: 'Fine Line', zone: 'brazo' },
-                            { src: 'assets/tattoo_butterfly.png', title: 'Mariposa Líneas', style: 'Fine Line', zone: 'brazo' }
-                        ];
-                    }
-                    renderFilteredProfileGallery();
-                    rebuildCarouselDOM();
-                });
-        } else {
-            renderFilteredProfileGallery();
-            rebuildCarouselDOM();
+    // Ensures MapLibre GL map is resized and focused on active artist
+    function ensureQuickSheetMap(artistId) {
+        if (typeof maplibregl === 'undefined') return;
+        const details = artistsDetails[artistId];
+        if (!details) return;
+
+        if (!mapInstance) {
+            initMap();
         }
 
-        // Update map focus and marker popup
-        if (mapInstance) {
-            // Re-align map rendering
+        const coords = details.coords || [-38.7396, -72.5984];
+        const lngLat = toLngLat(coords);
+
+        // Handle animation expansion: resize map at successive frames
+        [50, 150, 300, 450, 600].forEach(delay => {
             setTimeout(() => {
-                mapInstance.invalidateSize();
-                mapInstance.setView(details.coords, 11);
-                
-                // Find and open popup for this marker
-                const item = markersGroup.find(m => m.id === artistId);
-                if (item && item.marker) {
-                    item.marker.openPopup();
+                if (mapInstance && typeof mapInstance.resize === 'function') {
+                    mapInstance.resize();
+                    if (delay === 150 || delay === 450) {
+                        try {
+                            mapInstance.flyTo({
+                                center: lngLat,
+                                zoom: 12.5,
+                                speed: 1.4,
+                                curve: 1.1,
+                                essential: true
+                            });
+                        } catch (e) {
+                            mapInstance.setCenter(lngLat);
+                        }
+                    }
                 }
-            }, 100);
-        }
+            }, delay);
+        });
+
+        // Open popup and highlight active pin in MapLibre
+        markersGroup.forEach(item => {
+            if (item.marker && item.marker.getElement) {
+                const el = item.marker.getElement();
+                if (item.id === artistId) {
+                    if (el) el.classList.add('active');
+                    if (item.popup && !item.popup.isOpen()) {
+                        try { item.popup.addTo(mapInstance); } catch(e) {}
+                    }
+                } else {
+                    if (el) el.classList.remove('active');
+                    if (item.popup && item.popup.isOpen()) {
+                        try { item.popup.remove(); } catch(e) {}
+                    }
+                }
+            }
+        });
     }
 
     // Ficha navigation controls
@@ -1375,107 +2366,282 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper to safely convert any coordinates format to [lng, lat]
+    function toLngLat(coords) {
+        if (!coords || !Array.isArray(coords) || coords.length < 2) return [-72.5984, -38.7396];
+        // Longitude for Chile/Araucanía is ~ -70 to -75; Latitude is ~ -35 to -42
+        if (coords[0] < -55) {
+            return [coords[0], coords[1]];
+        }
+        return [coords[1], coords[0]];
+    }
+
+    // High-Performance MapLibre Vector Styles (Zero API Key, Open Infrastructure)
+    const MAPLIBRE_STYLE = 'https://tiles.openfreemap.org/styles/positron';
+    const MAPLIBRE_FALLBACK_STYLE = 'https://tiles.openfreemap.org/styles/bright';
+
+    // Dedicated MapLibre instance for Profile Detail view
+    let profileMapInstance = null;
+    let profileMarkerInstance = null;
+
+    function initProfileMap(coords, name, location) {
+        const mapEl = document.getElementById('profile-detail-map');
+        if (!mapEl || typeof maplibregl === 'undefined' || !coords) return;
+
+        const lngLat = toLngLat(coords);
+
+        try {
+            if (!profileMapInstance) {
+                profileMapInstance = new maplibregl.Map({
+                    container: 'profile-detail-map',
+                    style: MAPLIBRE_STYLE,
+                    center: lngLat,
+                    zoom: 12.5,
+                    attributionControl: false
+                });
+
+                profileMapInstance.on('error', (e) => {
+                    console.warn("MapLibre profile-detail-map style error, attempting fallback:", e);
+                    if (e && e.error && profileMapInstance) {
+                        try {
+                            profileMapInstance.setStyle(MAPLIBRE_FALLBACK_STYLE);
+                        } catch(err) {}
+                    }
+                });
+
+                profileMapInstance.on('load', () => {
+                    if (profileMapInstance) profileMapInstance.resize();
+                });
+
+                const pinEl = document.createElement('div');
+                pinEl.className = 'custom-maplibre-pin active';
+                pinEl.title = `${name} (${location})`;
+
+                const popup = new maplibregl.Popup({ offset: 14, closeButton: false, closeOnClick: false })
+                    .setHTML(`<strong>${escapeHTML(name)}</strong><span>${escapeHTML(location)}</span>`);
+
+                profileMarkerInstance = new maplibregl.Marker({ element: pinEl })
+                    .setLngLat(lngLat)
+                    .setPopup(popup)
+                    .addTo(profileMapInstance);
+                
+                profileMarkerInstance.togglePopup();
+
+                [50, 150, 300, 500].forEach(delay => {
+                    setTimeout(() => {
+                        if (profileMapInstance && profileMapInstance.resize) {
+                            profileMapInstance.resize();
+                        }
+                    }, delay);
+                });
+            } else {
+                profileMapInstance.setCenter(lngLat);
+                if (profileMarkerInstance) {
+                    profileMarkerInstance.setLngLat(lngLat);
+                    if (profileMarkerInstance.getPopup()) {
+                        profileMarkerInstance.getPopup().setHTML(`<strong>${escapeHTML(name)}</strong><span>${escapeHTML(location)}</span>`);
+                    }
+                }
+                [50, 150, 300].forEach(delay => {
+                    setTimeout(() => {
+                        if (profileMapInstance && profileMapInstance.resize) {
+                            profileMapInstance.resize();
+                        }
+                    }, delay);
+                });
+            }
+        } catch (err) {
+            console.error("Profile MapLibre init failed:", err);
+        }
+    }
+
+    // Load and render artist profile (High-Impact Style & Zero IA)
+    function loadArtistProfile(artistId) {
+        const details = artistsDetails[artistId];
+        if (!details) {
+            console.warn(`loadArtistProfile: no details found for artistId "${artistId}"`);
+            return;
+        }
+
+        // Profile Name
+        const nameEl = document.querySelector('.profile-name');
+        if (nameEl) nameEl.textContent = details.name;
+
+        // Location with map pin
+        const locEl = document.querySelector('.profile-location');
+        if (locEl) locEl.innerHTML = `<i data-lucide="map-pin"></i> ${escapeHTML(details.location)}`;
+
+        // Profile Avatar
+        const profAvatar = document.querySelector('.profile-avatar-img');
+        if (profAvatar) {
+            profAvatar.src = details.avatar;
+            profAvatar.alt = details.name;
+        }
+
+        // Instagram Link
+        const profInstaLink = document.getElementById('profile-detail-instagram-link');
+        if (profInstaLink) profInstaLink.href = details.instagram;
+
+        // Instagram Handle
+        const profInstaHandle = document.getElementById('profile-detail-insta-handle');
+        if (profInstaHandle) {
+            const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+            profInstaHandle.innerHTML = `${INSTAGRAM_ICON_SVG} ${escapeHTML(handle)}`;
+        }
+
+        // Declared Styles Chips
+        const stylesChipsEl = document.getElementById('profile-styles-chips');
+        if (stylesChipsEl && details.styles) {
+            stylesChipsEl.innerHTML = details.styles.map(s => `<span class="profile-style-badge">${escapeHTML(s)}</span>`).join('');
+        }
+
+        // Tech Specs: Experiencia & Tintas
+        const expEl = document.getElementById('profile-detail-experience');
+        if (expEl) expEl.textContent = details.experience || '3–5 años';
+
+        const inksEl = document.getElementById('profile-detail-inks');
+        if (inksEl) inksEl.textContent = details.inks || 'Dynamic';
+
+        // Bio
+        const bioEl = document.getElementById('profile-detail-bio');
+        if (bioEl) bioEl.textContent = details.bio;
+
+        // Update studio map location description
+        const locMapText = document.getElementById('profile-map-location-text');
+        if (locMapText) {
+            locMapText.textContent = `${details.location}, Región de La Araucanía`;
+        }
+
+        // Render Photo Gallery (Real Cloudinary photos or Verified Zero-IA Notice)
+        renderTattoosWizardGallery(details);
+
+        // Render Studio Map in Profile View
+        if (details.coords) {
+            initProfileMap(details.coords, details.name, details.location);
+        }
+
+        lucide.createIcons();
+    }
+    window.loadArtistProfile = loadArtistProfile;
+
+    // Render TattoosWizard Gallery (Zero IA: verified Cloudinary photos or Authentic Instagram Notice)
+    function renderTattoosWizardGallery(details) {
+        const galleryContainer = document.getElementById('tab-gallery-grid');
+        if (!galleryContainer) return;
+
+        galleryContainer.innerHTML = '';
+        const portfolio = details.portfolio || [];
+
+        if (portfolio.length === 0) {
+            const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+            galleryContainer.innerHTML = `
+                <div class="empty-portfolio-notice" style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: #ffffff; border: 3px solid #000000; border-radius: 16px; box-shadow: 5px 5px 0px #000000; margin: 30px auto; max-width: 620px;">
+                    <div style="font-size: 2.8rem; margin-bottom: 12px;">🛡️</div>
+                    <h3 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 10px; color: #000000;">
+                        No logré capturar info real de este perfil
+                    </h3>
+                    <p style="font-family: 'Outfit', sans-serif; font-size: 0.98rem; color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
+                        Cumpliendo con la regla estricta de <strong>Cero Imágenes IA o de stock</strong>, sólo se visualizan fotografías verificadas. Puedes explorar todo el portafolio auténtico de <strong>${escapeHTML(details.name)}</strong> directamente en su cuenta oficial de Instagram.
+                    </p>
+                    <a href="${escapeHTML(details.instagram)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #7B4AD8; color: #ffffff; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; text-decoration: none; padding: 12px 24px; border: 2.5px solid #000000; border-radius: 100px; box-shadow: 3px 3px 0px #000000; transition: transform 0.15s ease;">
+                        ${INSTAGRAM_ICON_SVG} Ver trabajos en ${escapeHTML(handle)}
+                    </a>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
+        }
+
+        portfolio.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'tattooswizard-card';
+            card.innerHTML = `
+                <div class="tattooswizard-card-img-wrap">
+                    <span class="tattooswizard-badge-style">${escapeHTML(item.style || 'Tatuaje')}</span>
+                    <img src="${item.src}" alt="${escapeHTML(item.title)}" loading="lazy">
+                </div>
+                <div class="tattooswizard-card-info">
+                    <h4 class="tattooswizard-card-title">${escapeHTML(item.title)}</h4>
+                    <button class="tattooswizard-zoom-btn" type="button">
+                        <i data-lucide="zoom-in" style="width: 15px; height: 15px;"></i> Ampliar
+                    </button>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                openLightbox(item.src, `${item.title} — ${details.name} (${details.location})`);
+            });
+
+            galleryContainer.appendChild(card);
+        });
+
+        lucide.createIcons();
+    }
+
     // Ficha View Portfolio Button (Navigates to full portfolio view)
     const btnFichaPortfolio = document.getElementById('btn-ficha-view-portfolio');
     if (btnFichaPortfolio) {
         btnFichaPortfolio.addEventListener('click', () => {
             switchView('artist-view');
-            const details = artistsDetails[currentFichaArtistId];
-            if (details) {
-                document.querySelector('.profile-name').textContent = details.name;
-                document.querySelector('.profile-location').innerHTML = `<i data-lucide="map-pin"></i> ${details.location}`;
-                const profAvatar = document.querySelector('.profile-avatar-img');
-                if (profAvatar) {
-                    profAvatar.src = details.avatar;
-                    if (details.avatarFilter) profAvatar.style.filter = details.avatarFilter;
-                    else profAvatar.style.filter = '';
-                }
-                const infoTitle = document.querySelector('.info-title');
-                if (infoTitle) infoTitle.textContent = details.name;
-                
-                const infoAvatar = document.querySelector('.info-avatar-circle img');
-                if (infoAvatar) {
-                    infoAvatar.src = details.avatar;
-                    if (details.avatarFilter) infoAvatar.style.filter = details.avatarFilter;
-                    else infoAvatar.style.filter = '';
-                }
-
-                const profInstaLink = document.getElementById('profile-detail-instagram-link');
-                if (profInstaLink) profInstaLink.href = details.instagram;
-                
-                const profInstaHandle = document.getElementById('profile-detail-insta-handle');
-                if (profInstaHandle) {
-                    const handle = details.instagram.substring(details.instagram.lastIndexOf('/') + 1) || 'instagram';
-                    profInstaHandle.innerHTML = `<i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @${escapeHTML(handle)}`;
-                }
-
-                lucide.createIcons();
-            }
+            loadArtistProfile(currentFichaArtistId);
         });
     }
 
+    // ==========================================================================
+    // 9. MAPLIBRE GL JS INTERACTIVE MAIN MAP (High-Performance Vector/Raster WebGL)
+    // ==========================================================================
 
-    // ==========================================================================
-    // 9. LEAFLET.JS MAP INTERACTION
-    // ==========================================================================
     function initMap() {
-        // Location coordinates
-        const centerCoords = [-38.7396, -72.5984]; // Temuco
-        
-        // Initialize Map
-        mapInstance = L.map('interactive-map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView(centerCoords, 10);
+        if (typeof maplibregl === 'undefined') {
+            console.warn("MapLibre GL JS SDK not loaded yet.");
+            return;
+        }
+        const mapEl = document.getElementById('interactive-map');
+        if (!mapEl) return;
 
-        // Add Tile layer (CartoDB Positron is very clean and matches our theme)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19
-        }).addTo(mapInstance);
+        try {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
 
-        // Pins locations details
-        const locations = [
-            { id: 'pipo', name: 'Studio Tatto Pipo', coords: [-39.2045, -73.0538], popup: '<strong>Studio tatto pipo</strong><br>Teodoro Schmidt' },
-            { id: 'wentruart', name: 'Wentruart', coords: [-38.7450, -72.6020], popup: '<strong>Wentruart</strong><br>Temuco' },
-            { id: 'tattoopucon', name: 'Tattoo Pucón', coords: [-39.2736, -71.9744], popup: '<strong>Tattoo Pucón</strong><br>Pucón' },
-            { id: 'puertotinta', name: 'Puerto Tinta', coords: [-38.7906, -73.3986], popup: '<strong>Puerto Tinta</strong><br>Saavedra' }
-        ];
+            mapEl.innerHTML = '';
+            // Center in Temuco: [lng, lat]
+            const defaultCenter = [-72.5984, -38.7396];
 
-        // Custom Leaflet marker icons with purple theme
-        const purpleIcon = L.divIcon({
-            html: '<div style="background-color: #5d32a8; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.3);"></div>',
-            className: 'custom-map-pin',
-            iconSize: [14, 14],
-            iconAnchor: [7, 7]
-        });
-
-        // Add markers to map
-        locations.forEach(loc => {
-            const marker = L.marker(loc.coords, { icon: purpleIcon }).addTo(mapInstance);
-            
-            // Create nice popup
-            marker.bindPopup(loc.popup);
-            
-            markersGroup.push({
-                id: loc.id,
-                marker: marker
+            mapInstance = new maplibregl.Map({
+                container: 'interactive-map',
+                style: MAPLIBRE_STYLE,
+                center: defaultCenter,
+                zoom: 9.5,
+                attributionControl: false
             });
 
-            // Click marker to focus and filter card
-            marker.on('click', () => {
-                const targetCard = document.querySelector(`.artist-card[data-id="${loc.id}"]`);
-                if (targetCard) {
-                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Visual pulse effect on card
-                    targetCard.style.borderColor = '#7b4ad8';
-                    targetCard.style.boxShadow = '0 0 16px rgba(123, 74, 216, 0.4)';
-                    setTimeout(() => {
-                        targetCard.style.borderColor = '';
-                        targetCard.style.boxShadow = '';
-                    }, 1200);
+            mapInstance.on('error', (e) => {
+                console.warn("MapLibre interactive-map style error, attempting fallback:", e);
+                if (e && e.error && mapInstance) {
+                    try {
+                        mapInstance.setStyle(MAPLIBRE_FALLBACK_STYLE);
+                    } catch(err) {}
                 }
             });
-        });
+
+            mapInstance.on('load', () => {
+                if (mapInstance) mapInstance.resize();
+            });
+
+            // Pins locations details (all 13 artists from La Araucanía)
+            const safeArtists = (typeof artistsDetails !== 'undefined' && artistsDetails) ? artistsDetails : {};
+            markersGroup = [];
+
+            Object.keys(safeArtists).forEach(id => {
+                const d = safeArtists[id];
+                addOrUpdateArtistMarker(id, d.name, d.coords, d.location);
+            });
+
+        } catch (err) {
+            console.error("MapLibre initMap failed:", err);
+        }
     }
 
     // Expand Map widget logic
@@ -1493,40 +2659,56 @@ document.addEventListener('DOMContentLoaded', () => {
             
             lucide.createIcons();
             
-            // Re-align map centering
+            // Re-align MapLibre canvas
             setTimeout(() => {
-                mapInstance.invalidateSize();
-                mapInstance.setView([-38.7396, -72.5984], 10);
+                if (mapInstance && mapInstance.resize) {
+                    mapInstance.resize();
+                }
             }, 300);
         });
     }
 
     function addOrUpdateArtistMarker(artistId, name, coords, location) {
-        if (!mapInstance) return;
-        
+        if (!mapInstance || !coords || typeof maplibregl === 'undefined') return;
+
         // Remove existing marker if it exists
         const existingIdx = markersGroup.findIndex(m => m.id === artistId);
         if (existingIdx !== -1) {
-            mapInstance.removeLayer(markersGroup[existingIdx].marker);
+            if (markersGroup[existingIdx].marker) {
+                markersGroup[existingIdx].marker.remove();
+            }
             markersGroup.splice(existingIdx, 1);
         }
 
-        const purpleIcon = L.divIcon({
-            html: '<div style="background-color: #5d32a8; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.3);"></div>',
-            className: 'custom-map-pin',
-            iconSize: [14, 14],
-            iconAnchor: [7, 7]
-        });
+        // MapLibre expects [lng, lat]
+        const lngLat = toLngLat(coords);
 
-        const marker = L.marker(coords, { icon: purpleIcon }).addTo(mapInstance);
-        marker.bindPopup(`<strong>${escapeHTML(name)}</strong><br>${escapeHTML(location)}`);
-        
-        markersGroup.push({
-            id: artistId,
-            marker: marker
-        });
+        // Create Custom HTML Pin element for MapLibre
+        const el = document.createElement('div');
+        el.className = 'custom-maplibre-pin';
+        el.setAttribute('data-artist-id', artistId);
+        el.title = `${name} (${location})`;
 
-        marker.on('click', () => {
+        const popup = new maplibregl.Popup({ offset: 14, closeButton: false, closeOnClick: false })
+            .setHTML(`<strong>${escapeHTML(name)}</strong><span>${escapeHTML(location)}</span>`);
+
+        const marker = new maplibregl.Marker({ element: el })
+            .setLngLat(lngLat)
+            .setPopup(popup)
+            .addTo(mapInstance);
+
+        // Click on pin focuses card & updates quick ficha
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateQuickFicha(artistId);
+
+            const select = document.getElementById('filter-location-select');
+            if (select && location) {
+                select.value = location;
+                state.activeFilters.locationName = location;
+                if (typeof applyFilters === 'function') applyFilters();
+            }
+
             const targetCard = document.querySelector(`.artist-card[data-id="${artistId}"]`);
             if (targetCard) {
                 targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1538,41 +2720,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1200);
             }
         });
+
+        markersGroup.push({
+            id: artistId,
+            marker: marker,
+            popup: popup,
+            lngLat: lngLat
+        });
     }
-        
-    // Initialize dashboard profile editor map
+
+    // Initialize dashboard profile editor map with MapLibre GL
     const profileMapEl = document.getElementById('profile-editor-map');
-    if (profileMapEl) {
-        window.artistProfileMapInstance = L.map('profile-editor-map', {
-            zoomControl: true,
-            attributionControl: false
-        }).setView([-39.2045, -73.0538], 12);
+    if (profileMapEl && typeof maplibregl !== 'undefined') {
+        try {
+            const initialCoords = (state.tatuadorProfile && state.tatuadorProfile.coords) || [-39.2045, -73.0538];
+            const initialLngLat = toLngLat(initialCoords);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19
-        }).addTo(window.artistProfileMapInstance);
+            window.artistProfileMapInstance = new maplibregl.Map({
+                container: 'profile-editor-map',
+                style: MAPLIBRE_STYLE,
+                center: initialLngLat,
+                zoom: 12,
+                attributionControl: false
+            });
 
-        const initialCoords = state.tatuadorProfile.coords || [-39.2045, -73.0538];
-        const profileMarker = L.marker(initialCoords, { draggable: true }).addTo(window.artistProfileMapInstance);
-        
-        // Map click listener
-        window.artistProfileMapInstance.on('click', (e) => {
-            const { lat, lng } = e.latlng;
-            profileMarker.setLatLng([lat, lng]);
-            document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-            reverseGeocodeMock(lat, lng);
-        });
+            const profileMarker = new maplibregl.Marker({ draggable: true })
+                .setLngLat(initialLngLat)
+                .addTo(window.artistProfileMapInstance);
 
-        // Marker drag listener
-        profileMarker.on('dragend', () => {
-            const position = profileMarker.getLatLng();
-            const lat = position.lat;
-            const lng = position.lng;
-            document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-            reverseGeocodeMock(lat, lng);
-        });
+            window.artistProfileMarkerInstance = profileMarker;
 
-        window.artistProfileMarkerInstance = profileMarker;
+            window.artistProfileMapInstance.on('click', (e) => {
+                const { lng, lat } = e.lngLat;
+                profileMarker.setLngLat([lng, lat]);
+                const coordInput = document.getElementById('edit-art-coords');
+                if (coordInput) coordInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                reverseGeocodeMock(lat, lng);
+            });
+
+            profileMarker.on('dragend', () => {
+                const lngLat = profileMarker.getLngLat();
+                const coordInput = document.getElementById('edit-art-coords');
+                if (coordInput) coordInput.value = `${lngLat.lat.toFixed(6)}, ${lngLat.lng.toFixed(6)}`;
+                reverseGeocodeMock(lngLat.lat, lngLat.lng);
+            });
+        } catch (e) {
+            console.error("Profile editor map init failed", e);
+        }
     }
 
     // Mock reverse geocoding to keep the address input synced with map clicks
@@ -2314,10 +3508,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // 6. Refresh workspace UI panels
             refreshTatuadorWorkspace();
             
-            // Re-render Leaflet map markers
+            // Re-render MapLibre map markers
             if (mapInstance) {
                 // Clear existing markers
-                markersGroup.forEach(m => mapInstance.removeLayer(m.marker));
+                markersGroup.forEach(m => {
+                    if (m.marker && m.marker.remove) m.marker.remove();
+                });
                 markersGroup.length = 0; // Empty array
                 
                 // Add new markers
@@ -2582,8 +3778,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.innerHTML = `
             <div style="position: relative; max-width: 90%; max-height: 80%; display: flex; flex-direction: column; align-items: center;">
                 <img src="${imgSrc}" alt="${title}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--border-radius-md); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-                <p style="color: white; font-family: var(--font-stack); font-weight: 600; margin-top: 16px; font-size: 1.1rem; letter-spacing: 0.5px;">${title}</p>
-                <button style="position: absolute; top: -48px; right: 0; background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;"><i data-lucide="x"></i></button>
+                <button type="button" class="lightbox-custom-close-btn" style="position: absolute; top: -52px; right: 0; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; z-index: 10001;" aria-label="Cerrar">
+                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-06_kf9bp1.svg" alt="Cerrar" style="width: 42px; height: 42px; filter: drop-shadow(2px 2px 0px #000000); transition: transform 0.15s ease;">
+                </button>
             </div>
         `;
 
@@ -2759,6 +3956,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // 11. ADDITIONAL LOGIC: HISTORY TABS, NEEDLES INFO, MAPS, DASHBOARDS
     // ==========================================================================
 
+    // Unified Cultura Landing: Double Main Tabs (Historia vs ¿Sabías que?)
+    document.querySelectorAll('.btn-cultura-main-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.btn-cultura-main-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const targetTab = btn.getAttribute('data-cultura-tab');
+            document.querySelectorAll('.cultura-panel').forEach(panel => {
+                if (panel.id === targetTab) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+
+            // Update header title and subtitle dynamically according to active tab
+            const headerTitle = document.getElementById('cultura-header-title');
+            const headerDesc = document.getElementById('cultura-header-desc');
+            if (targetTab === 'panel-sabias-que') {
+                if (headerTitle) headerTitle.textContent = "¿Sabías que?";
+                if (headerDesc) headerDesc.textContent = "Un recorrido por los secretos, curiosidades y datos más fascinantes de este arte milenario.";
+            } else {
+                if (headerTitle) headerTitle.textContent = "Historia del tatuaje";
+                if (headerDesc) headerDesc.textContent = "Un recorrido cronológico por los hitos y la evolución del arte corporal en el mundo y en nuestro país.";
+            }
+            
+            // Sync active sidebar icon (H active for both unified tabs)
+            document.querySelectorAll('.floating-sidebar-menu .sidebar-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.floating-sidebar-menu .btn-sidebar-historia').forEach(i => i.classList.add('active'));
+            
+            lucide.createIcons();
+        });
+    });
+
     // History & Trivia View Tab switching
     document.querySelectorAll('.btn-history-tab').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2793,32 +4024,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             const mapContainer = document.getElementById('artist-profile-map');
-            if (!mapContainer) return;
+            if (!mapContainer || typeof maplibregl === 'undefined') return;
             
             if (artistProfileMapInstance) {
                 artistProfileMapInstance.remove();
                 artistProfileMapInstance = null;
             }
 
-            artistProfileMapInstance = L.map('artist-profile-map', {
-                zoomControl: true,
-                attributionControl: false
-            }).setView(coords, 12);
+            const lngLat = toLngLat(coords);
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 19
-            }).addTo(artistProfileMapInstance);
+            try {
+                artistProfileMapInstance = new maplibregl.Map({
+                    container: 'artist-profile-map',
+                    style: MAPLIBRE_STYLE,
+                    center: lngLat,
+                    zoom: 12,
+                    attributionControl: false
+                });
 
-            const purpleIcon = L.divIcon({
-                html: '<div style="background-color: #5d32a8; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.3);"></div>',
-                className: 'custom-map-pin',
-                iconSize: [12, 12],
-                iconAnchor: [6, 6]
-            });
+                const el = document.createElement('div');
+                el.className = 'custom-maplibre-pin';
+                const popup = new maplibregl.Popup({ offset: 12 })
+                    .setHTML(`<strong>${escapeHTML(document.querySelector('.profile-name')?.textContent || 'Estudio')}</strong>`);
 
-            L.marker(coords, { icon: purpleIcon }).addTo(artistProfileMapInstance)
-                .bindPopup(`<strong>${document.querySelector('.profile-name').textContent}</strong>`)
-                .openPopup();
+                new maplibregl.Marker({ element: el })
+                    .setLngLat(lngLat)
+                    .setPopup(popup)
+                    .addTo(artistProfileMapInstance);
+            } catch (err) {
+                console.error("MapLibre artist profile map error:", err);
+            }
         }, 300);
     }
 
@@ -3120,9 +4355,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('artist-grid');
         // Use explicit artistId if provided, else derive from name
         const safeId = artistId || name.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const avatar = (avatarUrl === 'assets/logo_pipo.png' && safeId !== 'pipo') 
-            ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp' 
-            : (avatarUrl || 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp');
+        const isPipo = safeId === 'pipo';
+        
+        const avatar = isPipo 
+            ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp'
+            : 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';
         
         const card = document.createElement('article');
         card.className = 'artist-card';
@@ -3136,16 +4373,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const artistInfo = artistsDetails[safeId];
         const instagram = (artistInfo && artistInfo.instagram) ? artistInfo.instagram : 'https://instagram.com';
-        const instagramHandle = instagram.substring(instagram.lastIndexOf('/') + 1) || 'instagram';
+        const instagramHandle = (artistInfo && artistInfo.handle) ? artistInfo.handle.replace('@', '') : (instagram.substring(instagram.lastIndexOf('/') + 1) || 'instagram');
         
-        const safeCover = coverImage || (artistInfo && artistInfo.coverImage) || 'assets/tattoo_flower.png';
+        // Zero AI Cover: only real Cloudinary photo for Pipo; authentic verified badge for others
+        let coverHTML = '';
+        if (isPipo) {
+            coverHTML = `<img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp" alt="Tatuaje de Studio tatto pipo" class="card-tattoo-img">`;
+        } else {
+            coverHTML = `
+                <div class="card-verified-brand-cover">
+                    <div class="brand-cover-badge">VERIFICADO</div>
+                    <div class="brand-cover-handle">@${escapeHTML(instagramHandle)}</div>
+                    <div class="brand-cover-cta">Portafolio en Instagram</div>
+                </div>
+            `;
+        }
         
         card.innerHTML = `
             <div class="card-image-wrapper">
-                <img src="${escapeHTML(safeCover)}" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img" onerror="this.onerror=null;this.src='assets/tattoo_flower.png';">
-                <button class="btn-favorite" aria-label="Agregar a favoritos">
-                     <i data-lucide="heart" class="icon-heart"></i>
-                </button>
+                ${coverHTML}
             </div>
             <div class="card-info">
                 <div class="artist-brand-row">
@@ -3156,7 +4402,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 class="artist-name">${escapeHTML(name)}</h3>
                         <div style="display: flex; flex-direction: column; gap: 2px;">
                             <span class="artist-loc"><i data-lucide="map-pin"></i> ${escapeHTML(loc)}</span>
-                            <span class="artist-insta"><i data-lucide="instagram"></i> @${escapeHTML(instagramHandle)}</span>
+                            <span class="artist-insta">${INSTAGRAM_ICON_SVG} @${escapeHTML(instagramHandle)}</span>
                         </div>
                     </div>
                 </div>
@@ -3168,16 +4414,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <div class="artist-meta">
                      <span class="meta-exp">${escapeHTML(String(exp))} años tatuando</span>
-                     <a href="${escapeHTML(instagram)}" target="_blank" class="btn-contactar" rel="noopener noreferrer">Contactar</a>
+                     <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
                 </div>
             </div>
         `;
         
         grid.appendChild(card);
         
-        // Click action — opens quick sheet drawer
+        // Click action — button goes directly to profile; clicking card opens quick sheet
         card.addEventListener('click', (e) => {
-            if (e.target.closest('.btn-favorite')) return;
+            const btnExplorar = e.target.closest('.btn-explorar-tag');
+            if (btnExplorar) {
+                e.stopPropagation();
+                switchView('artist-view');
+                loadArtistProfile(safeId);
+                return;
+            }
+
             updateQuickFicha(safeId);
 
             const drawer = document.getElementById('artist-quick-sheet');
@@ -3187,21 +4440,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.querySelectorAll('.artist-card').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
-        });
-        
-        // Favorite heart action
-        const heart = card.querySelector('.btn-favorite');
-        heart.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (heart.classList.contains('active')) {
-                heart.classList.remove('active');
-                state.favorites.delete(safeId);
-                showToast('Eliminado de tus favoritos');
-            } else {
-                heart.classList.add('active');
-                state.favorites.add(safeId);
-                showToast('¡Guardado en tus favoritos!');
-            }
         });
         
         lucide.createIcons();
@@ -4167,106 +5405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initCustomCursor() {
-        const dot = document.getElementById('custom-cursor-dot');
-        const ring = document.getElementById('custom-cursor-ring');
-        
-        if (!dot || !ring) return;
-        
-        // Detect touch devices (no precise pointer) and disable custom cursor
-        if (window.matchMedia('(pointer: coarse)').matches) {
-            dot.style.display = 'none';
-            ring.style.display = 'none';
-            return;
-        }
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let ringX = 0;
-        let ringY = 0;
-        
-        // Initially hide cursor until first mouse movement
-        dot.style.opacity = '0';
-        ring.style.opacity = '0';
-        dot.style.transition = 'opacity 0.3s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease';
-        ring.style.transition = 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease';
-        
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Instantly position the central dot
-            dot.style.left = `${mouseX}px`;
-            dot.style.top = `${mouseY}px`;
-            
-            // Fade in cursors upon mouse activity
-            dot.style.opacity = '1';
-            ring.style.opacity = '1';
-        });
-        
-        // Trailing ring with lag/inertia using requestAnimationFrame loop (60fps)
-        function animateRing() {
-            // Ring lags slightly (moves 15% closer to target coordinates per frame)
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            
-            ring.style.left = `${ringX}px`;
-            ring.style.top = `${ringY}px`;
-            
-            requestAnimationFrame(animateRing);
-        }
-        animateRing();
-        
-        // Hover state trigger for interactive targets
-        document.addEventListener('mouseover', (e) => {
-            const target = e.target;
-            const isInteractive = target.closest('a') || 
-                                  target.closest('button') || 
-                                  target.closest('select') || 
-                                  target.closest('input') || 
-                                  target.closest('textarea') || 
-                                  target.closest('label') ||
-                                  target.closest('.artist-card') || 
-                                  target.closest('.btn-style') || 
-                                  target.closest('.btn-category') ||
-                                  target.closest('.carousel-3d-item') ||
-                                  target.closest('.gallery-item') ||
-                                  target.closest('.tab-link') ||
-                                  target.closest('.btn-favorite') ||
-                                  target.closest('.nav-link') ||
-                                  target.closest('.info-action-link') ||
-                                  target.closest('.btn-more-styles') ||
-                                  target.style.cursor === 'pointer';
-                                  
-            if (isInteractive) {
-                dot.classList.add('hovered');
-                ring.classList.add('hovered');
-            } else {
-                dot.classList.remove('hovered');
-                ring.classList.remove('hovered');
-            }
-        });
-        
-        // Click effect triggers scale/color changes
-        window.addEventListener('mousedown', () => {
-            ring.classList.add('active');
-            dot.classList.add('active');
-        });
-        
-        window.addEventListener('mouseup', () => {
-            ring.classList.remove('active');
-            dot.classList.remove('active');
-        });
-        
-        // Hide custom cursor elements if mouse leaves the screen viewport bounds
-        document.addEventListener('mouseleave', () => {
-            dot.style.opacity = '0';
-            ring.style.opacity = '0';
-        });
-        
-        document.addEventListener('mouseenter', () => {
-            dot.style.opacity = '1';
-            ring.style.opacity = '1';
-        });
+        // Handled directly and synchronously in index.html for maximum responsiveness and cache resilience
     }
 
     function initTattooDrawingAnimation() {
@@ -4500,82 +5639,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // HOW IT WORKS — DYNAMIC STEP CARD INTERACTIONS
     // ==========================================================================
     function initHowItWorksCards() {
-        const stepCards = document.querySelectorAll('.step-card');
-        if (!stepCards.length) return;
-
-        // 1. Scroll-triggered entrance animation using IntersectionObserver
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    // Stagger each card entrance by 120ms
-                    const delay = parseInt(entry.target.dataset.stepNum || '0') * 120;
-                    setTimeout(() => {
-                        entry.target.classList.add('is-visible');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-
-        stepCards.forEach(card => observer.observe(card));
-
-        // 2. Ripple on click + action routing
-        const cardActions = {
-            'step-card-1': () => {
-                // Scroll smoothly to the search/filter area
-                const searchInput = document.getElementById('global-search-input');
-                if (searchInput) {
-                    searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => searchInput.focus(), 400);
-                }
-                showToast('🔍 Usa los filtros de estilo para encontrar tu artista');
-            },
-            'step-card-2': () => {
-                // Scroll to the artist grid cards
-                const grid = document.getElementById('artist-grid');
-                if (grid) {
-                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-                showToast('❤️ Revisa los portafolios y recomendaciones de clientes');
-            },
-            'step-card-3': () => {
-                // Open the first artist's quick sheet drawer to show the booking form
-                const firstCard = document.querySelector('.artist-card');
-                if (firstCard) {
-                    firstCard.click();
-                }
-                showToast('📅 ¡Así de fácil puedes agendar tu cita!');
-            }
-        };
-
-        stepCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                // Ripple effect
-                const ripple = document.createElement('span');
-                ripple.className = 'step-ripple';
-                const rect = card.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height) * 2;
-                ripple.style.cssText = `
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${e.clientX - rect.left - size / 2}px;
-                    top: ${e.clientY - rect.top - size / 2}px;
-                `;
-                card.appendChild(ripple);
-                ripple.addEventListener('animationend', () => ripple.remove());
-
-                // Route to action
-                const action = cardActions[card.id];
-                if (action) {
-                    setTimeout(action, 200);
-                }
-            });
-
-            // Subtle bounce on mouseenter
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background-color 0.2s ease';
-            });
-        });
+        // Punto 10: Steps son puramente informativos (sin comportamiento ni aspecto de botón)
     }
 
     // Initialize Visual FX
@@ -4620,7 +5684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load artist profile from Supabase by userId
-    async function loadArtistProfile(userId) {
+    async function loadTatuadorAuthProfile(userId) {
         if (!supabaseClient || !userId) return;
 
         const { data: profile, error } = await supabaseClient
@@ -4665,7 +5729,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: profile.location || 'Araucanía',
             bio: profile.bio || '',
             instagram: profile.instagram || '',
-            avatar: profile.avatar_url || 'assets/logo_pipo.png',
+            avatar: profile.avatar_url || 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp',
             coords: profile.coords || [-38.7396, -72.5984],
             experience: profile.experience || 1,
             price: profile.price || 'Intermedio',
@@ -4698,7 +5762,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (supabaseClient) {
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_IN' && session?.user) {
-                await loadArtistProfile(session.user.id);
+                await loadTatuadorAuthProfile(session.user.id);
             } else if (event === 'SIGNED_OUT') {
                 currentAuthUserId = null;
                 state.isTatuadorSubscribed = false;
@@ -4901,7 +5965,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Auto-confirmed (dev mode) — session already active
             if (data.session) {
-                await loadArtistProfile(data.user.id);
+                await loadTatuadorAuthProfile(data.user.id);
             }
         });
     }
@@ -5144,262 +6208,190 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDynamicPricingUI();
 
     // ==========================================================================
-    // LANDING EVENTOS Y COMUNIDAD
+    // 12. EVENTOS & COMUNIDAD — POP-UP EMERGENTE, CARTELERA Y LIGHTBOX
     // ==========================================================================
 
-    const eventsData = {
-        'temuco-fest': {
-            badge: 'MEGA EVENTO',
-            badgeClass: 'highlight',
-            title: 'Temuco Tattoo Fest 2026',
-            meta: [
-                { icon: 'calendar', text: 'Sábado 01 de Agosto, 2026' },
-                { icon: 'clock', text: '10:00 a 21:00 hrs' },
-                { icon: 'map-pin', text: 'Plaza Central, Portal Temuco' }
-            ],
-            body: `
-                <p><strong>¡El evento del año en La Araucanía!</strong> Temuco Tattoo Fest 2026 llega a la plaza central de Portal Temuco para reunir a los mejores talentos del arte corporal de nuestra región en una jornada dedicada a la creatividad, la música y la cultura del tatuaje.</p>
-                <p>Este festival es de <strong>entrada liberada</strong> y tiene como objetivo principal potenciar y visibilizar el trabajo de artistas de Temuco, Padre Las Casas, Villarrica y alrededores, creando un espacio seguro y profesional para que el público general interactúe con esta disciplina.</p>
-                <h4>¿Qué encontrarás en la jornada?</h4>
-                <ul class="detail-features-list">
-                    <li><strong>Tatuajes en Vivo:</strong> Más de 15 tatuadores locales destacados tatuando en tiempo real. ¡Reserva con anticipación o elige diseños flash en el momento!</li>
-                    <li><strong>Música y Escenario:</strong> DJs en vivo durante todo el día y bandas invitadas a partir de las 18:00 hrs.</li>
-                    <li><strong>Concursos y Categorías:</strong> Premiación especial al "Mejor Tatuaje del Evento" elegida por un jurado de artistas consagrados.</li>
-                    <li><strong>Regalos y Merchandising:</strong> Sorteos rápidos cada hora de poleras, productos de cuidado post-tatuaje y stickers de Tinta Conectada.</li>
-                </ul>
-                <p><em>Patrocinado oficialmente por marcas de insumos veganos y el centro comercial Portal Temuco.</em></p>
-            `,
-            actionText: 'Agendar con Artistas Participantes',
-            actionClass: 'primary-btn',
-            actionHandler: 'goToHome'
-        },
-        'whatsapp-chat': {
-            badge: 'COMUNIDAD',
-            badgeClass: 'whatsapp',
-            title: 'Red de Tatuadores Araucanía',
-            meta: [
-                { icon: 'users', text: 'Grupo de WhatsApp Oficial' },
-                { icon: 'globe', text: 'Coordinación Regional' },
-                { icon: 'shield-check', text: 'Solo Artistas Certificados' }
-            ],
-            body: `
-                <p><strong>¡Fortalezcamos el gremio local!</strong> Hemos creado el canal de comunicación oficial para todos los tatuadores y perforadores que residen y trabajan en la región de La Araucanía.</p>
-                <p>Este grupo tiene el propósito de colaborar activamente para resolver problemas comunes del rubro, como la compra coordinada de insumos médicos de alta calidad, la difusión de ofertas, la organización de eventos benéficos y la discusión de normativas de salud pública regionales.</p>
-                <h4>Normas de la Comunidad</h4>
-                <ul class="detail-features-list">
-                    <li><strong>Profesionalismo:</strong> Exclusivo para compartir portafolios, técnicas, dudas y novedades del arte del tatuaje.</li>
-                    <li><strong>Colaboración:</strong> Compras al por mayor compartidas de tintas homologadas (Solid, Dynamic, Eternal) y cartuchos premium.</li>
-                    <li><strong>Ética Laboral:</strong> Espacio libre de spam para mantener una comunicación fluida y respetuosa.</li>
-                </ul>
-            `,
-            actionText: 'Unirse al Grupo de WhatsApp',
-            actionClass: 'whatsapp-btn',
-            actionUrl: 'https://wa.me/56900000000?text=Hola,%20quiero%20unirme%20al%20grupo%20de%20Tatuadores%20de%20la%20Araucania'
-        },
-        'newsletter-discount': {
-            badge: 'BENEFICIO',
-            badgeClass: 'discount',
-            title: 'Club Tinta Conectada',
-            meta: [
-                { icon: 'ticket', text: '15% Descuento en tu Cita' },
-                { icon: 'mail', text: 'Novedades Mensuales' }
-            ],
-            body: `
-                <p>¡Queremos acompañarte en tu próximo proyecto en la piel! Al unirte a nuestro boletín mensual, no solo recibirás inspiración y los portafolios destacados de los mejores artistas de La Araucanía, sino también promociones exclusivas en estudios colaboradores.</p>
-                <p>Ingresa tu correo abajo y te enviaremos de inmediato un <strong>código de descuento del 15%</strong> para que lo uses en tu próxima sesión con cualquiera de los artistas adheridos en la plataforma.</p>
-                
-                <div class="newsletter-form-container">
-                    <h5>Inscríbete y obtén tu cupón de inmediato:</h5>
-                    <form id="newsletter-event-form">
-                        <div class="newsletter-input-group">
-                            <input type="email" id="newsletter-event-email" placeholder="tu-correo@gmail.com" required autocomplete="email">
-                            <button type="submit" id="btn-newsletter-event-submit">Reclamar</button>
-                        </div>
-                    </form>
-                    <div id="newsletter-event-result"></div>
-                </div>
-            `,
-            actionText: '',
-            actionClass: 'hidden'
-        },
-        'flash-weekend': {
-            badge: 'SOLIDARIDAD',
-            badgeClass: 'solidarity',
-            title: 'Flash Weekend Araucanía',
-            meta: [
-                { icon: 'calendar', text: '12 y 13 de Septiembre, 2026' },
-                { icon: 'heart', text: 'A Beneficio Rescate Animal' },
-                { icon: 'map-pin', text: 'Estudios Adheridos de la Región' }
-            ],
-            body: `
-                <p><strong>¿Buscas un tatuaje pequeño con sentido?</strong> El "Flash Weekend Araucanía" es un evento coordinado donde múltiples estudios en Temuco, Villarrica y Pucón abren sus puertas simultáneamente con catálogos de diseños 'Flash' (diseños listos para tatuar rápidos de realizar, entre 5 y 10 cm).</p>
-                <p>Todos los diseños tendrán un precio preferencial y fijo. Lo más importante: <strong>el 30% de todo lo recaudado será donado directamente a fundaciones locales</strong> dedicadas al rescate, esterilización y adopción de perritos y gatitos abandonados en La Araucanía.</p>
-                <h4>¿Cómo participar?</h4>
-                <ul class="detail-features-list">
-                    <li><strong>Diseños Listos:</strong> Los artistas publicarán sus catálogos una semana antes del evento en Tinta Conectada.</li>
-                    <li><strong>Atención Directa:</strong> Sin cita previa. Se atenderá por orden de llegada durante ambos días.</li>
-                    <li><strong>Estudios Aliados:</strong> Studio Tattoo Pipo, Wentruart y Tattoo Pucón ya confirmaron su participación.</li>
-                </ul>
-            `,
-            actionText: 'Ver Estudios Participantes',
-            actionClass: 'primary-btn',
-            actionHandler: 'goToHome'
-        },
-        'seminario-bioseguridad': {
-            badge: 'PROFESIONAL',
-            badgeClass: 'education',
-            title: 'Workshop de Bioseguridad',
-            meta: [
-                { icon: 'graduation-cap', text: 'Seminario Certificado' },
-                { icon: 'shield-alert', text: 'Prevención de Infecciones' },
-                { icon: 'calendar', text: '24 de Agosto, 2026' }
-            ],
-            body: `
-                <p><strong>El resguardo de la salud es lo primero.</strong> Tinta Conectada, en conjunto con profesionales del área de salud de la región, organiza un seminario de capacitación intensivo enfocado en las normas sanitarias vigentes y técnicas modernas de asepsia aplicadas a la micropigmentación y el tatuaje.</p>
-                <p>Este workshop entregará certificación de aprobación válida para la renovación de permisos ante el SEREMI de Salud de La Araucanía.</p>
-                <h4>Temas Clave del Seminario:</h4>
-                <ul class="detail-features-list">
-                    <li><strong>Contaminación Cruzada:</strong> Métodos rigurosos de barrera física y desinfección del área de trabajo.</li>
-                    <li><strong>Química de Pigmentos:</strong> Tintas veganas premium vs. tintas tradicionales, y manejo de alergias en clientes.</li>
-                    <li><strong>Manejo de Desechos:</strong> Protocolo REAS para el almacenamiento y descarte seguro de agujas y material contaminado.</li>
-                </ul>
-                <p><em>Cupos limitados a 30 participantes para asegurar el correcto aprendizaje y la parte práctica.</em></p>
-            `,
-            actionText: 'Inscribirse al Workshop (Cupos Limitados)',
-            actionClass: 'primary-btn',
-            actionHandler: 'openRegisterModal'
+    function openUpcomingEventsModal() {
+        const modal = document.getElementById('upcoming-events-modal');
+        if (!modal) return;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
+    window.openUpcomingEventsModal = openUpcomingEventsModal;
+
+    function closeUpcomingEventsModal() {
+        const modal = document.getElementById('upcoming-events-modal');
+        if (!modal) return;
+        modal.style.display = 'none';
+        const lightbox = document.getElementById('events-lightbox-modal');
+        if (!lightbox || lightbox.style.display === 'none') {
+            document.body.style.overflow = '';
         }
-    };
+    }
+    window.closeUpcomingEventsModal = closeUpcomingEventsModal;
 
-    function initEventosView() {
-        const detailsContainer = document.getElementById('evento-details-display');
-        if (!detailsContainer) return;
+    function openEventsLightbox(imageSrc, title) {
+        if (!imageSrc) return;
+        const lightbox = document.getElementById('events-lightbox-modal');
+        const imgEl = document.getElementById('lightbox-poster-img');
+        const captionEl = document.getElementById('lightbox-poster-caption');
+        if (!lightbox || !imgEl) return;
 
-        // Render default (Temuco Fest)
-        renderEventDetails('temuco-fest');
+        imgEl.src = imageSrc;
+        if (captionEl) {
+            captionEl.textContent = title || 'Afiche Oficial del Evento';
+        }
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
 
-        // Bind clicks on cards
-        const cards = document.querySelectorAll('#eventos-view .evento-card');
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Remove active class from all
-                cards.forEach(c => c.classList.remove('active'));
-                // Add active class to clicked card
-                card.classList.add('active');
-
-                const eventId = card.getAttribute('data-event');
-                renderEventDetails(eventId);
-
-                // Responsive scroll to details on small screens
-                if (window.innerWidth <= 991) {
-                    const detailEl = document.getElementById('evento-details-display');
-                    if (detailEl) {
-                        detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-        });
-
-        // Bind home banner CTA button click
-        const btnBannerVerMas = document.getElementById('btn-banner-ver-mas');
-        if (btnBannerVerMas) {
-            btnBannerVerMas.addEventListener('click', (e) => {
-                e.preventDefault();
-                switchView('eventos-view');
-                // Select first card
-                const defaultCard = document.querySelector('#eventos-view .evento-card[data-event="temuco-fest"]');
-                if (defaultCard) {
-                    defaultCard.click();
-                }
-            });
+    function closeEventsLightbox() {
+        const lightbox = document.getElementById('events-lightbox-modal');
+        if (!lightbox) return;
+        lightbox.style.display = 'none';
+        const upcomingModal = document.getElementById('upcoming-events-modal');
+        if (!upcomingModal || upcomingModal.style.display === 'none') {
+            document.body.style.overflow = '';
         }
     }
 
-    function renderEventDetails(eventId) {
-        const detailsContainer = document.getElementById('evento-details-display');
-        if (!detailsContainer) return;
+    function initEventosView() {
+        // 1. Modal Pop-up buttons
+        const btnCloseEventsPopup = document.getElementById('btn-close-events-popup');
+        if (btnCloseEventsPopup) {
+            btnCloseEventsPopup.addEventListener('click', closeUpcomingEventsModal);
+        }
 
-        const data = eventsData[eventId];
-        if (!data) return;
+        const btnPopupDismiss = document.getElementById('btn-popup-dismiss-events');
+        if (btnPopupDismiss) {
+            btnPopupDismiss.addEventListener('click', closeUpcomingEventsModal);
+        }
 
-        // Render meta items html
-        let metaHtml = '';
-        data.meta.forEach(item => {
-            metaHtml += `
-                <div class="detail-meta-item">
-                    <i data-lucide="${item.icon}"></i>
-                    <span>${item.text}</span>
-                </div>
-            `;
+        const btnPopupIrEventos = document.getElementById('btn-popup-ir-eventos');
+        if (btnPopupIrEventos) {
+            btnPopupIrEventos.addEventListener('click', () => {
+                closeUpcomingEventsModal();
+                switchView('eventos-view');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Overlay click outside window closes upcoming modal
+        const upcomingModal = document.getElementById('upcoming-events-modal');
+        if (upcomingModal) {
+            upcomingModal.addEventListener('click', (e) => {
+                if (e.target === upcomingModal) {
+                    closeUpcomingEventsModal();
+                }
+            });
+        }
+
+        // 2. Home announcement bar click -> opens Upcoming Events modal
+        const btnHomeEventsBar = document.getElementById('btn-home-events-bar');
+        if (btnHomeEventsBar) {
+            btnHomeEventsBar.addEventListener('click', () => {
+                openUpcomingEventsModal();
+            });
+            btnHomeEventsBar.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openUpcomingEventsModal();
+                }
+            });
+        }
+
+        // 3. Lightbox visualizer controls
+        const btnCloseLightbox = document.getElementById('btn-close-lightbox');
+        if (btnCloseLightbox) {
+            btnCloseLightbox.addEventListener('click', closeEventsLightbox);
+        }
+
+        const lightboxModal = document.getElementById('events-lightbox-modal');
+        if (lightboxModal) {
+            lightboxModal.addEventListener('click', (e) => {
+                if (e.target === lightboxModal) {
+                    closeEventsLightbox();
+                }
+            });
+        }
+
+        const btnLightboxIrEventos = document.getElementById('btn-lightbox-ir-eventos');
+        if (btnLightboxIrEventos) {
+            btnLightboxIrEventos.addEventListener('click', () => {
+                closeEventsLightbox();
+                closeUpcomingEventsModal();
+                switchView('eventos-view');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // 4. Delegated listener for all poster triggers [data-poster-src]
+        document.addEventListener('click', (e) => {
+            const posterTrigger = e.target.closest('[data-poster-src]');
+            if (posterTrigger) {
+                // Ignore if clicking a button or anchor with distinct non-poster action
+                if (e.target.closest('a') && !posterTrigger.matches('a')) return;
+
+                const src = posterTrigger.getAttribute('data-poster-src');
+                const title = posterTrigger.getAttribute('data-poster-title');
+                if (src) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openEventsLightbox(src, title);
+                }
+            }
         });
 
-        // Action button html
-        let actionBtnHtml = '';
-        if (data.actionText) {
-            let onclickAttr = '';
-            if (data.actionUrl) {
-                onclickAttr = `onclick="window.open('${data.actionUrl}', '_blank')"`;
-            } else if (data.actionHandler === 'goToHome') {
-                onclickAttr = `onclick="switchView('home-view')"`;
-            } else if (data.actionHandler === 'openRegisterModal') {
-                onclickAttr = `onclick="switchView('dashboard-tatuador-view')"`;
-            }
-            actionBtnHtml = `
-                <div class="detail-footer">
-                    <button class="btn-detail-action ${data.actionClass || ''}" ${onclickAttr}>
-                        ${data.actionText} <i data-lucide="arrow-right"></i>
-                    </button>
-                </div>
-            `;
-        }
+        // 5. Category Pills filtering in Cartelera (Tattoodo style)
+        const categoryPills = document.querySelectorAll('.events-category-bar .btn-event-pill');
+        const heroCard = document.querySelector('.tattoodo-hero-card');
+        const articleCards = document.querySelectorAll('.tattoodo-article-card');
 
-        // Render detailed content
-        detailsContainer.innerHTML = `
-            <div class="detail-header">
-                <span class="detail-badge ${data.badgeClass}">${data.badge}</span>
-                <h2 class="detail-title">${data.title}</h2>
-                <div class="detail-meta-list">
-                    ${metaHtml}
-                </div>
-            </div>
-            <div class="detail-body">
-                ${data.body}
-            </div>
-            ${actionBtnHtml}
-        `;
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                categoryPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
 
-        // Recreate Lucide icons for the newly injected HTML
-        lucide.createIcons();
+                const filter = pill.getAttribute('data-event-filter') || 'all';
 
-        // Bind interactive form if it's the newsletter discount
-        if (eventId === 'newsletter-discount') {
-            const form = document.getElementById('newsletter-event-form');
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const emailInput = document.getElementById('newsletter-event-email');
-                    const resultContainer = document.getElementById('newsletter-event-result');
-                    if (emailInput && resultContainer) {
-                        const email = emailInput.value;
-                        const randomNum = Math.floor(1000 + Math.random() * 9000);
-                        const couponCode = `TINTA-ARAU-${randomNum}`;
-                        
-                        resultContainer.innerHTML = `
-                            <div class="coupon-generated-box">
-                                <p style="color: #276749; font-weight: 700; margin: 0; font-size: 1rem;">¡Registro Exitoso!</p>
-                                <p style="font-size: 0.85rem; color: #4a5568; margin: 0; line-height: 1.4;">Hemos registrado tu correo <strong>${escapeHTML(email)}</strong>. Aquí tienes tu cupón de 15% de descuento en tu próxima sesión:</p>
-                                <div class="coupon-code-text">${couponCode}</div>
-                                <p style="font-size: 0.75rem; color: #718096; margin: 4px 0 0 0;">Presenta este código a tu tatuador seleccionado al agendar.</p>
-                            </div>
-                        `;
-                        
-                        // Hide form
-                        form.style.display = 'none';
-                        showToast('¡Cupón generado con éxito!');
+                // Hero Card filtering (Expo Tattoo is "convencion")
+                if (heroCard) {
+                    const heroCat = heroCard.getAttribute('data-event-cat');
+                    if (filter === 'all' || heroCat === filter) {
+                        heroCard.classList.remove('event-card-hidden');
+                    } else {
+                        heroCard.classList.add('event-card-hidden');
+                    }
+                }
+
+                // Grid cards filtering
+                articleCards.forEach(card => {
+                    const cat = card.getAttribute('data-event-cat');
+                    if (filter === 'all' || cat === filter) {
+                        card.classList.remove('event-card-hidden');
+                    } else {
+                        card.classList.add('event-card-hidden');
                     }
                 });
+            });
+        });
+
+        // 6. Global Escape key closes any open events modal or lightbox
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const lb = document.getElementById('events-lightbox-modal');
+                if (lb && lb.style.display !== 'none') {
+                    closeEventsLightbox();
+                    return;
+                }
+                const upModal = document.getElementById('upcoming-events-modal');
+                if (upModal && upModal.style.display !== 'none') {
+                    closeUpcomingEventsModal();
+                }
             }
-        }
+        });
     }
 
     // Initialize Eventos view logic

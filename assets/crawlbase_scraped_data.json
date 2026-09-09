@@ -1,0 +1,7 @@
+{
+  "nowss": {
+    "success": false,
+    "error": "HTTP Error 403: Request to GET / on api.crawlbase.com not allowed by policy\n",
+    "requires_token": true
+  }
+}

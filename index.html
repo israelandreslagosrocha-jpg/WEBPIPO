@@ -5,17 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tinta Conectada | Encuentra a tu tatuador ideal en La Araucanía</title>
     <meta name="description" content="Conecta con los mejores tatuadores y estudios profesionales en la región de La Araucanía. Explora portafolios, filtra por estilo, ubicación y agenda tu cita.">
-    <!-- Google Fonts: Outfit -->
+    <!-- Google Fonts: Outfit & Syne -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Leaflet.js CSS and JS for Interactive Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- MapLibre GL JS for High-Performance Interactive Map (Dual CDN) -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" id="maplibre-css" />
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script>
+        if (typeof maplibregl === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"><\/script>');
+            const cssFallback = document.createElement('link');
+            cssFallback.rel = 'stylesheet';
+            cssFallback.href = 'https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css';
+            document.head.appendChild(cssFallback);
+        }
+    </script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=54">
+    <!-- Unconditional Tattoo Machine Cursor Styles -->
+    <style>
+        html, body, *, *::before, *::after {
+            cursor: none !important;
+        }
+        .custom-cursor-dot {
+            width: 48px !important;
+            height: 48px !important;
+            background-image: url('assets/tattoo_machine_cursor.png') !important;
+            background-size: contain !important;
+            background-repeat: no-repeat !important;
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -44px);
+            transform-origin: 4px 44px;
+            pointer-events: none !important;
+            z-index: 2147483647 !important;
+            opacity: 0;
+            transition: transform 0.12s cubic-bezier(0.25, 1, 0.5, 1);
+            display: block !important;
+        }
+        .custom-cursor-dot.visible {
+            opacity: 1 !important;
+        }
+        .custom-cursor-dot.hovered {
+            transform: translate(-4px, -44px) scale(1.18);
+        }
+        .custom-cursor-dot.active {
+            transform: translate(-4px, -44px) rotate(-15deg) scale(0.95);
+        }
+        .custom-cursor-ring {
+            display: none !important;
+        }
+        @media (hover: none) and (pointer: coarse) {
+            html, body, *, *::before, *::after {
+                cursor: auto !important;
+            }
+            .custom-cursor-dot {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Global Video Background -->
@@ -27,7 +79,7 @@
     </div>
 
     <!-- App Container -->
-    <div id="app-container" class="landing-active">
+    <div id="app-container" class="landing-active contenedor-centrado">
         <!-- GLOBAL HEADER -->
         <header class="main-header">
             <div class="header-logo" id="btn-logo-home" style="display: flex; align-items: center; cursor: pointer; border: none; background: transparent; padding: 0;">
@@ -82,16 +134,36 @@
             <section id="home-view" class="view-panel">
                 <div class="home-layout">
                     
-                    <!-- LEFT COLUMN: Menu & Trivia -->
+                    <!-- LEFT COLUMN: Trivia Bubble & Yellow Menu -->
                     <div class="home-left-panel">
-                        <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
+                        <!-- 1. BURBUJA DINÁMICA CIRCULAR "SABÍAS QUE" (ARRIBA DEL MENÚ) -->
+                        <div class="trivia-interactive-bubble circular-bubble" id="trivia-interactive-bubble" role="region" aria-label="Curiosidad sobre tatuajes">
+                            <button type="button" class="bubble-dice-btn" id="btn-cycle-trivia" title="Girar y ver otro dato curioso" aria-label="Cambiar dato curioso">
+                                <i data-lucide="dice-5"></i>
+                            </button>
+                            <span class="bubble-badge font-syne">
+                                <i data-lucide="lightbulb"></i> SABÍAS QUE?
+                            </span>
+                            <div class="bubble-body">
+                                <p class="bubble-text" id="bubble-trivia-text">Ötzi (3300 a.C.) tenía 61 tatuajes que coinciden con puntos de acupuntura medicinal.</p>
+                            </div>
+                            <div class="bubble-footer">
+                                <a href="#" class="bubble-link" id="btn-bubble-explore-trivia">
+                                    Ver historia <i data-lucide="arrow-right"></i>
+                                </a>
+                            </div>
+                            <div class="bubble-trail-dot-1"></div>
+                            <div class="bubble-trail-dot-2"></div>
+                        </div>
+
+                        <!-- 2. VERTICAL YELLOW NAVBAR (Sidebar Centrado y Proporcional) -->
                         <div class="floating-sidebar-menu">
                             <div class="sidebar-item item-logo" title="Inicio">
                                 <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
                             </div>
-                            <!-- Volver a Home (Casa) -->
-                            <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
-                                <i data-lucide="home"></i>
+                            <!-- Volver Atrás (Punto 14: Flecha Oficial Pipo) -->
+                            <div class="sidebar-item btn-sidebar-back-home" title="Volver Atrás" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Volver Atrás" class="sidebar-custom-svg-btn">
                             </div>
                             <div class="sidebar-item active btn-sidebar-home" title="Inicio">
                                 <svg viewBox="90 85 185 140" fill="currentColor">
@@ -100,86 +172,46 @@
                                     <path d="M109.07,204.6l3.23,3.33c-4.25,5.6-10.27,9.16-16.16,12.9C99.82,214.91,103.44,209,109.07,204.6Z" />
                                 </svg>
                             </div>
-                            <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
-                                <svg viewBox="140 45 105 180" fill="currentColor">
-                                    <path d="M206.29,135.78Q202,148.49,195.85,153a54.55,54.55,0,0,1-16.16,7.62,55.38,55.38,0,0,0-12,5q-4.36,2.64-7.26,9.26t-2.91,19a17.92,17.92,0,0,0,3.27,10.26,24.4,24.4,0,0,0,8.53,7.72,21.69,21.69,0,0,0,10.53,2.9,15.41,15.41,0,0,0,12-5.26,74.08,74.08,0,0,1,14.88-12.89,30.51,30.51,0,0,1,16.71-4.72,23.55,23.55,0,0,1,3.45.18,28.68,28.68,0,0,1,10.89,3.27q4.53,2.53,13.25,10.16l-1.45.73a17.53,17.53,0,0,0-8.72-2.36A29,29,0,0,0,230,206.4a51.1,51.1,0,0,0-14.43,8.81q-6.09,5.35-13.71,17.52Q172.25,218.38,158.18,207t-14.07-23.33q0-16.89,3.72-25.33t9.26-11.16a56.15,56.15,0,0,1,14.8-4.36q9.8-1.63,15.61-4.63t10-12.16q4.19-9.16,4.54-27.33h8.53Q210.55,123.07,206.29,135.78ZM220,55.9l-7.63,8.89a37.68,37.68,0,0,1-3.18,3.45,3.8,3.8,0,0,1-2.45,1.27,4,4,0,0,1-2.18-.9,39.38,39.38,0,0,1-3.08-2.55l-6.72-5.63a3.14,3.14,0,0,0-1.45-.54c-.85,0-1.88.61-3.09,1.82L189.5,61,192,58.07l9.62-11.25a21.31,21.31,0,0,1,1.91-2,2.38,2.38,0,0,1,1.54-.72c.72,0,2.18.9,4.35,2.72l8,6.9a3.14,3.14,0,0,0,1.46.54c.6,0,1.57-.66,2.9-2l.73.72Z" />
-                                </svg>
-                            </div>
+
                             <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
                                 <svg viewBox="105 15 180 240" fill="currentColor">
                                     <path d="M161.19,34.24A52.06,52.06,0,0,0,138,39.61,47.37,47.37,0,0,0,120.38,54a32,32,0,0,0-6.66,19.34q0,12.24,9.67,23.41l-1.29,1.72q-14.61-15.25-14.61-31.58,0-12.89,8.59-24.27a59.84,59.84,0,0,1,22.67-18,68.16,68.16,0,0,1,29.53-6.66,61,61,0,0,1,33.3,9.66,19.38,19.38,0,0,0,5.47-3.86,14.17,14.17,0,0,0,3.12-6.23h2.15a21.17,21.17,0,0,1-6.88,11.27q-5.15,4.41-19.12,12.14A48.1,48.1,0,0,0,161.19,34.24ZM274.61,238.52q1.5,10.53,7.09,12.67v1.72a22.06,22.06,0,0,1-14.18-8.7,54,54,0,0,1-8.16-17.72,31.56,31.56,0,0,1-24.06,14V239q7.74-1.72,11.28-7.62a35,35,0,0,0,4.51-13.86q1-8,1.18-22.77V105.13a54.45,54.45,0,0,1-2.58,6.55c-1.15,2.51-1.93,4.33-2.36,5.48q-3.87,8.59-5.91,14.39a32,32,0,0,0-2,10.52,11,11,0,0,0,3,8.17L241.1,152q-4.95-4.94-3.87-12.88a24,24,0,0,0,.22-3.66,6.39,6.39,0,0,0-1.29-4.29q-1.29-1.5-4.94-1.5H204.15v51.55q0,11.6-5.26,17.72t-15.14,8.27a70.41,70.41,0,0,1,19.12,6.44,47.44,47.44,0,0,1,14.39,11l-16.11,15.89a58.63,58.63,0,0,0-22.24-16.86,64.56,64.56,0,0,0-26.53-6.12q-11.16,0-18.47,5.05t-7.3,14.5a22.25,22.25,0,0,0,.21,3.43h-1.5c-.29-2.57-.43-4.37-.43-5.37a23.41,23.41,0,0,1,6.34-16.64q6.33-6.76,16.86-10.21a12.05,12.05,0,0,0,6.12-8.27,81.07,81.07,0,0,0,1.18-16V136.27q0-9.66-5.47-13.74a16.91,16.91,0,0,0-11.5-3.66,20,20,0,0,1,10.53-3,10.72,10.72,0,0,1,6.44,1.72V71.19q0-9.45,5.05-15.15a29.48,29.48,0,0,1,10.95-8,116.18,116.18,0,0,1,13.22-4.3v2.58q-8.38,3.87-8.38,24.92v110q0,17.61-11.17,24.49a40.14,40.14,0,0,1,6,0c4.16-.43,7.23-3,9.24-7.84a43,43,0,0,0,3-16.65v-110q0-9.68,2.36-16a28.36,28.36,0,0,1,5.8-9.88,76.71,76.71,0,0,1,9.24-7.84,88,88,0,0,0,10.2-8.91A29.62,29.62,0,0,0,217,17.49h1.72A85.4,85.4,0,0,1,214.68,28q-2.15,4.51-3.87,7.73a55.6,55.6,0,0,0-5.15,13.32q-1.5,6.45-1.51,22.13v39.09h33.94a19.43,19.43,0,0,0,7.74-1.39,7.53,7.53,0,0,0,4.29-4.19,38.76,38.76,0,0,0,2.15-6.88V60a91.44,91.44,0,0,0-2.79-23.42,46.79,46.79,0,0,0-10.1-18.9l.43-.21,3.87,3.22a206.56,206.56,0,0,1,16,14.5q5.69,5.91,5.91,9.56a36.72,36.72,0,0,1,8.59-9.67,21.47,21.47,0,0,1,11.17-4.73v.43q-7.73,2.58-10,14.18a149.07,149.07,0,0,0-2.25,27.93V215.32A165.15,165.15,0,0,0,274.61,238.52Z" />
                                 </svg>
-                            </div>
-                            <div class="sidebar-item btn-sidebar-eventos" title="Eventos y Comunidad">
-                                <i data-lucide="star"></i>
-                            </div>
-                            <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
-                                <i data-lucide="bookmark"></i>
-                            </div>
-                        </div>
-
-                        <!-- SABÍAS QUE? BALLOON / GLOBE (Below Menu) -->
-                        <div class="trivia-balloon-card">
-                            <div class="balloon-icon-wrapper">
-                                <i data-lucide="help-circle"></i>
-                            </div>
-                            <div class="balloon-content">
-                                <strong>¿Sabías que?</strong>
-                                <span id="home-trivia-snippet">Ötzi, la momia humana más antigua conocida (3300 a.C.), tiene 61 tatuajes en su cuerpo que coinciden con puntos de acupuntura terapéutica...</span>
-                                <a href="#" id="btn-home-trivia-ver-mas" class="balloon-ver-mas">Ver más &rarr;</a>
                             </div>
                         </div>
                     </div>
 
                     <!-- MIDDLE COLUMN: Content Grid -->
                     <div class="home-center-panel">
-                        <!-- BANNER DE EVENTO DESTACADO (MARKETING CAMPAIGN) -->
-                        <div class="evento-promo-banner neobrutalist-card">
-                            <div class="banner-badge-wrapper">
-                                <span class="banner-badge"><i data-lucide="sparkles"></i> DESTACADO</span>
+                        <!-- TIRA COMPACTA DE PRÓXIMOS EVENTOS (REEMPLAZA VIEJO BANNER) -->
+                        <div class="events-announcement-bar" id="btn-home-events-bar" role="button" tabindex="0" title="Ver cartelera de próximos eventos en La Araucanía">
+                            <div class="announcement-left">
+                                <span class="announcement-badge"><i data-lucide="calendar"></i> PRÓXIMOS EVENTOS</span>
+                                <span class="announcement-text"><strong>Expo Tattoo Araucanía (20-21 Sept)</strong> · +30 artistas, flash days y encuentros en la región</span>
                             </div>
-                            <div class="banner-main">
-                                <div class="banner-info">
-                                    <span class="banner-tagline">Gran Evento de Tatuadores en Temuco</span>
-                                    <h2 class="banner-title font-ghosthey">Portal Temuco 2026</h2>
-                                    <p class="banner-description">Concursos, música en vivo, ofertas exclusivas y regalos para toda la comunidad.</p>
-                                </div>
-                                <div class="banner-meta">
-                                    <div class="meta-item">
-                                        <i data-lucide="calendar"></i>
-                                        <span>01-08-2026</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i data-lucide="map-pin"></i>
-                                        <span>Portal Temuco</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-banner-cta" id="btn-banner-ver-mas">
-                                Más información <i data-lucide="arrow-right"></i>
-                            </button>
+                            <span class="announcement-link">Ver cartelera <i data-lucide="arrow-right"></i></span>
                         </div>
 
-                        <!-- HOW IT WORKS SECTION (Neobrutalist Cards) -->
+                        <!-- HOW IT WORKS SECTION (Punto 10: Réplica exacta Neobrutalista) -->
                         <div class="how-it-works-sec-new">
                             <h3 class="how-it-works-title-new">¿CÓMO FUNCIONA?</h3>
                             <div class="how-it-works-steps-new">
-                                <div class="step-card step-card-busca" id="step-card-1" data-step-num="1" title="Usa los filtros de estilo y ubicación para encontrar al artista ideal">
-                                    <div class="step-icon-wrapper step-icon-yellow">
+                                <div class="step-item step-item-busca">
+                                    <div class="step-square-box step-box-yellow">
                                         <i data-lucide="search"></i>
                                     </div>
                                     <span class="step-number-title">1. BUSCA</span>
-                                    <p class="step-desc-text">Filtra por estilo y distancia</p>
+                                    <p class="step-desc-text">Filtra por estilo, y distancia</p>
                                 </div>
-                                <div class="step-card step-card-elige" id="step-card-2" data-step-num="2" title="Explora portafolios y recomendaciones de otros clientes">
-                                    <div class="step-icon-wrapper step-icon-pink">
+                                <div class="step-item step-item-elige">
+                                    <div class="step-square-box step-box-red">
                                         <i data-lucide="heart"></i>
                                     </div>
                                     <span class="step-number-title">2. ELIGE</span>
-                                    <p class="step-desc-text">Revisa portafolios y elige a tu artista ideal</p>
+                                    <p class="step-desc-text">Revisa portafolios y elige a tu artista ideal.</p>
                                 </div>
-                                <div class="step-card step-card-reserva" id="step-card-3" data-step-num="3" title="Agenda tu cita directamente desde la ficha del tatuador">
-                                    <div class="step-icon-wrapper step-icon-purple">
+                                <div class="step-item step-item-reserva">
+                                    <div class="step-square-box step-box-purple">
                                         <i data-lucide="calendar"></i>
                                     </div>
                                     <span class="step-number-title">3. RESERVA</span>
@@ -191,39 +223,28 @@
                         <!-- MAIN NEOBRUTALIST CARD: TATUADORES -->
                         <div class="tatuadores-main-card">
                             <div class="tatuadores-card-header">
-                                <!-- Styles Pills (Left) -->
-                                <div class="style-pills-row">
-                                    <button class="style-pill active" data-style="Todos">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Todos" class="style-pill-icon">
+                                <!-- Styles Multi-Select Trigger & Title -->
+                                <div class="styles-trigger-wrapper">
+                                    <button class="btn-open-styles-modal" id="btn-open-styles-modal" type="button" title="Abrir selector de 21 estilos con guía educativa">
+                                        <i data-lucide="sliders-horizontal"></i>
+                                        <span>Filtrar por Estilo (<strong id="styles-badge-count">0/21</strong>)</span>
+                                        <i data-lucide="chevron-down" class="icon-chevron"></i>
+                                    </button>
+                                    <button class="btn-quick-all-styles active" id="btn-quick-all-styles" type="button" title="Mostrar todos los estilos">
                                         Todos
-                                    </button>
-                                    <button class="style-pill" data-style="Realismo">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-realismo_wlmtlj.svg" alt="Realismo" class="style-pill-icon">
-                                        REALISMO
-                                    </button>
-                                    <button class="style-pill" data-style="Acuarela">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tint_fullcolor_ysss41.svg" alt="Full Color" class="style-pill-icon">
-                                        FULL COLOR
-                                    </button>
-                                    <button class="style-pill" data-style="Black & Grey">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086732/picto_para_tinta-blackandgary_hkioay.svg" alt="Black and Gray" class="style-pill-icon">
-                                        Black and Gray
-                                    </button>
-                                    <button class="style-pill" data-style="Fine Line">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-fineline_k6rp0a.svg" alt="Fine Line" class="style-pill-icon">
-                                        FINE LINE
-                                    </button>
-                                    <button class="style-pill" data-style="Blackwork">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086732/picto_para_tinta-blackwoork_woohtv.svg" alt="Black work" class="style-pill-icon">
-                                        Black work
-                                    </button>
-                                    <button class="style-pill" data-style="Puntillismo">
-                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086733/picto_para_tinta-puntillismo_zhvrod.svg" alt="Puntillismo" class="style-pill-icon">
-                                        PUNTILLISMO
                                     </button>
                                 </div>
                                 <!-- Title (Right) -->
-                                <h2 class="tatuadores-gothic-title font-ghosthey">Tatuadores</h2>
+                                <h2 class="tatuadores-title font-syne">Tatuadores</h2>
+                            </div>
+
+                            <!-- Dynamic Active Filters Chips Bar -->
+                            <div class="active-filters-chips-bar" id="active-filters-chips-bar" style="display: none;">
+                                <div class="active-chips-label"><i data-lucide="filter"></i> Filtros activos:</div>
+                                <div class="active-chips-list" id="active-chips-list"></div>
+                                <button class="btn-clear-all-chips" id="btn-clear-all-chips" type="button">
+                                    <i data-lucide="trash-2"></i> Limpiar filtros
+                                </button>
                             </div>
 
                             <!-- Search & Dropdown Filters Row -->
@@ -232,9 +253,11 @@
                                     <select id="filter-location-select" class="neobrutalist-select">
                                         <option value="Todos">Ubicación (Todas)</option>
                                         <option value="Temuco">Temuco</option>
-                                        <option value="Padre Las Casas">Padre Las Casas</option>
-                                        <option value="Villarrica">Villarrica</option>
                                         <option value="Teodoro Schmidt">Teodoro Schmidt</option>
+                                        <option value="Villarrica">Villarrica</option>
+                                        <option value="Pucón">Pucón</option>
+                                        <option value="Padre Las Casas">Padre Las Casas</option>
+                                        <option value="Angol">Angol</option>
                                     </select>
                                     <span class="select-arrow-red"></span>
                                 </div>
@@ -256,77 +279,399 @@
 
                             <!-- Artist Grid -->
                             <div class="artist-grid" id="artist-grid">
-                                <!-- Studio Tatto Pipo -->
-                                <article class="artist-card active" data-id="pipo" data-location="Teodoro Schmidt" data-styles="['Fine Line', 'Blackwork']">
+                                <!-- Studio tatto pipo -->
+                                <article class="artist-card active" data-id="pipo" data-location="Teodoro Schmidt" data-styles="['Fine Line', 'Blackwork', 'Puntillismo', 'Botanica', 'Geometrico']" data-exp="5" data-price="Intermedio">
                                     <div class="card-image-wrapper">
-                                        <img src="assets/tattoo_flower.png" alt="Tatuaje de Studio Tatto Pipo" class="card-tattoo-img">
-                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
-                                            <i data-lucide="heart" class="icon-heart"></i>
-                                        </button>
+                                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp" alt="Tatuaje de Studio tatto pipo" class="card-tattoo-img" loading="lazy">
                                     </div>
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Studio Tatto Pipo Avatar">
+                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" alt="Studio tatto pipo Avatar">
                                             </div>
                                             <div class="artist-brand-text">
                                                 <h3 class="artist-name">Studio tatto pipo</h3>
-                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Teodoro Schmidt</span>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Teodoro Schmidt</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @pipo.tattooo</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="artist-tags">
                                             <span class="tag">Fine Line</span>
                                             <span class="tag">Blackwork</span>
+                                            <span class="tag tag-count">+3</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
                                         </div>
                                     </div>
                                 </article>
 
-                                <!-- Wentruart -->
-                                <article class="artist-card" data-id="wentruart" data-location="Temuco" data-styles="['Neo Tradicional', 'Tradicional']">
+                                <!-- Connaink -->
+                                <article class="artist-card" data-id="connaink" data-location="Temuco" data-styles="['Fine Line', 'Puntillismo']" data-exp="1" data-price="Intermedio">
                                     <div class="card-image-wrapper">
-                                        <img src="assets/tattoo_alien.png" alt="Tatuaje de Wentruart" class="card-tattoo-img">
-                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
-                                            <i data-lucide="heart" class="icon-heart"></i>
-                                        </button>
+                                        <img src="assets/artists_real/connaink/tattoo_1.jpg" alt="Tatuaje de Connaink" class="card-tattoo-img" loading="lazy">
                                     </div>
                                     <div class="card-info">
                                         <div class="artist-brand-row">
                                             <div class="artist-avatar-circle">
-                                                <img src="https://unavatar.io/instagram/wentruart" alt="Wentruart Avatar">
+                                                <img src="assets/artists_real/connaink/avatar.jpg" alt="Connaink Avatar">
                                             </div>
                                             <div class="artist-brand-text">
-                                                <h3 class="artist-name">Wentruart</h3>
-                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                <h3 class="artist-name">Connaink</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @connaink</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="artist-tags">
-                                            <span class="tag">Neo Tradicional</span>
-                                            <span class="tag">Tradicional</span>
-                                        </div>
-                                    </div>
-                                </article>
-
-                                <!-- Tattoo Pucon -->
-                                <article class="artist-card" data-id="tattoopucon" data-location="Pucón" data-styles="['Realismo', 'Puntillismo']">
-                                    <div class="card-image-wrapper">
-                                        <img src="assets/tattoo_lion.png" alt="Tatuaje de Tattoo Pucón" class="card-tattoo-img">
-                                        <button class="btn-favorite" aria-label="Agregar a favoritos">
-                                            <i data-lucide="heart" class="icon-heart"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-info">
-                                        <div class="artist-brand-row">
-                                            <div class="artist-avatar-circle">
-                                                <img src="https://unavatar.io/instagram/tattoopucon" alt="Tattoo Pucón Avatar">
-                                            </div>
-                                            <div class="artist-brand-text">
-                                                <h3 class="artist-name">Tattoo Pucón</h3>
-                                                <span class="artist-loc"><i data-lucide="map-pin"></i> Pucón</span>
-                                            </div>
-                                        </div>
-                                        <div class="artist-tags">
-                                            <span class="tag">Realismo</span>
+                                            <span class="tag">Fine Line</span>
                                             <span class="tag">Puntillismo</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">Menos de 1 año</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- nowss.ttt -->
+                                <article class="artist-card" data-id="nowss" data-location="Temuco" data-styles="['Blackwork', 'Fine Line', 'Realismo', 'Puntillismo']" data-exp="4" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/nowss/tattoo_1.jpg" alt="Tatuaje de nowss.ttt" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/nowss/avatar.jpg" alt="nowss.ttt Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">nowss.ttt</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @nowss.ttt</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag tag-count">+2</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Tatto Zimple -->
+                                <article class="artist-card" data-id="tatto_zimple" data-location="Padre Las Casas" data-styles="['Blackwork', 'Black and Gray', 'Fine Line', 'Puntillismo']" data-exp="4" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <div class="card-verified-brand-cover">
+                                            <div class="brand-cover-badge">VERIFICADO</div>
+                                            <div class="brand-cover-handle">@tatto_zimple</div>
+                                            <div class="brand-cover-cta">Portafolio en Instagram</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tatto Zimple Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Tatto Zimple</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Padre Las Casas</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @tatto_zimple</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Black and Gray</span>
+                                            <span class="tag tag-count">+2</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- majesus.ink -->
+                                <article class="artist-card" data-id="majesus" data-location="Villarrica" data-styles="['Fine Line', 'Lettering']" data-exp="2" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/majesus/tattoo_1.jpg" alt="Tatuaje de majesus.ink" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/majesus/avatar.jpg" alt="majesus.ink Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">majesus.ink</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Villarrica</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @majesus.ink</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Lettering</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">1–3 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- sasori.tattoo -->
+                                <article class="artist-card" data-id="sasori" data-location="Temuco" data-styles="['Blackwork', 'Neotribal', 'Cybersigilism', 'Dark Ornamental']" data-exp="4" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <div class="card-verified-brand-cover">
+                                            <div class="brand-cover-badge">VERIFICADO</div>
+                                            <div class="brand-cover-handle">@sasori.tattoo.cl</div>
+                                            <div class="brand-cover-cta">Portafolio en Instagram</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="sasori.tattoo Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">sasori.tattoo</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @sasori.tattoo.cl</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Neotribal</span>
+                                            <span class="tag tag-count">+2</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- milenkorn -->
+                                <article class="artist-card" data-id="milenkorn" data-location="Pucón" data-styles="['Blackwork', 'Black and Gray']" data-exp="2" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/milenkorn/tattoo_1.jpg" alt="Tatuaje de milenkorn" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/milenkorn/avatar.jpg" alt="milenkorn Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">milenkorn</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Pucón</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @milenkorn</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Black and Gray</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">1–3 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Neblink Tattoo -->
+                                <article class="artist-card" data-id="neblink" data-location="Temuco" data-styles="['Blackwork', 'Black and Gray', 'Fine Line', 'Realismo']" data-exp="4" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <div class="card-verified-brand-cover">
+                                            <div class="brand-cover-badge">VERIFICADO</div>
+                                            <div class="brand-cover-handle">@nebl.ink</div>
+                                            <div class="brand-cover-cta">Portafolio en Instagram</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Neblink Tattoo Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Neblink Tattoo</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @nebl.ink</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Black and Gray</span>
+                                            <span class="tag tag-count">+2</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Ánima Artist -->
+                                <article class="artist-card" data-id="anima" data-location="Angol" data-styles="['Blackwork', 'Fine Line', 'Ornamental']" data-exp="6" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/anima/tattoo_1.jpg" alt="Tatuaje de Ánima Artist" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/anima/avatar.jpg" alt="Ánima Artist Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Ánima Artist</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Angol</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @anima.artist</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Ornamental</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">Más de 5 años</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- balentina.ttt -->
+                                <article class="artist-card" data-id="balentina" data-location="Temuco" data-styles="['Blackwork', 'Puntillismo']" data-exp="4" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/balentina/tattoo_1.jpg" alt="Tatuaje de balentina.ttt" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/balentina/avatar.jpg" alt="balentina.ttt Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">balentina.ttt</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @balentina.ttt</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Puntillismo</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Dulce de Limón Ink -->
+                                <article class="artist-card" data-id="dulcedelimon" data-location="Villarrica" data-styles="['Blackwork', 'Fine Line', 'Puntillismo']" data-exp="2" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/dulcedelimon/tattoo_1.jpg" alt="Tatuaje de Dulce de Limón Ink" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/dulcedelimon/avatar.jpg" alt="Dulce de Limón Ink Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Dulce de Limón Ink</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Villarrica</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @dulcedelimon.ink</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Puntillismo</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">1–3 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Pan de Tinta -->
+                                <article class="artist-card" data-id="pandetinta" data-location="Temuco" data-styles="['Blackwork', 'Fine Line', 'Puntillismo']" data-exp="5" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/pandetinta/tattoo_1.jpg" alt="Tatuaje de Pan de Tinta" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/pandetinta/avatar.jpg" alt="Pan de Tinta Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Pan de Tinta</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @pan.detinta</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Blackwork</span>
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Puntillismo</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">Más de 5 años</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Denussa Tatua -->
+                                <article class="artist-card" data-id="denussa" data-location="Temuco" data-styles="['Fine Line', 'Puntillismo']" data-exp="3" data-price="Intermedio">
+                                    <div class="card-image-wrapper">
+                                        <img src="assets/artists_real/denussa/tattoo_1.jpg" alt="Tatuaje de Denussa Tatua" class="card-tattoo-img" loading="lazy">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="artist-brand-row">
+                                            <div class="artist-avatar-circle">
+                                                <img src="assets/artists_real/denussa/avatar.jpg" alt="Denussa Tatua Avatar">
+                                            </div>
+                                            <div class="artist-brand-text">
+                                                <h3 class="artist-name">Denussa Tatua</h3>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <span class="artist-loc"><i data-lucide="map-pin"></i> Temuco</span>
+                                                    <span class="artist-insta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @denussatatua</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="artist-tags">
+                                            <span class="tag">Fine Line</span>
+                                            <span class="tag">Puntillismo</span>
+                                        </div>
+                                        <div class="artist-meta">
+                                            <span class="meta-exp">3–5 años tatuando</span>
+                                            <button type="button" class="btn-explorar-tag" style="background-color: #FFC82C; border: 2px solid #000000; box-shadow: 2px 2px 0px #000000; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; cursor: pointer;">Explorar <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></button>
                                         </div>
                                     </div>
                                 </article>
@@ -344,18 +689,13 @@
                     <!-- RIGHT COLUMN: Selected Artist Quick Sheet (Ficha) -->
                     <div class="home-right-panel" id="artist-quick-sheet">
                         <div class="ficha-card">
-                            <!-- Close Button -->
-                            <button class="btn-ficha-close" id="btn-ficha-close" title="Cerrar">
-                                <i data-lucide="x"></i>
+                            <!-- Close Button (Official Pipo SVG) -->
+                            <button class="btn-ficha-close" id="btn-ficha-close" title="Cerrar" type="button" aria-label="Cerrar Ficha">
+                                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-06_kf9bp1.svg" alt="Cerrar" class="btn-close-svg-icon">
                             </button>
                             <!-- Large Cover/Avatar Image -->
                             <div class="ficha-cover-wrapper">
                                 <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp" id="ficha-artist-avatar" alt="Artist Avatar" class="ficha-avatar-img">
-                                <div class="ficha-status-dots">
-                                    <span class="status-dot"></span>
-                                    <span class="status-dot"></span>
-                                    <span class="status-dot"></span>
-                                </div>
                             </div>
 
                             <!-- Info details -->
@@ -364,7 +704,7 @@
                                 <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;">
                                     <p class="ficha-artist-loc" id="ficha-artist-location" style="margin: 0;"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
                                     <p class="ficha-artist-insta-handle" id="ficha-artist-insta-handle" style="margin: 0; font-size: 0.9rem; color: #7b4ad8; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @pipo.tattooo
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @pipo.tattooo
                                     </p>
                                 </div>
                                 
@@ -373,15 +713,10 @@
                                     <p id="ficha-artist-bio">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria en la región de La Araucanía.</p>
                                 </div>
 
-                                <div class="ficha-bottom-row" style="display: flex; gap: 12px; align-items: center; width: 100%;">
-                                    <!-- Contactar Button (Instagram) -->
-                                    <a href="https://instagram.com" target="_blank" id="ficha-artist-instagram" class="btn btn-primary" style="flex: 1; text-decoration: none; justify-content: center; gap: 8px;" rel="noopener noreferrer">
-                                        <i data-lucide="instagram"></i> Contactar
-                                    </a>
-                                    
-                                    <!-- View Full Profile Button -->
-                                    <button class="btn-ficha-portfolio" id="btn-ficha-view-portfolio">
-                                        Explorar
+                                <div class="ficha-bottom-row" style="display: flex; align-items: center; width: 100%;">
+                                    <!-- View Full Profile Button (Solo Explorar para entrar al perfil completo) -->
+                                    <button class="btn-ficha-portfolio" id="btn-ficha-view-portfolio" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        Explorar <i data-lucide="arrow-right"></i>
                                     </button>
                                 </div>
                             </div>
@@ -389,41 +724,6 @@
                             <!-- Map inside the Ficha -->
                             <div class="ficha-map-wrapper">
                                 <div id="interactive-map" style="width: 100%; height: 180px; border-radius: 12px; z-index: 1;"></div>
-                            </div>
-                            
-                            <!-- Comments/Recommendations Section in Drawer -->
-                            <div class="ficha-comments-section" style="margin-top: 16px; border-top: 2px solid #000000; padding-top: 16px;">
-                                <h4 style="font-weight: 800; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 1rem; color: #000;">
-                                    Recomendaciones 
-                                    <span class="badge" style="font-size: 0.75rem; background: #7b4ad8; color: #fff; border: 2px solid #000000;" id="ficha-comments-count">2</span>
-                                </h4>
-                                <!-- Comments list -->
-                                <div id="ficha-comments-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; padding-right: 4px; margin-bottom: 12px;">
-                                    <!-- Dynamic comments go here -->
-                                </div>
-                                <!-- Write comment trigger button -->
-                                <button class="btn btn-outline btn-block btn-sm" id="btn-show-add-comment" style="font-size: 0.8rem; height: 32px;"><i data-lucide="message-square-plus" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> Dejar Recomendación</button>
-                                
-                                <!-- Add comment form (collapsed by default) -->
-                                <div id="add-comment-form-container" style="display: none; margin-top: 12px; background: rgba(0,0,0,0.05); padding: 12px; border: 2.5px solid #000000; border-radius: 8px;">
-                                    <h5 style="margin: 0 0 8px 0; font-weight: 800; font-size: 0.85rem; color: #000;">Escribe tu comentario</h5>
-                                    <div class="input-group" style="margin-bottom: 8px;">
-                                        <input type="text" id="comment-client-name" placeholder="Tu Nombre" class="form-control" style="font-size: 0.8rem; padding: 6px 10px; height: 30px; border: 2px solid #000000;">
-                                    </div>
-                                    <div class="input-group" style="margin-bottom: 8px;">
-                                        <textarea id="comment-client-text" placeholder="¿Cómo fue tu experiencia con el estudio?..." class="form-control" rows="2" style="font-size: 0.8rem; padding: 6px 10px; border: 2px solid #000000;"></textarea>
-                                    </div>
-                                    <div style="display: flex; gap: 8px;">
-                                        <button type="button" class="btn btn-primary btn-sm flex-1" id="btn-submit-comment" style="font-size: 0.8rem; height: 30px; padding: 0 8px;">Enviar</button>
-                                        <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-comment" style="font-size: 0.8rem; height: 30px; padding: 0 8px;">Cancelar</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Toggle arrows inside ficha -->
-                            <div class="ficha-controls">
-                                <button class="btn-ficha-toggle" id="btn-ficha-toggle-prev" title="Anterior"><i data-lucide="chevron-left"></i></button>
-                                <button class="btn-ficha-toggle" id="btn-ficha-toggle-next" title="Siguiente"><i data-lucide="chevron-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -439,9 +739,9 @@
                         <div class="sidebar-item item-logo" title="Inicio">
                             <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
                         </div>
-                        <!-- Volver a Home (Casa) -->
-                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
-                            <i data-lucide="home"></i>
+                        <!-- Volver Atrás (Punto 14: Flecha Oficial Pipo) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver Atrás" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Volver Atrás" class="sidebar-custom-svg-btn">
                         </div>
                         <div class="sidebar-item btn-sidebar-home" title="Inicio">
                             <svg viewBox="90 85 185 140" fill="currentColor">
@@ -450,28 +750,19 @@
                                 <path d="M109.07,204.6l3.23,3.33c-4.25,5.6-10.27,9.16-16.16,12.9C99.82,214.91,103.44,209,109.07,204.6Z" />
                             </svg>
                         </div>
-                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
-                            <svg viewBox="140 45 105 180" fill="currentColor">
-                                <path d="M206.29,135.78Q202,148.49,195.85,153a54.55,54.55,0,0,1-16.16,7.62,55.38,55.38,0,0,0-12,5q-4.36,2.64-7.26,9.26t-2.91,19a17.92,17.92,0,0,0,3.27,10.26,24.4,24.4,0,0,0,8.53,7.72,21.69,21.69,0,0,0,10.53,2.9,15.41,15.41,0,0,0,12-5.26,74.08,74.08,0,0,1,14.88-12.89,30.51,30.51,0,0,1,16.71-4.72,23.55,23.55,0,0,1,3.45.18,28.68,28.68,0,0,1,10.89,3.27q4.53,2.53,13.25,10.16l-1.45.73a17.53,17.53,0,0,0-8.72-2.36A29,29,0,0,0,230,206.4a51.1,51.1,0,0,0-14.43,8.81q-6.09,5.35-13.71,17.52Q172.25,218.38,158.18,207t-14.07-23.33q0-16.89,3.72-25.33t9.26-11.16a56.15,56.15,0,0,1,14.8-4.36q9.8-1.63,15.61-4.63t10-12.16q4.19-9.16,4.54-27.33h8.53Q210.55,123.07,206.29,135.78ZM220,55.9l-7.63,8.89a37.68,37.68,0,0,1-3.18,3.45,3.8,3.8,0,0,1-2.45,1.27,4,4,0,0,1-2.18-.9,39.38,39.38,0,0,1-3.08-2.55l-6.72-5.63a3.14,3.14,0,0,0-1.45-.54c-.85,0-1.88.61-3.09,1.82L189.5,61,192,58.07l9.62-11.25a21.31,21.31,0,0,1,1.91-2,2.38,2.38,0,0,1,1.54-.72c.72,0,2.18.9,4.35,2.72l8,6.9a3.14,3.14,0,0,0,1.46.54c.6,0,1.57-.66,2.9-2l.73.72Z" />
-                            </svg>
-                        </div>
+
                         <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
                             <svg viewBox="105 15 180 240" fill="currentColor">
                                 <path d="M161.19,34.24A52.06,52.06,0,0,0,138,39.61,47.37,47.37,0,0,0,120.38,54a32,32,0,0,0-6.66,19.34q0,12.24,9.67,23.41l-1.29,1.72q-14.61-15.25-14.61-31.58,0-12.89,8.59-24.27a59.84,59.84,0,0,1,22.67-18,68.16,68.16,0,0,1,29.53-6.66,61,61,0,0,1,33.3,9.66,19.38,19.38,0,0,0,5.47-3.86,14.17,14.17,0,0,0,3.12-6.23h2.15a21.17,21.17,0,0,1-6.88,11.27q-5.15,4.41-19.12,12.14A48.1,48.1,0,0,0,161.19,34.24ZM274.61,238.52q1.5,10.53,7.09,12.67v1.72a22.06,22.06,0,0,1-14.18-8.7,54,54,0,0,1-8.16-17.72,31.56,31.56,0,0,1-24.06,14V239q7.74-1.72,11.28-7.62a35,35,0,0,0,4.51-13.86q1-8,1.18-22.77V105.13a54.45,54.45,0,0,1-2.58,6.55c-1.15,2.51-1.93,4.33-2.36,5.48q-3.87,8.59-5.91,14.39a32,32,0,0,0-2,10.52,11,11,0,0,0,3,8.17L241.1,152q-4.95-4.94-3.87-12.88a24,24,0,0,0,.22-3.66,6.39,6.39,0,0,0-1.29-4.29q-1.29-1.5-4.94-1.5H204.15v51.55q0,11.6-5.26,17.72t-15.14,8.27a70.41,70.41,0,0,1,19.12,6.44,47.44,47.44,0,0,1,14.39,11l-16.11,15.89a58.63,58.63,0,0,0-22.24-16.86,64.56,64.56,0,0,0-26.53-6.12q-11.16,0-18.47,5.05t-7.3,14.5a22.25,22.25,0,0,0,.21,3.43h-1.5c-.29-2.57-.43-4.37-.43-5.37a23.41,23.41,0,0,1,6.34-16.64q6.33-6.76,16.86-10.21a12.05,12.05,0,0,0,6.12-8.27,81.07,81.07,0,0,0,1.18-16V136.27q0-9.66-5.47-13.74a16.91,16.91,0,0,0-11.5-3.66,20,20,0,0,1,10.53-3,10.72,10.72,0,0,1,6.44,1.72V71.19q0-9.45,5.05-15.15a29.48,29.48,0,0,1,10.95-8,116.18,116.18,0,0,1,13.22-4.3v2.58q-8.38,3.87-8.38,24.92v110q0,17.61-11.17,24.49a40.14,40.14,0,0,1,6,0c4.16-.43,7.23-3,9.24-7.84a43,43,0,0,0,3-16.65v-110q0-9.68,2.36-16a28.36,28.36,0,0,1,5.8-9.88,76.71,76.71,0,0,1,9.24-7.84,88,88,0,0,0,10.2-8.91A29.62,29.62,0,0,0,217,17.49h1.72A85.4,85.4,0,0,1,214.68,28q-2.15,4.51-3.87,7.73a55.6,55.6,0,0,0-5.15,13.32q-1.5,6.45-1.51,22.13v39.09h33.94a19.43,19.43,0,0,0,7.74-1.39,7.53,7.53,0,0,0,4.29-4.19,38.76,38.76,0,0,0,2.15-6.88V60a91.44,91.44,0,0,0-2.79-23.42,46.79,46.79,0,0,0-10.1-18.9l.43-.21,3.87,3.22a206.56,206.56,0,0,1,16,14.5q5.69,5.91,5.91,9.56a36.72,36.72,0,0,1,8.59-9.67,21.47,21.47,0,0,1,11.17-4.73v.43q-7.73,2.58-10,14.18a149.07,149.07,0,0,0-2.25,27.93V215.32A165.15,165.15,0,0,0,274.61,238.52Z" />
                             </svg>
                         </div>
-                        <div class="sidebar-item btn-sidebar-eventos" title="Eventos y Comunidad">
-                            <i data-lucide="star"></i>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
-                            <i data-lucide="bookmark"></i>
-                        </div>
                     </div>
                     
                     <!-- LEFT COLUMN: Profile Info Card -->
                     <aside class="artist-profile-sidebar">
-                        <button class="btn-back-home" id="btn-back-home">
-                            <i data-lucide="arrow-left"></i> Volver a Explorar
+                        <button class="btn-back-home" id="btn-back-home" type="button" title="Volver a Explorar">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Volver Atrás" class="btn-back-svg-icon">
+                            <span>Volver a Explorar</span>
                         </button>
                         
                         <div class="artist-card-detailed">
@@ -485,14 +776,35 @@
                             <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; align-items: center;">
                                 <p class="profile-location" id="profile-detail-location" style="margin: 0;"><i data-lucide="map-pin"></i> Teodoro Schmidt</p>
                                 <p class="profile-insta-handle" id="profile-detail-insta-handle" style="margin: 0; font-size: 0.95rem; color: #7b4ad8; font-weight: 600; display: flex; align-items: center; gap: 6px; justify-content: center;">
-                                    <i data-lucide="instagram" style="width: 16px; height: 16px;"></i> @pipo.tattooo
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @pipo.tattooo
                                 </p>
                             </div>
                             
-                            <!-- Instagram CTA (Contactar) -->
-                            <a href="https://instagram.com" target="_blank" id="profile-detail-instagram-link" class="btn btn-primary btn-instagram" style="width: 100%; display: flex; justify-content: center; gap: 8px; text-decoration: none;" rel="noopener noreferrer">
-                                <i data-lucide="instagram"></i> Contactar
+                            <!-- Instagram CTA (Contactar - Punto 11: Botón borde circular y logo de Instagram) -->
+                            <a href="https://instagram.com" target="_blank" id="profile-detail-instagram-link" class="btn-contactar-instagram" rel="noopener noreferrer">
+                                CONTACTAR
                             </a>
+                            
+                            <!-- Estilos declarados en formulario -->
+                            <div class="profile-styles-section">
+                                <div class="profile-styles-chips" id="profile-styles-chips">
+                                    <span class="profile-style-badge">Fine Line</span>
+                                    <span class="profile-style-badge">Blackwork</span>
+                                    <span class="profile-style-badge">Puntillismo</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Ficha Técnica (Años tatuando + Marcas de tintas) -->
+                            <div class="profile-tech-specs">
+                                <div class="profile-tech-row">
+                                    <span class="profile-tech-label">Experiencia:</span>
+                                    <span class="profile-tech-val" id="profile-detail-experience">5 años</span>
+                                </div>
+                                <div class="profile-tech-row">
+                                    <span class="profile-tech-label">Tintas habituales:</span>
+                                    <span class="profile-tech-val inks-val" id="profile-detail-inks">Dynamic Ink, Eternal Ink</span>
+                                </div>
+                            </div>
                             
                             <!-- Visual status indicators -->
                             <div class="visual-indicators">
@@ -501,100 +813,61 @@
                                 <span class="indicator-bar"></span>
                             </div>
                             
-                            <!-- Profile Sections (matches exact text "Hacerca de" in Image 5) -->
+                            <!-- Profile Sections (Acerca de) -->
                             <div class="profile-about-section">
-                                <h3 class="about-heading" id="trigger-info-drawer">Hacerca de</h3>
-                                <p class="about-text">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.</p>
+                                <h3 class="profile-about-title">
+                                    <i data-lucide="info" style="width: 16px; height: 16px; color: #7b4ad8;"></i> Acerca de
+                                </h3>
+                                <p class="about-text" id="profile-detail-bio">Artista especializado en trazos finos y composiciones geométricas personalizadas con más de 5 años de trayectoria.</p>
+                            </div>
+
+                            <!-- Studio Map Section -->
+                            <div class="profile-map-section" style="margin-top: 18px; border-top: 2.5px solid #000000; padding-top: 16px;">
+                                <h3 class="profile-map-heading" style="display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #000000;">
+                                    <i data-lucide="map-pin" style="width: 18px; height: 18px; color: #7b4ad8;"></i> Ubicación del Estudio
+                                </h3>
+                                <p class="profile-map-location-text" id="profile-map-location-text" style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">
+                                    Teodoro Schmidt, Región de La Araucanía
+                                </p>
+                                <div class="profile-detail-map-wrapper">
+                                    <div id="profile-detail-map"></div>
+                                </div>
                             </div>
                         </div>
                     </aside>
                     
-                    <!-- RIGHT COLUMN: Portfolio, Carousel and Gallery -->
+                    <!-- RIGHT COLUMN: Portfolio (TattoosWizard High-Impact Gallery) -->
                     <div class="artist-portfolio-content">
                         
                         <!-- Header inside Detail View -->
                         <div class="portfolio-header">
-                            <h2 class="section-title">Galería de Trabajos</h2>
-                            <button class="btn-icon-purple" id="btn-profile-filters" aria-label="Filtrar Diseños">
-                                <i data-lucide="sliders-horizontal"></i>
-                            </button>
+                            <div>
+                                <h2 class="section-title">Portafolio de Trabajos Reales</h2>
+                                <p class="portfolio-subtitle">Fotografías 100% auténticas de tatuajes realizados por el artista</p>
+                            </div>
                         </div>
-                        
-                        <!-- 3D CAROUSEL SECTION -->
-                        <section class="carousel-3d-section">
-                            <div class="carousel-3d-container" id="carousel-3d">
-                                <!-- Carousel items -->
-                                <div class="carousel-3d-item prev">
-                                    <img src="assets/tattoo_alien.png" alt="Tatuaje Alien">
-                                </div>
-                                <div class="carousel-3d-item active">
-                                    <img src="assets/tattoo_flower.png" alt="Tatuaje Flores">
-                                </div>
-                                <div class="carousel-3d-item next">
-                                    <img src="assets/tattoo_butterfly.png" alt="Tatuaje Mariposas">
-                                </div>
-                            </div>
-                            
-                            <!-- Carousel Navigation -->
-                            <div class="carousel-controls">
-                                <button class="btn-carousel-nav prev" id="btn-carousel-prev" aria-label="Imagen anterior">
-                                    <i data-lucide="chevron-left"></i>
-                                </button>
-                                <button class="btn-carousel-nav next" id="btn-carousel-next" aria-label="Imagen siguiente">
-                                    <i data-lucide="chevron-right"></i>
-                                </button>
-                            </div>
-                        </section>
 
-                        <!-- GALLERY TAB NAVIGATION -->
-                        <section class="gallery-tabs-section">
-                            <div class="portfolio-filter-row">
-                                <span class="filter-row-label">Zonas del cuerpo:</span>
-                                <div class="gallery-tabs-list body-zones-list">
-                                    <button class="tab-link active" data-tab="all-zones">Todos</button>
-                                    <button class="tab-link" data-tab="cara">Cara</button>
-                                    <button class="tab-link" data-tab="cuello">Cuello</button>
-                                    <button class="tab-link" data-tab="torso">Torso</button>
-                                    <button class="tab-link" data-tab="brazo">Brazos</button>
-                                    <button class="tab-link" data-tab="manos">Manos</button>
-                                    <button class="tab-link" data-tab="piernas">Piernas</button>
-                                </div>
-                            </div>
-                            
-                            <div class="portfolio-filter-row" style="margin-top: 12px;">
-                                <span class="filter-row-label">Estilos:</span>
-                                <div class="gallery-style-list style-filters-list">
-                                    <button class="style-tab-link active" data-style="all-styles">Todos</button>
-                                    <button class="style-tab-link" data-style="Puntillismo">Puntillismo</button>
-                                    <button class="style-tab-link" data-style="Realismo">Realismo</button>
-                                    <button class="style-tab-link" data-style="Blackwork">Blackwork</button>
-                                    <button class="style-tab-link" data-style="Black & Grey">Black & Grey</button>
-                                    <button class="style-tab-link" data-style="Acuarela">Acuarela</button>
-                                    <button class="style-tab-link" data-style="Fine Line">Fine Line</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Tab Content Grid -->
-                            <div class="tab-content active" id="tab-gallery-grid" style="margin-top: 20px;">
-                                <!-- Gallery Items (dynamically filtered/loaded by JS) -->
+                        <!-- TattoosWizard High-Impact Gallery Grid -->
+                        <section class="tattooswizard-portfolio-section">
+                            <div class="tattooswizard-gallery-grid" id="tab-gallery-grid">
+                                <!-- Dynamically loaded real photos -->
                             </div>
                         </section>
-                        
                     </div>
                 </div>
             </section>
 
-            <!-- VIEW: SABÍAS QUE VIEW (Trivia Editorial) -->
-            <section id="sabias-que-view" class="view-panel">
-                <div class="sabias-que-layout">
+            <!-- VIEW: CULTURA, HISTORIA & SABÍAS QUE (UNIFIED LANDING) -->
+            <section id="history-view" class="view-panel">
+                <div class="history-layout">
                     <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
                     <div class="floating-sidebar-menu">
                         <div class="sidebar-item item-logo" title="Inicio">
                             <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
                         </div>
-                        <!-- Volver a Home (Casa) -->
-                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
-                            <i data-lucide="home"></i>
+                        <!-- Volver Atrás (Punto 14: Flecha Oficial Pipo) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver Atrás" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Volver Atrás" class="sidebar-custom-svg-btn">
                         </div>
                         <div class="sidebar-item btn-sidebar-home" title="Inicio">
                             <svg viewBox="90 85 185 140" fill="currentColor">
@@ -603,232 +876,194 @@
                                 <path d="M109.07,204.6l3.23,3.33c-4.25,5.6-10.27,9.16-16.16,12.9C99.82,214.91,103.44,209,109.07,204.6Z" />
                             </svg>
                         </div>
-                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
-                            <svg viewBox="140 45 105 180" fill="currentColor">
-                                <path d="M206.29,135.78Q202,148.49,195.85,153a54.55,54.55,0,0,1-16.16,7.62,55.38,55.38,0,0,0-12,5q-4.36,2.64-7.26,9.26t-2.91,19a17.92,17.92,0,0,0,3.27,10.26,24.4,24.4,0,0,0,8.53,7.72,21.69,21.69,0,0,0,10.53,2.9,15.41,15.41,0,0,0,12-5.26,74.08,74.08,0,0,1,14.88-12.89,30.51,30.51,0,0,1,16.71-4.72,23.55,23.55,0,0,1,3.45.18,28.68,28.68,0,0,1,10.89,3.27q4.53,2.53,13.25,10.16l-1.45.73a17.53,17.53,0,0,0-8.72-2.36A29,29,0,0,0,230,206.4a51.1,51.1,0,0,0-14.43,8.81q-6.09,5.35-13.71,17.52Q172.25,218.38,158.18,207t-14.07-23.33q0-16.89,3.72-25.33t9.26-11.16a56.15,56.15,0,0,1,14.8-4.36q9.8-1.63,15.61-4.63t10-12.16q4.19-9.16,4.54-27.33h8.53Q210.55,123.07,206.29,135.78ZM220,55.9l-7.63,8.89a37.68,37.68,0,0,1-3.18,3.45,3.8,3.8,0,0,1-2.45,1.27,4,4,0,0,1-2.18-.9,39.38,39.38,0,0,1-3.08-2.55l-6.72-5.63a3.14,3.14,0,0,0-1.45-.54c-.85,0-1.88.61-3.09,1.82L189.5,61,192,58.07l9.62-11.25a21.31,21.31,0,0,1,1.91-2,2.38,2.38,0,0,1,1.54-.72c.72,0,2.18.9,4.35,2.72l8,6.9a3.14,3.14,0,0,0,1.46.54c.6,0,1.57-.66,2.9-2l.73.72Z" />
-                            </svg>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
+
+                        <div class="sidebar-item btn-sidebar-historia active" title="Historia del Tatuaje">
                             <svg viewBox="105 15 180 240" fill="currentColor">
                                 <path d="M161.19,34.24A52.06,52.06,0,0,0,138,39.61,47.37,47.37,0,0,0,120.38,54a32,32,0,0,0-6.66,19.34q0,12.24,9.67,23.41l-1.29,1.72q-14.61-15.25-14.61-31.58,0-12.89,8.59-24.27a59.84,59.84,0,0,1,22.67-18,68.16,68.16,0,0,1,29.53-6.66,61,61,0,0,1,33.3,9.66,19.38,19.38,0,0,0,5.47-3.86,14.17,14.17,0,0,0,3.12-6.23h2.15a21.17,21.17,0,0,1-6.88,11.27q-5.15,4.41-19.12,12.14A48.1,48.1,0,0,0,161.19,34.24ZM274.61,238.52q1.5,10.53,7.09,12.67v1.72a22.06,22.06,0,0,1-14.18-8.7,54,54,0,0,1-8.16-17.72,31.56,31.56,0,0,1-24.06,14V239q7.74-1.72,11.28-7.62a35,35,0,0,0,4.51-13.86q1-8,1.18-22.77V105.13a54.45,54.45,0,0,1-2.58,6.55c-1.15,2.51-1.93,4.33-2.36,5.48q-3.87,8.59-5.91,14.39a32,32,0,0,0-2,10.52,11,11,0,0,0,3,8.17L241.1,152q-4.95-4.94-3.87-12.88a24,24,0,0,0,.22-3.66,6.39,6.39,0,0,0-1.29-4.29q-1.29-1.5-4.94-1.5H204.15v51.55q0,11.6-5.26,17.72t-15.14,8.27a70.41,70.41,0,0,1,19.12,6.44,47.44,47.44,0,0,1,14.39,11l-16.11,15.89a58.63,58.63,0,0,0-22.24-16.86,64.56,64.56,0,0,0-26.53-6.12q-11.16,0-18.47,5.05t-7.3,14.5a22.25,22.25,0,0,0,.21,3.43h-1.5c-.29-2.57-.43-4.37-.43-5.37a23.41,23.41,0,0,1,6.34-16.64q6.33-6.76,16.86-10.21a12.05,12.05,0,0,0,6.12-8.27,81.07,81.07,0,0,0,1.18-16V136.27q0-9.66-5.47-13.74a16.91,16.91,0,0,0-11.5-3.66,20,20,0,0,1,10.53-3,10.72,10.72,0,0,1,6.44,1.72V71.19q0-9.45,5.05-15.15a29.48,29.48,0,0,1,10.95-8,116.18,116.18,0,0,1,13.22-4.3v2.58q-8.38,3.87-8.38,24.92v110q0,17.61-11.17,24.49a40.14,40.14,0,0,1,6,0c4.16-.43,7.23-3,9.24-7.84a43,43,0,0,0,3-16.65v-110q0-9.68,2.36-16a28.36,28.36,0,0,1,5.8-9.88,76.71,76.71,0,0,1,9.24-7.84,88,88,0,0,0,10.2-8.91A29.62,29.62,0,0,0,217,17.49h1.72A85.4,85.4,0,0,1,214.68,28q-2.15,4.51-3.87,7.73a55.6,55.6,0,0,0-5.15,13.32q-1.5,6.45-1.51,22.13v39.09h33.94a19.43,19.43,0,0,0,7.74-1.39,7.53,7.53,0,0,0,4.29-4.19,38.76,38.76,0,0,0,2.15-6.88V60a91.44,91.44,0,0,0-2.79-23.42,46.79,46.79,0,0,0-10.1-18.9l.43-.21,3.87,3.22a206.56,206.56,0,0,1,16,14.5q5.69,5.91,5.91,9.56a36.72,36.72,0,0,1,8.59-9.67,21.47,21.47,0,0,1,11.17-4.73v.43q-7.73,2.58-10,14.18a149.07,149.07,0,0,0-2.25,27.93V215.32A165.15,165.15,0,0,0,274.61,238.52Z" />
                             </svg>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-eventos" title="Eventos y Comunidad">
-                            <i data-lucide="star"></i>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
-                            <i data-lucide="bookmark"></i>
-                        </div>
-                    </div>
-
-                    <!-- Curiosidades Editorial Slider & Detail Layout -->
-                    <div class="editorial-content-wrapper">
-                        <!-- Title banner -->
-                        <div class="editorial-header-card" style="text-align: left; padding: 20px 0; margin-bottom: 8px; background: transparent; border: none; box-shadow: none;">
-                            <h1 class="editorial-title font-ghosthey" style="font-size: 3.5rem; margin: 0 0 10px 0;">¿Sabías que?</h1>
-                            <p class="editorial-subtitle" style="font-size: 1.1rem; color: #4a5568; font-weight: 500; margin: 0;">Un recorrido por los secretos más fascinantes de este arte milenario en la piel.</p>
-                        </div>
-
-                        <!-- Horizontal Slide Wrapper with Navigation Buttons -->
-                        <div class="editorial-slide-wrapper">
-                            <button class="slide-nav-btn prev" id="btn-slide-prev" aria-label="Anterior slide">
-                                <i data-lucide="chevron-left"></i>
-                            </button>
-                            <button class="slide-nav-btn next" id="btn-slide-next" aria-label="Siguiente slide">
-                                <i data-lucide="chevron-right"></i>
-                            </button>
-                            
-                            <div class="editorial-slide-container" id="editorial-slide-container">
-                                <!-- Card 1 -->
-                                <div class="editorial-slide-card active" data-index="0">
-                                    <div class="editorial-card-icon-wrapper yellow">
-                                        <i data-lucide="help-circle"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">1. El origen de la palabra</h3>
-                                    <p class="editorial-card-text-summary">La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar"...</p>
-                                </div>
-                                <!-- Card 2 -->
-                                <div class="editorial-slide-card" data-index="1">
-                                    <div class="editorial-card-icon-wrapper red">
-                                        <i data-lucide="history"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">2. La momia de Ötzi y acupuntura</h3>
-                                    <p class="editorial-card-text-summary">Ötzi, la momia del 3300 a.C., cuenta con 61 tatuajes en su cuerpo y articulaciones...</p>
-                                </div>
-                                <!-- Card 3 -->
-                                <div class="editorial-slide-card" data-index="2">
-                                    <div class="editorial-card-icon-wrapper purple">
-                                        <i data-lucide="shield-check"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">3. Tintas modernas y veganismo</h3>
-                                    <p class="editorial-card-text-summary">En el pasado se usaban aglutinantes animales; hoy se emplean tintas veganas...</p>
-                                </div>
-                                <!-- Card 4 -->
-                                <div class="editorial-slide-card" data-index="3">
-                                    <div class="editorial-card-icon-wrapper blue">
-                                        <i data-lucide="hourglass"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">4. Tatuaje permanente</h3>
-                                    <p class="editorial-card-text-summary">La tinta se inyecta en la dermis, donde los glóbulos blancos no pueden removerla...</p>
-                                </div>
-                                <!-- Card 5 -->
-                                <div class="editorial-slide-card" data-index="4">
-                                    <div class="editorial-card-icon-wrapper green">
-                                        <i data-lucide="map-pin"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">5. Registro arqueológico chileno</h3>
-                                    <p class="editorial-card-text-summary">La momia Chinchorro en Arica posee el tatuaje de bigote más antiguo de América...</p>
-                                </div>
-                                <!-- Card 6 -->
-                                <div class="editorial-slide-card" data-index="5">
-                                    <div class="editorial-card-icon-wrapper orange">
-                                        <i data-lucide="zap"></i>
-                                    </div>
-                                    <h3 class="editorial-card-title">6. Máquina eléctrica</h3>
-                                    <p class="editorial-card-text-summary">En 1891, Samuel O'Reilly patentó la primera máquina rotativa eléctrica...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Detail Section -->
-                        <div class="editorial-detail-block" id="editorial-detail-block">
-                            <div class="detail-header-row">
-                                <div class="editorial-card-icon-wrapper yellow" id="detail-icon-wrapper" style="margin-bottom: 0;">
-                                    <i data-lucide="help-circle" id="detail-icon"></i>
-                                </div>
-                                <h2 class="detail-title" id="detail-title">1. El origen de la palabra</h2>
-                            </div>
-                            <div class="detail-body-text" id="detail-body">
-                                La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar" o "golpear dos veces" (en referencia al sonido rítmico de las herramientas tradicionales de golpeteo). El explorador James Cook la introdujo en el idioma inglés como "tattoo" en el siglo XVIII después de sus expediciones a la Polinesia. Históricamente, este término describe no solo la alteración de la piel, sino todo el ritual social y espiritual que acompañaba al proceso en las islas del Pacífico, donde el tatuaje marcaba el estatus, valor y linaje de una persona.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- VIEW 3: HISTORY VIEW -->
-            <section id="history-view" class="view-panel">
-                <div class="history-layout">
-                    <!-- VERTICAL YELLOW NAVBAR (Sidebar) -->
-                    <div class="floating-sidebar-menu">
-                        <div class="sidebar-item item-logo" title="Inicio">
-                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
-                        </div>
-                        <!-- Volver a Home (Casa) -->
-                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
-                            <i data-lucide="home"></i>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-home" title="Inicio">
-                            <svg viewBox="0 0 392.84 291.79" fill="currentColor">
-                                <path d="M262.06,136.89c2.47-1.68,3-4,1.37-5.77a52.46,52.46,0,0,0-3.89-3.86,3.4,3.4,0,0,0-5.13.59c-.16.19-.31.4-.31.4l-19.66-19.58A10.35,10.35,0,0,0,242,103a1.77,1.77,0,0,1,2-1.18c2.05.09,4.11,0,6.14,0v-7c-2.16,0-4.23,0-6.29,0a1.64,1.64,0,0,1-1.78-1.1,10,10,0,0,0-9.33-5.94c-4.27,0-7.41,2.07-9.41,5.83a2.42,2.42,0,0,1-3.78.62c-1.19-1.17-2.35-2.38-3.55-3.54a3.52,3.52,0,1,0-5,5q2,2,4,4l5.67,5.61-3.8,3.65a15.36,15.36,0,0,0-3.12-1.6c-2.57-.68-4.64.45-6.42,2.23q-9.71,9.7-19.41,19.4c-3.35,3.36-3.52,6-.73,9.62l-3.69,3.73c-.61-.59-1.26-1.22-2.11-2.06l2.8-2.23L179,132.63l-1.25,1.78c-3.15-3.15-6.13-6.12-9.31-9.27l3.46-3.21-5-5-4.41,4.69c-1-1-1.81-2-2.69-2.83-1.66-1.6-3.58-1.65-5.07-.18s-1.53,3.49.14,5.16c.86.86,1.79,1.67,2.89,2.7l-4.63,4.28c1.76,1.75,3.38,3.36,5.2,5.19l3-3.4,9.11,9.05-1,1c-.67-.72-1.22-1.35-1.81-1.94a7,7,0,0,0-10.23,0q-15,14.91-29.87,29.86a7,7,0,0,0,0,10.22c2.88,2.91,5.79,5.79,8.68,8.7a7,7,0,0,0,10.31.11c1.19-1.16,2.36-2.36,3.54-3.54q13.13-13.11,26.23-26.24a7,7,0,0,0,0-10.39c-.58-.59-1.24-1.11-1.9-1.7.8-.84,1.44-1.51,2.18-2.27l40.93,41,5-4.8c-1.39-2.27-1.23-3.54.69-5.46l12.24-12.23,19-19c1.84-1.85,3.1-2,5.28-.63h0l5.14-5.1C263.92,138.42,263,137.67,262.06,136.89ZM232.68,94.81a3.49,3.49,0,1,1,0,7,3.49,3.49,0,1,1,0-7Zm-27.82,61.27-3.8,3.77L188.7,147.5c1.19-1.2,2.43-2.42,3.72-3.71,0,0,.11,0,.18.07,2.45,2.84,6.52,2.16,9-.32q5.73-5.74,11.47-11.46c2.84-2.84,5.68-5.67,8.51-8.53,1.8-1.82,2.86-4,2.08-6.57a14.49,14.49,0,0,0-1.56-2.83l3.62-3.61,12.4,12.37-3.77,3.67a.26.26,0,0,1-.18-.07c-2.64-3-6.65-2-8.82.17l-11.48,11.45-8.6,8.6a7.38,7.38,0,0,0-2.34,4.32A5.27,5.27,0,0,0,204.86,156.08Zm8.47,16c-2.33-2.31-4.71-4.69-7.07-7l3.77-3.68c2.52,2.69,6.3,2.6,9.68-.84,6.36-6.46,12.8-12.83,19.22-19.23,1.77-1.78,3-3.82,2.37-6.39a17.85,17.85,0,0,0-1.77-3.57c.34-.29.9-.74,1.41-1.24.74-.72,1.45-1.47,2.13-2.16l7.16,7.24Zm46.32-27.91h0Z" />
-                                <path d="M110.07,200l15.7-15.62,6.81,6.78c-5.18,5.18-10.5,10.47-15.76,15.72Z" />
-                                <path d="M109.07,204.6l3.23,3.33c-4.25,5.6-10.27,9.16-16.16,12.9C99.82,214.91,103.44,209,109.07,204.6Z" />
-                            </svg>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
-                            <svg viewBox="0 0 392.84 291.79" fill="currentColor">
-                                <path d="M206.29,135.78Q202,148.49,195.85,153a54.55,54.55,0,0,1-16.16,7.62,55.38,55.38,0,0,0-12,5q-4.36,2.64-7.26,9.26t-2.91,19a17.92,17.92,0,0,0,3.27,10.26,24.4,24.4,0,0,0,8.53,7.72,21.69,21.69,0,0,0,10.53,2.9,15.41,15.41,0,0,0,12-5.26,74.08,74.08,0,0,1,14.88-12.89,30.51,30.51,0,0,1,16.71-4.72,23.55,23.55,0,0,1,3.45.18,28.68,28.68,0,0,1,10.89,3.27q4.53,2.53,13.25,10.16l-1.45.73a17.53,17.53,0,0,0-8.72-2.36A29,29,0,0,0,230,206.4a51.1,51.1,0,0,0-14.43,8.81q-6.09,5.35-13.71,17.52Q172.25,218.38,158.18,207t-14.07-23.33q0-16.89,3.72-25.33t9.26-11.16a56.15,56.15,0,0,1,14.8-4.36q9.8-1.63,15.61-4.63t10-12.16q4.19-9.16,4.54-27.33h8.53Q210.55,123.07,206.29,135.78ZM220,55.9l-7.63,8.89a37.68,37.68,0,0,1-3.18,3.45,3.8,3.8,0,0,1-2.45,1.27,4,4,0,0,1-2.18-.9,39.38,39.38,0,0,1-3.08-2.55l-6.72-5.63a3.14,3.14,0,0,0-1.45-.54c-.85,0-1.88.61-3.09,1.82L189.5,61,192,58.07l9.62-11.25a21.31,21.31,0,0,1,1.91-2,2.38,2.38,0,0,1,1.54-.72c.72,0,2.18.9,4.35,2.72l8,6.9a3.14,3.14,0,0,0,1.46.54c.6,0,1.57-.66,2.9-2l.73.72Z" />
-                            </svg>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
-                            <svg viewBox="0 0 392.84 291.79" fill="currentColor">
-                                <path d="M161.19,34.24A52.06,52.06,0,0,0,138,39.61,47.37,47.37,0,0,0,120.38,54a32,32,0,0,0-6.66,19.34q0,12.24,9.67,23.41l-1.29,1.72q-14.61-15.25-14.61-31.58,0-12.89,8.59-24.27a59.84,59.84,0,0,1,22.67-18,68.16,68.16,0,0,1,29.53-6.66,61,61,0,0,1,33.3,9.66,19.38,19.38,0,0,0,5.47-3.86,14.17,14.17,0,0,0,3.12-6.23h2.15a21.17,21.17,0,0,1-6.88,11.27q-5.15,4.41-19.12,12.14A48.1,48.1,0,0,0,161.19,34.24ZM274.61,238.52q1.5,10.53,7.09,12.67v1.72a22.06,22.06,0,0,1-14.18-8.7,54,54,0,0,1-8.16-17.72,31.56,31.56,0,0,1-24.06,14V239q7.74-1.72,11.28-7.62a35,35,0,0,0,4.51-13.86q1-8,1.18-22.77V105.13a54.45,54.45,0,0,1-2.58,6.55c-1.15,2.51-1.93,4.33-2.36,5.48q-3.87,8.59-5.91,14.39a32,32,0,0,0-2,10.52,11,11,0,0,0,3,8.17L241.1,152q-4.95-4.94-3.87-12.88a24,24,0,0,0,.22-3.66,6.39,6.39,0,0,0-1.29-4.29q-1.29-1.5-4.94-1.5H204.15v51.55q0,11.6-5.26,17.72t-15.14,8.27a70.41,70.41,0,0,1,19.12,6.44,47.44,47.44,0,0,1,14.39,11l-16.11,15.89a58.63,58.63,0,0,0-22.24-16.86,64.56,64.56,0,0,0-26.53-6.12q-11.16,0-18.47,5.05t-7.3,14.5a22.25,22.25,0,0,0,.21,3.43h-1.5c-.29-2.57-.43-4.37-.43-5.37a23.41,23.41,0,0,1,6.34-16.64q6.33-6.76,16.86-10.21a12.05,12.05,0,0,0,6.12-8.27,81.07,81.07,0,0,0,1.18-16V136.27q0-9.66-5.47-13.74a16.91,16.91,0,0,0-11.5-3.66,20,20,0,0,1,10.53-3,10.72,10.72,0,0,1,6.44,1.72V71.19q0-9.45,5.05-15.15a29.48,29.48,0,0,1,10.95-8,116.18,116.18,0,0,1,13.22-4.3v2.58q-8.38,3.87-8.38,24.92v110q0,17.61-11.17,24.49a40.14,40.14,0,0,1,6,0c4.16-.43,7.23-3,9.24-7.84a43,43,0,0,0,3-16.65v-110q0-9.68,2.36-16a28.36,28.36,0,0,1,5.8-9.88,76.71,76.71,0,0,1,9.24-7.84,88,88,0,0,0,10.2-8.91A29.62,29.62,0,0,0,217,17.49h1.72A85.4,85.4,0,0,1,214.68,28q-2.15,4.51-3.87,7.73a55.6,55.6,0,0,0-5.15,13.32q-1.5,6.45-1.51,22.13v39.09h33.94a19.43,19.43,0,0,0,7.74-1.39,7.53,7.53,0,0,0,4.29-4.19,38.76,38.76,0,0,0,2.15-6.88V60a91.44,91.44,0,0,0-2.79-23.42,46.79,46.79,0,0,0-10.1-18.9l.43-.21,3.87,3.22a206.56,206.56,0,0,1,16,14.5q5.69,5.91,5.91,9.56a36.72,36.72,0,0,1,8.59-9.67,21.47,21.47,0,0,1,11.17-4.73v.43q-7.73,2.58-10,14.18a149.07,149.07,0,0,0-2.25,27.93V215.32A165.15,165.15,0,0,0,274.61,238.52Z" />
-                            </svg>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-eventos" title="Eventos y Comunidad">
-                            <i data-lucide="star"></i>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
-                            <i data-lucide="bookmark"></i>
                         </div>
                     </div>
                     
                     <div class="history-content-wrapper">
                         <!-- Title banner -->
-                        <div class="history-header-card" style="text-align: left; margin-bottom: 20px;">
-                            <h1 class="history-title font-ghosthey">Historia del tatuaje</h1>
-                            <p class="history-subtitle">Un recorrido cronológico por los hitos y la evolución del arte corporal en el mundo y en nuestro país.</p>
+                        <div class="history-header-card" style="text-align: left; margin-bottom: 20px; width: 100%;">
+                            <span class="editorial-badge" style="background-color: #000000; color: #FFC82C; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; display: inline-block; margin-bottom: 10px;">
+                                <i data-lucide="book-open" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> Cultura & Curiosidades
+                            </span>
+                            <h1 class="history-title font-ghosthey" id="cultura-header-title">Historia y Sabías que</h1>
+                            <p class="history-subtitle" id="cultura-header-desc">Un recorrido cronológico y los secretos más fascinantes del arte corporal en el mundo y en Chile.</p>
                         </div>
 
-                        <!-- Tab Navigation for History -->
-                        <div class="history-tabs">
-                            <button class="btn-history-tab active" data-history-tab="history-world">Tatuaje en el Mundo</button>
-                            <button class="btn-history-tab" data-history-tab="history-chile">Tatuaje Chileno</button>
+                        <!-- DOBLE PESTAÑA PRINCIPAL (OPCIÓN B) -->
+                        <div class="cultura-main-tabs">
+                            <button class="btn-cultura-main-tab active" id="btn-tab-historia" data-cultura-tab="panel-historia">
+                                <i data-lucide="scroll"></i> Historia del Tatuaje
+                            </button>
+                            <button class="btn-cultura-main-tab" id="btn-tab-sabias-que" data-cultura-tab="panel-sabias-que">
+                                <i data-lucide="help-circle"></i> ¿Sabías que?
+                            </button>
                         </div>
 
-                        <!-- World History Timeline -->
-                        <div class="history-tab-content active" id="history-sec-history-world">
-                            <h2 class="section-title">El Tatuaje en el Mundo</h2>
-                            <p class="section-subtitle">Una mirada histórica a la evolución del arte corporal global</p>
+                        <!-- PESTAÑA 1: HISTORIA DEL TATUAJE -->
+                        <div class="cultura-panel active" id="panel-historia">
+                            <!-- Tab Navigation for History (World vs Chile) -->
+                            <div class="history-tabs">
+                                <button class="btn-history-tab active" data-history-tab="history-world">Tatuaje en el Mundo</button>
+                                <button class="btn-history-tab" data-history-tab="history-chile">Tatuaje Chileno</button>
+                            </div>
 
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">3000 a.C.</div>
-                                    <div class="timeline-content">
-                                        <h3>Egipto Antiguo</h3>
-                                        <p>El tatuaje era practicado principalmente por mujeres, asociado con la fertilidad, protección contra enfermedades y devoción religiosa a deidades como Hathor.</p>
+                            <!-- World History Timeline -->
+                            <div class="history-tab-content active" id="history-sec-history-world">
+                                <h2 class="section-title">El Tatuaje en el Mundo</h2>
+                                <p class="section-subtitle">Una mirada histórica a la evolución del arte corporal global</p>
+
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">3000 a.C.</div>
+                                        <div class="timeline-content">
+                                            <h3>Egipto Antiguo</h3>
+                                            <p>El tatuaje era practicado principalmente por mujeres, asociado con la fertilidad, protección contra enfermedades y devoción religiosa a deidades como Hathor.</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">1000 a.C.</div>
+                                        <div class="timeline-content">
+                                            <h3>Cultura Polinesia (Samoa, Maorí)</h3>
+                                            <p>El "Tatau" o "Tā moko" era un ritual social sagrado que indicaba estatus, genealogía y valor. Cada marca contaba la historia personal y familiar del portador.</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">Siglo XVII - XIX</div>
+                                        <div class="timeline-content">
+                                            <h3>Irezumi en Japón</h3>
+                                            <p>El tatuaje tradicional japonés evoluciona como un arte pictórico de cuerpo completo basado en grabados xilográficos (Ukiyo-e). A pesar de prohibiciones temporales, se consolidó como una de las técnicas más valoradas del mundo.</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">Siglo XX - Hoy</div>
+                                        <div class="timeline-content">
+                                            <h3>El Nacimiento del Tatuaje Moderno</h3>
+                                            <p>Con la invención de la máquina de tatuar eléctrica por Samuel O'Reilly en 1891 y la popularización en subculturas, el tatuaje transiciona desde el estilo marinero clásico (Old School) hasta el arte fino y el hiperrealismo contemporáneo.</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">1000 a.C.</div>
-                                    <div class="timeline-content">
-                                        <h3>Cultura Polinesia (Samoa, Maorí)</h3>
-                                        <p>El "Tatau" o "Tā moko" era un ritual social sagrado que indicaba estatus, genealogía y valor. Cada marca contaba la historia personal y familiar del portador.</p>
+                            </div>
+
+                            <!-- Chilean History -->
+                            <div class="history-tab-content" id="history-sec-history-chile">
+                                <h2 class="section-title">El Tatuaje Chileno</h2>
+                                <p class="section-subtitle">Orígenes y consagración del tatuaje en nuestro territorio</p>
+
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">Ancestral</div>
+                                        <div class="timeline-content">
+                                            <h3>Pintura Corporal Selk'nam</h3>
+                                            <p>En el extremo sur de Chile, el pueblo Selk'nam practicaba complejos diseños de pintura corporal durante la ceremonia del Hain, representando espíritus ancestrales y roles sociales con pigmentos naturales.</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">Siglo XVII - XIX</div>
-                                    <div class="timeline-content">
-                                        <h3>Irezumi en Japón</h3>
-                                        <p>El tatuaje tradicional japonés evoluciona como un arte pictórico de cuerpo completo basado en grabados xilográficos (Ukiyo-e). A pesar de prohibiciones temporales, se consolidó como una de las técnicas más valoradas del mundo.</p>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">1990s</div>
+                                        <div class="timeline-content">
+                                            <h3>Los Inicios del Tatuaje Urbano</h3>
+                                            <p>Con el fin de la dictadura y la apertura cultural, los primeros estudios profesionales abren en Santiago y Valparaíso. Artistas autodidactas construían sus propias máquinas y conseguían tintas del extranjero de forma artesanal.</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">Siglo XX - Hoy</div>
-                                    <div class="timeline-content">
-                                        <h3>El Nacimiento del Tatuaje Moderno</h3>
-                                        <p>Con la invención de la máquina de tatuar eléctrica por Samuel O'Reilly en 1891 y la popularización en subculturas, el tatuaje transiciona desde el estilo marinero clásico (Old School) hasta el arte fino y el hiperrealismo contemporáneo.</p>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-date">2010s</div>
+                                        <div class="timeline-content">
+                                            <h3>Profesionalización e Identidad Local</h3>
+                                            <p>Se consolidan convenciones nacionales y el tatuaje gana masividad. En La Araucanía, los artistas locales empiezan a incorporar iconografía mapuche, fauna andina y estilos de autor en trazo fino (Fine Line).</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Chilean History -->
-                        <div class="history-tab-content" id="history-sec-history-chile">
-                            <h2 class="section-title">El Tatuaje Chileno</h2>
-                            <p class="section-subtitle">Orígenes y consagración del tatuaje en nuestro territorio</p>
-
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">Ancestral</div>
-                                    <div class="timeline-content">
-                                        <h3>Pintura Corporal Selk'nam</h3>
-                                        <p>En el extremo sur de Chile, el pueblo Selk'nam practicaba complejos diseños de pintura corporal durante la ceremonia del Hain, representando espíritus ancestrales y roles sociales con pigmentos naturales.</p>
+                        <!-- PESTAÑA 2: ¿SABÍAS QUE? -->
+                        <div class="cultura-panel" id="panel-sabias-que">
+                            <!-- Horizontal Slide Wrapper with Navigation Buttons -->
+                            <div class="editorial-slide-wrapper" style="width: 100%;">
+                                <button class="slide-nav-btn prev" id="btn-slide-prev" aria-label="Anterior slide">
+                                    <i data-lucide="chevron-left"></i>
+                                </button>
+                                <button class="slide-nav-btn next" id="btn-slide-next" aria-label="Siguiente slide">
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                                
+                                <div class="editorial-slide-container" id="editorial-slide-container">
+                                    <!-- Card 1 -->
+                                    <div class="editorial-slide-card active" data-index="0">
+                                        <div class="editorial-card-icon-wrapper yellow">
+                                            <i data-lucide="help-circle"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">1. El origen de la palabra</h3>
+                                        <p class="editorial-card-text-summary">La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar"...</p>
                                     </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">1990s</div>
-                                    <div class="timeline-content">
-                                        <h3>Los Inicios del Tatuaje Urbano</h3>
-                                        <p>Con el fin de la dictadura y la apertura cultural, los primeros estudios profesionales abren en Santiago y Valparaíso. Artistas autodidactas construían sus propias máquinas y conseguían tintas del extranjero de forma artesanal.</p>
+                                    <!-- Card 2 -->
+                                    <div class="editorial-slide-card" data-index="1">
+                                        <div class="editorial-card-icon-wrapper red">
+                                            <i data-lucide="history"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">2. La momia de Ötzi y acupuntura</h3>
+                                        <p class="editorial-card-text-summary">Ötzi, la momia del 3300 a.C., cuenta con 61 tatuajes en su cuerpo y articulaciones...</p>
                                     </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-dot"></div>
-                                    <div class="timeline-date">2010s</div>
-                                    <div class="timeline-content">
-                                        <h3>Profesionalización e Identidad Local</h3>
-                                        <p>Se consolidan convenciones nacionales y el tatuaje gana masividad. En La Araucanía, los artistas locales empiezan a incorporar iconografía mapuche, fauna andina y estilos de autor en trazo fino (Fine Line).</p>
+                                    <!-- Card 3 -->
+                                    <div class="editorial-slide-card" data-index="2">
+                                        <div class="editorial-card-icon-wrapper purple">
+                                            <i data-lucide="shield-check"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">3. Tintas modernas y veganismo</h3>
+                                        <p class="editorial-card-text-summary">En el pasado se usaban aglutinantes animales; hoy se emplean tintas veganas...</p>
+                                    </div>
+                                    <!-- Card 4 -->
+                                    <div class="editorial-slide-card" data-index="3">
+                                        <div class="editorial-card-icon-wrapper blue">
+                                            <i data-lucide="hourglass"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">4. Tatuaje permanente</h3>
+                                        <p class="editorial-card-text-summary">La tinta se inyecta en la dermis, donde los glóbulos blancos no pueden removerla...</p>
+                                    </div>
+                                    <!-- Card 5 -->
+                                    <div class="editorial-slide-card" data-index="4">
+                                        <div class="editorial-card-icon-wrapper green">
+                                            <i data-lucide="map-pin"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">5. Registro arqueológico chileno</h3>
+                                        <p class="editorial-card-text-summary">La momia Chinchorro en Arica posee el tatuaje de bigote más antiguo de América...</p>
+                                    </div>
+                                    <!-- Card 6 -->
+                                    <div class="editorial-slide-card" data-index="5">
+                                        <div class="editorial-card-icon-wrapper orange">
+                                            <i data-lucide="zap"></i>
+                                        </div>
+                                        <h3 class="editorial-card-title">6. Máquina eléctrica</h3>
+                                        <p class="editorial-card-text-summary">En 1891, Samuel O'Reilly patentó la primera máquina rotativa eléctrica...</p>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Detail Section -->
+                            <div class="editorial-detail-block" id="editorial-detail-block" style="width: 100%; margin-top: 25px;">
+                                <div class="detail-header-row">
+                                    <div class="editorial-card-icon-wrapper yellow" id="detail-icon-wrapper" style="margin-bottom: 0;">
+                                        <i data-lucide="help-circle" id="detail-icon"></i>
+                                    </div>
+                                    <h2 class="detail-title" id="detail-title">1. El origen de la palabra</h2>
+                                </div>
+                                <div class="detail-body-text" id="detail-body">
+                                    La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar" o "golpear dos veces" (en referencia al sonido rítmico de las herramientas tradicionales de golpeteo). El explorador James Cook la introdujo en el idioma inglés como "tattoo" en el siglo XVIII después de sus expediciones a la Polinesia. Históricamente, este término describe no solo la alteración de la piel, sino todo el ritual social y espiritual que acompañaba al proceso en las islas del Pacífico, donde el tatuaje marcaba el estatus, valor y linaje de una persona.
+                                </div>
+                            </div>
                         </div>
+
                     </div><!-- end .history-content-wrapper -->
                 </div>
             </section>
@@ -1531,29 +1766,20 @@
                         <div class="sidebar-item item-logo" title="Inicio">
                             <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp" alt="Tinta Conectada" class="sidebar-logo-img">
                         </div>
-                        <div class="sidebar-item btn-sidebar-back-home" title="Volver al Inicio" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
-                            <i data-lucide="home"></i>
+                        <!-- Volver Atrás (Punto 14: Flecha Oficial Pipo) -->
+                        <div class="sidebar-item btn-sidebar-back-home" title="Volver Atrás" style="display: none; border-bottom: 2.5px solid #000000; padding-bottom: 12px; margin-bottom: 4px; border-radius: 0; width: 100%; justify-content: center;">
+                            <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Volver Atrás" class="sidebar-custom-svg-btn">
                         </div>
                         <div class="sidebar-item btn-sidebar-home" title="Inicio">
                             <svg viewBox="90 85 185 140" fill="currentColor">
                                 <path d="M262.06,136.89c2.47-1.68,3-4,1.37-5.77a52.46,52.46,0,0,0-3.89-3.86,3.4,3.4,0,0,0-5.13.59c-.16.19-.31.4-.31.4l-19.66-19.58A10.35,10.35,0,0,0,242,103a1.77,1.77,0,0,1,2-1.18c2.05.09,4.11,0,6.14,0v-7c-2.16,0-4.23,0-6.29,0a1.64,1.64,0,0,1-1.78-1.1,10,10,0,0,0-9.33-5.94c-4.27,0-7.41,2.07-9.41,5.83a2.42,2.42,0,0,1-3.78.62c-1.19-1.17-2.35-2.38-3.55-3.54a3.52,3.52,0,1,0-5,5q2,2,4,4l5.67,5.61-3.8,3.65a15.36,15.36,0,0,0-3.12-1.6c-2.57-.68-4.64.45-6.42,2.23q-9.71,9.7-19.41,19.4c-3.35,3.36-3.52,6-.73,9.62l-3.69,3.73c-.61-.59-1.26-1.22-2.11-2.06l2.8-2.23L179,132.63l-1.25,1.78c-3.15-3.15-6.13-6.12-9.31-9.27l3.46-3.21-5-5-4.41,4.69c-1-1-1.81-2-2.69-2.83-1.66-1.6-3.58-1.65-5.07-.18s-1.53,3.49.14,5.16c.86.86,1.79,1.67,2.89,2.7l-4.63,4.28c1.76,1.75,3.38,3.36,5.2,5.19l3-3.4,9.11,9.05-1,1c-.67-.72-1.22-1.35-1.81-1.94a7,7,0,0,0-10.23,0q-15,14.91-29.87,29.86a7,7,0,0,0,0,10.22c2.88,2.91,5.79,5.79,8.68,8.7a7,7,0,0,0,10.31.11c1.19-1.16,2.36-2.36,3.54-3.54q13.13-13.11,26.23-26.24a7,7,0,0,0,0-10.39c-.58-.59-1.24-1.11-1.9-1.7.8-.84,1.44-1.51,2.18-2.27l40.93,41,5-4.8c-1.39-2.27-1.23-3.54.69-5.46l12.24-12.23,19-19c1.84-1.85,3.1-2,5.28-.63h0l5.14-5.1C263.92,138.42,263,137.67,262.06,136.89ZM232.68,94.81a3.49,3.49,0,1,1,0,7,3.49,3.49,0,1,1,0-7Zm-27.82,61.27-3.8,3.77L188.7,147.5c1.19-1.2,2.43-2.42,3.72-3.71,0,0,.11,0,.18.07,2.45,2.84,6.52,2.16,9-.32q5.73-5.74,11.47-11.46c2.84-2.84,5.68-5.67,8.51-8.53,1.8-1.82,2.86-4,2.08-6.57a14.49,14.49,0,0,0-1.56-2.83l3.62-3.61,12.4,12.37-3.77,3.67a.26.26,0,0,1-.18-.07c-2.64-3-6.65-2-8.82.17l-11.48,11.45-8.6,8.6a7.38,7.38,0,0,0-2.34,4.32A5.27,5.27,0,0,0,204.86,156.08Zm8.47,16c-2.33-2.31-4.71-4.69-7.07-7l3.77-3.68c2.52,2.69,6.3,2.6,9.68-.84,6.36-6.46,12.8-12.83,19.22-19.23,1.77-1.78,3-3.82,2.37-6.39a17.85,17.85,0,0,0-1.77-3.57c.34-.29.9-.74,1.41-1.24.74-.72,1.45-1.47,2.13-2.16l7.16,7.24Zm46.32-27.91h0Z" />
                             </svg>
                         </div>
-                        <div class="sidebar-item btn-sidebar-sabias-que" title="¿Sabías Que?">
-                            <svg viewBox="140 45 105 180" fill="currentColor">
-                                <path d="M206.29,135.78Q202,148.49,195.85,153a54.55,54.55,0,0,1-16.16,7.62,55.38,55.38,0,0,0-12,5q-4.36,2.64-7.26,9.26t-2.91,19a17.92,17.92,0,0,0,3.27,10.26,24.4,24.4,0,0,0,8.53,7.72,21.69,21.69,0,0,0,10.53,2.9,15.41,15.41,0,0,0,12-5.26,74.08,74.08,0,0,1,14.88-12.89,30.51,30.51,0,0,1,16.71-4.72,23.55,23.55,0,0,1,3.45.18,28.68,28.68,0,0,1,10.89,3.27q4.53,2.53,13.25,10.16l-1.45.73a17.53,17.53,0,0,0-8.72-2.36A29,29,0,0,0,230,206.4a51.1,51.1,0,0,0-14.43,8.81q-6.09,5.35-13.71,17.52Q172.25,218.38,158.18,207t-14.07-23.33q0-16.89,3.72-25.33t9.26-11.16a56.15,56.15,0,0,1,14.8-4.36q9.8-1.63,15.61-4.63t10-12.16q4.19-9.16,4.54-27.33h8.53Q210.55,123.07,206.29,135.78ZM220,55.9l-7.63,8.89a37.68,37.68,0,0,1-3.18,3.45,3.8,3.8,0,0,1-2.45,1.27,4,4,0,0,1-2.18-.9,39.38,39.38,0,0,1-3.08-2.55l-6.72-5.63a3.14,3.14,0,0,0-1.45-.54c-.85,0-1.88.61-3.09,1.82L189.5,61,192,58.07l9.62-11.25a21.31,21.31,0,0,1,1.91-2,2.38,2.38,0,0,1,1.54-.72c.72,0,2.18.9,4.35,2.72l8,6.9a3.14,3.14,0,0,0,1.46.54c.6,0,1.57-.66,2.9-2l.73.72Z" />
-                            </svg>
-                        </div>
+
                         <div class="sidebar-item btn-sidebar-historia" title="Historia del Tatuaje">
                             <svg viewBox="105 15 180 240" fill="currentColor">
                                 <path d="M161.19,34.24A52.06,52.06,0,0,0,138,39.61,47.37,47.37,0,0,0,120.38,54a32,32,0,0,0-6.66,19.34q0,12.24,9.67,23.41l-1.29,1.72q-14.61-15.25-14.61-31.58,0-12.89,8.59-24.27a59.84,59.84,0,0,1,22.67-18,68.16,68.16,0,0,1,29.53-6.66,61,61,0,0,1,33.3,9.66,19.38,19.38,0,0,0,5.47-3.86,14.17,14.17,0,0,0,3.12-6.23h2.15a21.17,21.17,0,0,1-6.88,11.27q-5.15,4.41-19.12,12.14A48.1,48.1,0,0,0,161.19,34.24ZM274.61,238.52q1.5,10.53,7.09,12.67v1.72a22.06,22.06,0,0,1-14.18-8.7,54,54,0,0,1-8.16-17.72,31.56,31.56,0,0,1-24.06,14V239q7.74-1.72,11.28-7.62a35,35,0,0,0,4.51-13.86q1-8,1.18-22.77V105.13a54.45,54.45,0,0,1-2.58,6.55c-1.15,2.51-1.93,4.33-2.36,5.48q-3.87,8.59-5.91,14.39a32,32,0,0,0-2,10.52,11,11,0,0,0,3,8.17L241.1,152q-4.95-4.94-3.87-12.88a24,24,0,0,0,.22-3.66,6.39,6.39,0,0,0-1.29-4.29q-1.29-1.5-4.94-1.5H204.15v51.55q0,11.6-5.26,17.72t-15.14,8.27a70.41,70.41,0,0,1,19.12,6.44,47.44,47.44,0,0,1,14.39,11l-16.11,15.89a58.63,58.63,0,0,0-22.24-16.86,64.56,64.56,0,0,0-26.53-6.12q-11.16,0-18.47,5.05t-7.3,14.5a22.25,22.25,0,0,0,.21,3.43h-1.5c-.29-2.57-.43-4.37-.43-5.37a23.41,23.41,0,0,1,6.34-16.64q6.33-6.76,16.86-10.21a12.05,12.05,0,0,0,6.12-8.27,81.07,81.07,0,0,0,1.18-16V136.27q0-9.66-5.47-13.74a16.91,16.91,0,0,0-11.5-3.66,20,20,0,0,1,10.53-3,10.72,10.72,0,0,1,6.44,1.72V71.19q0-9.45,5.05-15.15a29.48,29.48,0,0,1,10.95-8,116.18,116.18,0,0,1,13.22-4.3v2.58q-8.38,3.87-8.38,24.92v110q0,17.61-11.17,24.49a40.14,40.14,0,0,1,6,0c4.16-.43,7.23-3,9.24-7.84a43,43,0,0,0,3-16.65v-110q0-9.68,2.36-16a28.36,28.36,0,0,1,5.8-9.88,76.71,76.71,0,0,1,9.24-7.84,88,88,0,0,0,10.2-8.91A29.62,29.62,0,0,0,217,17.49h1.72A85.4,85.4,0,0,1,214.68,28q-2.15,4.51-3.87,7.73a55.6,55.6,0,0,0-5.15,13.32q-1.5,6.45-1.51,22.13v39.09h33.94a19.43,19.43,0,0,0,7.74-1.39,7.53,7.53,0,0,0,4.29-4.19,38.76,38.76,0,0,0,2.15-6.88V60a91.44,91.44,0,0,0-2.79-23.42,46.79,46.79,0,0,0-10.1-18.9l.43-.21,3.87,3.22a206.56,206.56,0,0,1,16,14.5q5.69,5.91,5.91,9.56a36.72,36.72,0,0,1,8.59-9.67,21.47,21.47,0,0,1,11.17-4.73v.43q-7.73,2.58-10,14.18a149.07,149.07,0,0,0-2.25,27.93V215.32A165.15,165.15,0,0,0,274.61,238.52Z" />
                             </svg>
-                        </div>
-                        <div class="sidebar-item active btn-sidebar-eventos" title="Eventos y Comunidad">
-                            <i data-lucide="star"></i>
-                        </div>
-                        <div class="sidebar-item btn-sidebar-guardados" title="Tatuadores Guardados">
-                            <i data-lucide="bookmark"></i>
                         </div>
                     </div>
 
@@ -1565,66 +1791,187 @@
                             <p class="eventos-subtitle" style="font-size: 1.1rem; color: #4a5568; font-weight: 500; margin: 0;">Descubre encuentros, únete a iniciativas locales y conecta con la escena de arte corporal en La Araucanía.</p>
                         </div>
 
-                        <!-- Events Grid Layout (Master List on Left, Details Box on Right) -->
-                        <div class="eventos-grid-layout">
-                            
-                            <!-- Left Side: List of Interactive Cards -->
-                            <div class="eventos-cards-list">
-                                <!-- Big Event Card (Promo) -->
-                                <div class="evento-card big-card active" data-event="temuco-fest">
-                                    <div class="card-glow-bg"></div>
-                                    <span class="card-badge highlight"><i data-lucide="sparkles"></i> MEGA EVENTO</span>
-                                    <h3 class="card-title">Temuco Tattoo Fest 2026</h3>
-                                    <p class="card-summary">El Portal Temuco se llena de arte corporal, música, concursos y más. ¡Conoce el gran encuentro del año!</p>
-                                    <div class="card-footer">
-                                        <span class="card-tag"><i data-lucide="calendar"></i> 01 de Agosto, 2026</span>
-                                        <span class="card-tag"><i data-lucide="map-pin"></i> Portal Temuco</span>
+                        <!-- CATEGORY FILTER BAR (TATTOODO ARTICLES STYLE) -->
+                        <nav class="events-category-bar" aria-label="Filtro de eventos">
+                            <button type="button" class="btn-event-pill active" data-event-filter="all">
+                                <i data-lucide="layout-grid"></i> Todos (6)
+                            </button>
+                            <button type="button" class="btn-event-pill" data-event-filter="convencion">
+                                <i data-lucide="sparkles"></i> Convenciones
+                            </button>
+                            <button type="button" class="btn-event-pill" data-event-filter="flash">
+                                <i data-lucide="zap"></i> Flash Days & Markets
+                            </button>
+                            <button type="button" class="btn-event-pill" data-event-filter="guest">
+                                <i data-lucide="user-check"></i> Artistas Invitados
+                            </button>
+                            <button type="button" class="btn-event-pill" data-event-filter="convocatoria">
+                                <i data-lucide="megaphone"></i> Convocatorias
+                            </button>
+                            <button type="button" class="btn-event-pill" data-event-filter="encuentro">
+                                <i data-lucide="map-pin"></i> Encuentros
+                            </button>
+                        </nav>
+
+                        <!-- TATTOODO ARTICLES EDITORIAL SECTION -->
+                        <div class="tattoodo-articles-wrapper">
+
+                            <!-- HERO FEATURED ARTICLE CARD (EXPO TATTOO ARAUCANÍA) -->
+                            <article class="tattoodo-hero-card" data-event-cat="convencion">
+                                <div class="tattoodo-hero-poster-wrapper" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/1-expo-tattoo.png" data-poster-title="Expo Tattoo Araucanía 2026">
+                                    <img src="assets/events/1-expo-tattoo.png" alt="Afiche Oficial Expo Tattoo Araucanía" class="tattoodo-hero-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893550/compressed_1-expo-tattoo-araucania_h2u0ov.png';">
+                                    <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i> Ver afiche</span>
+                                </div>
+                                <div class="tattoodo-hero-content">
+                                    <div class="tattoodo-card-badges">
+                                        <span class="tattoodo-badge badge-primary"><i data-lucide="sparkles"></i> MEGA EVENTO · CONVENCIÓN</span>
+                                        <span class="tattoodo-badge badge-date"><i data-lucide="calendar"></i> 20 · 21 SEPTIEMBRE</span>
+                                    </div>
+                                    <h2 class="tattoodo-hero-title font-syne">Expo Tattoo Araucanía</h2>
+                                    <div class="tattoodo-meta-row">
+                                        <span class="tattoodo-meta-item"><i data-lucide="map-pin"></i> Temuco, La Araucanía</span>
+                                        <span class="tattoodo-meta-divider">•</span>
+                                        <span class="tattoodo-meta-item"><i data-lucide="award"></i> Presenta: Tinta Conectada</span>
+                                    </div>
+                                    <p class="tattoodo-hero-excerpt">
+                                        El gran encuentro del arte corporal en el sur de Chile. Dos jornadas con más de 30 destacados tatuadores regionales en vivo, gastronomía típica, música en directo, exhibiciones y competencia oficial de tatuajes por categorías con jurado calificado.
+                                    </p>
+                                    <div class="tattoodo-perks-grid">
+                                        <span class="tattoodo-perk-pill"><i data-lucide="users"></i> +30 Tatuadores</span>
+                                        <span class="tattoodo-perk-pill"><i data-lucide="music"></i> Música en Vivo</span>
+                                        <span class="tattoodo-perk-pill"><i data-lucide="coffee"></i> Gastronomía</span>
+                                        <span class="tattoodo-perk-pill"><i data-lucide="trophy"></i> Concurso de Tatuajes</span>
+                                    </div>
+                                    <div class="tattoodo-card-actions">
+                                        <button type="button" class="btn btn-primary btn-open-poster" data-poster-src="assets/events/1-expo-tattoo.png" data-poster-title="Expo Tattoo Araucanía">
+                                            <i data-lucide="eye"></i> Ver Afiche Oficial
+                                        </button>
+                                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                                            <i data-lucide="send"></i> Consultar Información
+                                        </a>
                                     </div>
                                 </div>
+                            </article>
 
-                                <!-- Subgrid for Community Initiatives -->
-                                <div class="comunidad-cards-subgrid">
-                                    <!-- WhatsApp Group Card -->
-                                    <div class="evento-card" data-event="whatsapp-chat">
-                                        <span class="card-badge whatsapp"><i data-lucide="users"></i> COMUNIDAD</span>
-                                        <h4 class="card-title">Red de Tatuadores Araucanía</h4>
-                                        <p class="card-summary">Únete a nuestro grupo oficial de WhatsApp para colaborar, debatir y compartir entre artistas regionales.</p>
-                                        <span class="card-action-text">Ver cómo unirse &rarr;</span>
-                                    </div>
+                            <!-- EDITORIAL CARDS GRID (5 REMAINING CONFIRMED EVENTS) -->
+                            <div class="tattoodo-articles-grid" id="tattoodo-articles-grid">
 
-                                    <!-- Newsletter Card -->
-                                    <div class="evento-card" data-event="newsletter-discount">
-                                        <span class="card-badge discount"><i data-lucide="ticket"></i> BENEFICIO</span>
-                                        <h4 class="card-title">Club Tinta Conectada</h4>
-                                        <p class="card-summary">Suscríbete al newsletter de novedades y llévate un cupón del 15% de descuento para tu próxima sesión.</p>
-                                        <span class="card-action-text">Reclamar cupón &rarr;</span>
+                                <!-- Card 1: Flash Day -->
+                                <article class="tattoodo-article-card" data-event-cat="flash">
+                                    <div class="article-poster-container" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/2-flash-day.webp" data-poster-title="Flash Day: Tattoo, Música y Arte">
+                                        <img src="assets/events/2-flash-day.webp" alt="Afiche Flash Day" class="article-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_2-flash-day_q6lpda.webp';">
+                                        <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i></span>
+                                        <span class="article-badge-float badge-yellow">FLASH DAY</span>
                                     </div>
+                                    <div class="article-card-body">
+                                        <div class="article-meta-sub">
+                                            <span><i data-lucide="calendar"></i> Sábado 14 · 12:00 a 20:00</span>
+                                        </div>
+                                        <h3 class="article-card-title font-syne">Flash Day: Tattoo · Música · Arte</h3>
+                                        <p class="article-card-location"><i data-lucide="map-pin"></i> Estudio Tattoo X — 5 Tatuadores Invitados</p>
+                                        <p class="article-card-desc">Jornada continua de tatuajes flash listos para tatuar con precios promocionales desde $30.000, música ambiente y venta de ilustraciones originales.</p>
+                                        <div class="article-footer-row">
+                                            <span class="article-price-tag">Desde $30.000</span>
+                                            <button type="button" class="btn-card-link btn-open-poster" data-poster-src="assets/events/2-flash-day.webp" data-poster-title="Flash Day: Tattoo, Música y Arte">
+                                                Ver afiche &rarr;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
 
-                                    <!-- Suggested Event: Flash Solidario -->
-                                    <div class="evento-card" data-event="flash-weekend">
-                                        <span class="card-badge solidarity"><i data-lucide="heart"></i> SOLIDARIDAD</span>
-                                        <h4 class="card-title">Flash Weekend Araucanía</h4>
-                                        <p class="card-summary">Fin de semana benéfico con diseños Flash listos para tatuar a precio rebajado en apoyo a refugios de animales locales.</p>
-                                        <span class="card-action-text">Ver fechas y estudios &rarr;</span>
+                                <!-- Card 2: Guest Artist Martín Aguirre -->
+                                <article class="tattoodo-article-card" data-event-cat="guest">
+                                    <div class="article-poster-container" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/3-guest-artist.webp" data-poster-title="Guest Artist: Martín Aguirre">
+                                        <img src="assets/events/3-guest-artist.webp" alt="Afiche Guest Artist Martín Aguirre" class="article-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_3-guest-artist_e4fslm.webp';">
+                                        <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i></span>
+                                        <span class="article-badge-float badge-purple">GUEST ARTIST</span>
                                     </div>
+                                    <div class="article-card-body">
+                                        <div class="article-meta-sub">
+                                            <span><i data-lucide="calendar"></i> 05 — 07 de Octubre</span>
+                                        </div>
+                                        <h3 class="article-card-title font-syne">Martín Aguirre en Temuco</h3>
+                                        <p class="article-card-location"><i data-lucide="map-pin"></i> Estudio Anfitrión: Tattoo X</p>
+                                        <p class="article-card-desc">Residencia exclusiva con cupos limitados. Especialista invitado en técnicas de Blackwork botánico, Fine Line delicado y Realismo en sombras.</p>
+                                        <div class="article-footer-row">
+                                            <span class="article-badge-status">Cupos Limitados</span>
+                                            <button type="button" class="btn-card-link btn-open-poster" data-poster-src="assets/events/3-guest-artist.webp" data-poster-title="Guest Artist: Martín Aguirre">
+                                                Ver afiche &rarr;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
 
-                                    <!-- Suggested Event: Seminar/Workshop -->
-                                    <div class="evento-card" data-event="seminario-bioseguridad">
-                                        <span class="card-badge education"><i data-lucide="graduation-cap"></i> PROFESIONAL</span>
-                                        <h4 class="card-title">Workshop de Bioseguridad</h4>
-                                        <p class="card-summary">Seminario práctico certificado sobre bioseguridad, técnicas de esterilización y tintas veganas premium.</p>
-                                        <span class="card-action-text">Revisar temario &rarr;</span>
+                                <!-- Card 3: Convocatoria Tatuadores -->
+                                <article class="tattoodo-article-card" data-event-cat="convocatoria">
+                                    <div class="article-poster-container" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/4-convocatoria.webp" data-poster-title="Convocatoria Tatuadores: Buscamos Artistas">
+                                        <img src="assets/events/4-convocatoria.webp" alt="Afiche Convocatoria Tatuadores" class="article-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_4-convocatoria-tatuadores_wmgw31.webp';">
+                                        <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i></span>
+                                        <span class="article-badge-float badge-red">CONVOCATORIA</span>
                                     </div>
-                                </div>
+                                    <div class="article-card-body">
+                                        <div class="article-meta-sub">
+                                            <span><i data-lucide="clock"></i> Postulaciones Abiertas</span>
+                                        </div>
+                                        <h3 class="article-card-title font-syne">¿Eres Tatuador? Buscamos Artistas</h3>
+                                        <p class="article-card-location"><i data-lucide="map-pin"></i> Para Expo Tattoo Araucanía</p>
+                                        <p class="article-card-desc">Súmate con tu stand de trabajo, obtén difusión masiva en medios regionales, visibilidad ante cientos de asistentes y asegura nuevos clientes.</p>
+                                        <div class="article-footer-row">
+                                            <span class="article-badge-status">Stands Disponibles</span>
+                                            <button type="button" class="btn-card-link btn-open-poster" data-poster-src="assets/events/4-convocatoria.webp" data-poster-title="Convocatoria Tatuadores: Buscamos Artistas">
+                                                Postular / Ver &rarr;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Card 4: Tinta en La Araucanía -->
+                                <article class="tattoodo-article-card" data-event-cat="encuentro">
+                                    <div class="article-poster-container" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/6-tinta-en-la-araucania.webp" data-poster-title="Tinta en La Araucanía: Encuentro Regional">
+                                        <img src="assets/events/6-tinta-en-la-araucania.webp" alt="Afiche Tinta en La Araucanía" class="article-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_6-tinta-en-la-araucania_oxh0av.webp';">
+                                        <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i></span>
+                                        <span class="article-badge-float badge-green">ENCUENTRO</span>
+                                    </div>
+                                    <div class="article-card-body">
+                                        <div class="article-meta-sub">
+                                            <span><i data-lucide="calendar"></i> 15 de Octubre · 11:00 hrs</span>
+                                        </div>
+                                        <h3 class="article-card-title font-syne">Tinta en La Araucanía</h3>
+                                        <p class="article-card-location"><i data-lucide="map-pin"></i> Centro Cultural Temuco (Temuco, Villarrica, Pucón, Angol)</p>
+                                        <p class="article-card-desc">Primer encuentro regional que reúne a tatuadores de toda la cuenca lacustre y valles de La Araucanía. Exhibición en vivo, flashes, música y conversatorios.</p>
+                                        <div class="article-footer-row">
+                                            <span class="article-badge-status">Regional</span>
+                                            <button type="button" class="btn-card-link btn-open-poster" data-poster-src="assets/events/6-tinta-en-la-araucania.webp" data-poster-title="Tinta en La Araucanía: Encuentro Regional">
+                                                Ver afiche &rarr;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Card 5: Flash Market -->
+                                <article class="tattoodo-article-card" data-event-cat="flash">
+                                    <div class="article-poster-container" role="button" tabindex="0" title="Click para ver afiche ampliado" data-poster-src="assets/events/7-flash-market.webp" data-poster-title="Flash Market: Tattoos + Arte + Diseño">
+                                        <img src="assets/events/7-flash-market.webp" alt="Afiche Flash Market" class="article-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_7-flash-market_psdoco.webp';">
+                                        <span class="poster-zoom-hint"><i data-lucide="maximize-2"></i></span>
+                                        <span class="article-badge-float badge-yellow">MERCADO & ARTE</span>
+                                    </div>
+                                    <div class="article-card-body">
+                                        <div class="article-meta-sub">
+                                            <span><i data-lucide="calendar"></i> Domingo 08 · 12:00 a 19:00 hrs</span>
+                                        </div>
+                                        <h3 class="article-card-title font-syne">Flash Market: Tattoos + Arte + Diseño</h3>
+                                        <p class="article-card-location"><i data-lucide="map-pin"></i> Entrada Liberada · Temuco</p>
+                                        <p class="article-card-desc">Feria comunitaria abierta a todo público con stands de arte gráfico, venta de merch independiente, flash tattoos al paso, cafetería y música.</p>
+                                        <div class="article-footer-row">
+                                            <span class="article-badge-status">Entrada Liberada</span>
+                                            <button type="button" class="btn-card-link btn-open-poster" data-poster-src="assets/events/7-flash-market.webp" data-poster-title="Flash Market: Tattoos + Arte + Diseño">
+                                                Ver afiche &rarr;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
                             </div>
-
-                            <!-- Right Side: Details Display Box (Prevents blank spaces) -->
-                            <div class="evento-details-panel-container">
-                                <div class="evento-details-panel neobrutalist-card" id="evento-details-display">
-                                    <!-- Default contents or interactive contents get injected here -->
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -1814,6 +2161,227 @@
         </div>
 
     </div>
+
+    <!-- ==========================================================================
+         MODAL EMERGENTE MULTISELECCIÓN: 21 ESTILOS DE TATUAJE + GUÍA EDUCATIVA
+         ========================================================================== -->
+    <div class="styles-modal-overlay" id="styles-modal-overlay" style="display: none;">
+        <div class="styles-modal-window" id="styles-modal-window" role="dialog" aria-modal="true" aria-labelledby="styles-modal-title">
+            
+            <!-- Modal Header -->
+            <div class="styles-modal-header">
+                <div class="styles-modal-title-group">
+                    <div class="styles-modal-icon-badge">
+                        <i data-lucide="sliders-horizontal"></i>
+                    </div>
+                    <div>
+                        <h3 class="styles-modal-title" id="styles-modal-title">Estilos de Tatuaje</h3>
+                        <p class="styles-modal-subtitle">Selecciona uno o más estilos para filtrar tatuadores en La Araucanía</p>
+                    </div>
+                </div>
+                <button type="button" class="styles-modal-close" id="btn-close-styles-modal" aria-label="Cerrar ventana de estilos">
+                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-06_kf9bp1.svg" alt="Cerrar" class="btn-close-svg-icon">
+                </button>
+            </div>
+
+            <!-- Fast Search in 21 styles -->
+            <div class="styles-modal-search-row">
+                <div class="styles-search-input-wrapper">
+                    <i data-lucide="search" class="styles-search-icon"></i>
+                    <input type="text" id="styles-search-input" placeholder="Buscar estilo (ej. Fine Line, Neotribal, Anime, Botanica...)" autocomplete="off">
+                    <button type="button" id="btn-clear-styles-search" class="btn-clear-search-x" style="display: none;"><i data-lucide="x"></i></button>
+                </div>
+                <div class="styles-quick-actions">
+                    <button type="button" class="btn-styles-action-quick" id="btn-select-all-styles">Marcar todos</button>
+                    <button type="button" class="btn-styles-action-quick" id="btn-unselect-all-styles">Desmarcar</button>
+                </div>
+            </div>
+
+            <!-- Modal Content: 2-Column Responsive Layout -->
+            <div class="styles-modal-body">
+                <!-- Left: Scrollable 21 styles list -->
+                <div class="styles-list-column" id="styles-list-column">
+                    <div class="styles-list-grid" id="styles-list-grid">
+                        <!-- 21 items populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Educational Guide Panel -->
+                <aside class="styles-educational-column" id="styles-educational-column">
+                    <div class="educational-card-container">
+                        <div class="educational-badge-header">
+                            <span class="edu-badge"><i data-lucide="book-open"></i> GUÍA EDUCATIVA</span>
+                            <span class="edu-interactive-hint"><i data-lucide="sparkles"></i> Pasa el cursor o toca</span>
+                        </div>
+                        <h4 class="educational-title" id="edu-style-title">Explora los Estilos</h4>
+                        <span class="educational-subtitle-tag" id="edu-style-subtitle">Selección informada</span>
+                        
+                        <div class="educational-info-box">
+                            <div class="edu-info-heading"><i data-lucide="help-circle"></i> ¿Qué significa?</div>
+                            <p class="edu-info-text" id="edu-style-meaning">Posiciónate sobre cualquier estilo de la lista para conocer su origen, técnica y cómo se traduce visualmente en el arte corporal.</p>
+                        </div>
+
+                        <div class="educational-info-box">
+                            <div class="edu-info-heading"><i data-lucide="feather"></i> ¿Cómo es su aplicación?</div>
+                            <p class="edu-info-text" id="edu-style-application">Descubre qué tipo de trazos, agujas, tintas y zonas del cuerpo se adaptan mejor a cada técnica antes de cotizar.</p>
+                        </div>
+
+                        <div class="educational-footer-note">
+                            <i data-lucide="check-circle-2"></i> Artistas disponibles con este estilo en La Araucanía
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="styles-modal-footer">
+                <div class="styles-selected-summary">
+                    <span id="styles-modal-count-text">0 de 21 seleccionados</span>
+                </div>
+                <div class="styles-modal-actions">
+                    <button type="button" class="btn btn-outline" id="btn-modal-cancel-styles">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btn-modal-apply-styles">
+                        <i data-lucide="check"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL EMERGENTE AUTOMÁTICO: PRÓXIMOS EVENTOS EN LA ARAUCANÍA
+         ========================================================================== -->
+    <div class="events-modal-overlay" id="upcoming-events-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="events-modal-title" onclick="if(event.target === this) { if (window.closeUpcomingEventsModal) window.closeUpcomingEventsModal(); else { this.style.display='none'; document.body.style.overflow=''; } }">
+        <div class="events-modal-window">
+            
+            <!-- Modal Header -->
+            <div class="events-modal-header">
+                <div class="events-modal-badge-group">
+                    <span class="events-modal-badge"><i data-lucide="calendar"></i> PRÓXIMOS EVENTOS EN LA ARAUCANÍA</span>
+                    <span class="events-modal-subbadge">Temporada 2026</span>
+                </div>
+                <button type="button" class="events-modal-close" id="btn-close-events-popup" aria-label="Cerrar cartelera de eventos" onclick="if (window.closeUpcomingEventsModal) window.closeUpcomingEventsModal(); else { const m = document.getElementById('upcoming-events-modal'); if (m) m.style.display='none'; document.body.style.overflow=''; }">
+                    <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-06_kf9bp1.svg" alt="Cerrar" class="btn-close-svg-icon">
+                </button>
+            </div>
+
+            <!-- Modal Content: Featured Event + Upcoming Highlights -->
+            <div class="events-modal-body">
+                <!-- Featured Main Card: Expo Tattoo Araucanía -->
+                <div class="popup-featured-event">
+                    <div class="popup-featured-poster" role="button" tabindex="0" title="Ver afiche completo" data-poster-src="assets/events/1-expo-tattoo.png" data-poster-title="Expo Tattoo Araucanía">
+                        <img src="assets/events/1-expo-tattoo.png" alt="Afiche Expo Tattoo Araucanía 2026" class="popup-poster-img" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893550/compressed_1-expo-tattoo-araucania_h2u0ov.png';">
+                        <span class="popup-poster-tag">20 · 21 SEPTIEMBRE</span>
+                    </div>
+                    <div class="popup-featured-info">
+                        <span class="popup-kicker">TINTA CONECTADA PRESENTA</span>
+                        <h3 class="popup-event-title font-ghosthey" id="events-modal-title">Expo Tattoo Araucanía</h3>
+                        <p class="popup-event-place"><i data-lucide="map-pin"></i> Temuco, La Araucanía</p>
+                        <p class="popup-event-desc">El mega encuentro regional del arte corporal: más de 30 tatuadores en vivo, música en directo, gastronomía típica y gran concurso oficial de tatuajes.</p>
+                        
+                        <div class="popup-perks-row">
+                            <span class="popup-perk"><i data-lucide="users"></i> +30 Tatuadores</span>
+                            <span class="popup-perk"><i data-lucide="music"></i> Música en Vivo</span>
+                            <span class="popup-perk"><i data-lucide="coffee"></i> Gastronomía</span>
+                            <span class="popup-perk"><i data-lucide="trophy"></i> Concursos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Grid of other upcoming events -->
+                <div class="popup-upcoming-strip">
+                    <div class="popup-strip-header">
+                        <span class="popup-strip-title font-syne">MÁS EVENTOS CONFIRMADOS EN LA REGIÓN</span>
+                    </div>
+                    <div class="popup-strip-cards">
+                        <div class="popup-mini-card" role="button" tabindex="0" title="Ver afiche" data-poster-src="assets/events/2-flash-day.webp" data-poster-title="Flash Day: Tattoo, Música y Arte">
+                            <div class="mini-card-thumb">
+                                <img src="assets/events/2-flash-day.webp" alt="Flash Day" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_2-flash-day_q6lpda.webp';">
+                            </div>
+                            <div class="mini-card-meta">
+                                <span class="mini-date">SÁBADO 14 · 12 A 20 HRS</span>
+                                <strong>Flash Day Tattoo</strong>
+                                <span>Desde $30.000 · Tattoo X</span>
+                            </div>
+                        </div>
+                        <div class="popup-mini-card" role="button" tabindex="0" title="Ver afiche" data-poster-src="assets/events/3-guest-artist.webp" data-poster-title="Guest Artist: Martín Aguirre">
+                            <div class="mini-card-thumb">
+                                <img src="assets/events/3-guest-artist.webp" alt="Martín Aguirre" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_3-guest-artist_e4fslm.webp';">
+                            </div>
+                            <div class="mini-card-meta">
+                                <span class="mini-date">05 — 07 OCTUBRE</span>
+                                <strong>Guest: Martín Aguirre</strong>
+                                <span>Blackwork & Fine Line · Temuco</span>
+                            </div>
+                        </div>
+                        <div class="popup-mini-card" role="button" tabindex="0" title="Ver afiche" data-poster-src="assets/events/4-convocatoria.webp" data-poster-title="Convocatoria: Buscamos Artistas">
+                            <div class="mini-card-thumb">
+                                <img src="assets/events/4-convocatoria.webp" alt="Convocatoria Tatuadores" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_4-convocatoria-tatuadores_wmgw31.webp';">
+                            </div>
+                            <div class="mini-card-meta">
+                                <span class="mini-date">POSTULACIÓN ABIERTA</span>
+                                <strong>Buscamos Artistas</strong>
+                                <span>Expo Tattoo Araucanía</span>
+                            </div>
+                        </div>
+                        <div class="popup-mini-card" role="button" tabindex="0" title="Ver afiche" data-poster-src="assets/events/6-tinta-en-la-araucania.webp" data-poster-title="Tinta en La Araucanía">
+                            <div class="mini-card-thumb">
+                                <img src="assets/events/6-tinta-en-la-araucania.webp" alt="Tinta en La Araucanía" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_6-tinta-en-la-araucania_oxh0av.webp';">
+                            </div>
+                            <div class="mini-card-meta">
+                                <span class="mini-date">15 OCTUBRE · 11 HRS</span>
+                                <strong>Tinta en La Araucanía</strong>
+                                <span>Centro Cultural Temuco</span>
+                            </div>
+                        </div>
+                        <div class="popup-mini-card" role="button" tabindex="0" title="Ver afiche" data-poster-src="assets/events/7-flash-market.webp" data-poster-title="Flash Market: Tattoos + Arte + Diseño">
+                            <div class="mini-card-thumb">
+                                <img src="assets/events/7-flash-market.webp" alt="Flash Market" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1788893549/compressed_7-flash-market_psdoco.webp';">
+                            </div>
+                            <div class="mini-card-meta">
+                                <span class="mini-date">DOMINGO 08 · 12 A 19 HRS</span>
+                                <strong>Flash Market</strong>
+                                <span>Entrada Liberada · Temuco</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="events-modal-footer">
+                <button type="button" class="btn btn-outline" id="btn-popup-dismiss-events" onclick="if (window.closeUpcomingEventsModal) window.closeUpcomingEventsModal(); else { const m = document.getElementById('upcoming-events-modal'); if (m) m.style.display='none'; document.body.style.overflow=''; }">
+                    Continuar explorando
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-popup-ir-eventos">
+                    Más información <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         LIGHTBOX MODAL: VISUALIZADOR DE AFICHES EN ALTA RESOLUCIÓN
+         ========================================================================== -->
+    <div class="events-lightbox-overlay" id="events-lightbox-modal" style="display: none;" role="dialog" aria-modal="true" aria-label="Afiche ampliado">
+        <div class="events-lightbox-container">
+            <button type="button" class="events-lightbox-close" id="btn-close-lightbox" aria-label="Cerrar afiche ampliado">
+                <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-06_kf9bp1.svg" alt="Cerrar" class="btn-close-svg-icon">
+            </button>
+            <div class="events-lightbox-content">
+                <img src="" alt="Afiche ampliado" id="lightbox-poster-img" class="lightbox-poster-img">
+                <div class="lightbox-poster-bar">
+                    <span id="lightbox-poster-caption" class="lightbox-caption">Afiche de Evento</span>
+                    <button type="button" class="btn btn-primary btn-sm" id="btn-lightbox-ir-eventos">
+                        Ver en cartelera &rarr;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- PAGE TRANSITION WIPE OVERLAY -->
     <div class="page-transition-overlay">
         <div class="transition-wipe-bar"></div>
@@ -1822,11 +2390,32 @@
     
     <!-- CUSTOM CURSOR -->
     <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
-    <div class="custom-cursor-ring" id="custom-cursor-ring"></div>
+    <script>
+        (function() {
+            var dot = document.getElementById('custom-cursor-dot');
+            if (!dot) return;
+            window.addEventListener('mousemove', function(e) {
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                dot.classList.add('visible');
+            }, { passive: true });
+            window.addEventListener('mousedown', function() { dot.classList.add('active'); });
+            window.addEventListener('mouseup', function() { dot.classList.remove('active'); });
+            document.addEventListener('mouseover', function(e) {
+                if (e.target && (e.target.closest('a, button, select, input, textarea, label, [role="button"], .artist-card, .btn-style, .btn-category, .sidebar-item') || (window.getComputedStyle(e.target).cursor === 'pointer'))) {
+                    dot.classList.add('hovered');
+                } else {
+                    dot.classList.remove('hovered');
+                }
+            });
+            document.addEventListener('mouseleave', function() { dot.classList.remove('visible'); });
+            document.addEventListener('mouseenter', function() { dot.classList.add('visible'); });
+        })();
+    </script>
     
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App Logic -->
-    <script src="app.js"></script>
+    <script src="app.js?v=54"></script>
 </body>
 </html>

@@ -1,0 +1,74 @@
+{
+  "pipo": {
+    "instagram_handle": "@pipo.tattooo",
+    "biography_snippet": "Estudio de tatuajes Studio Tatto Pipo. Especialista en Fine Line, trazos finos, geometría y Blackwork. Teodoro Schmidt, ",
+    "detected_styles": [
+      "Blackwork",
+      "Fine Line",
+      "Puntillismo",
+      "Botanica",
+      "Geometrico"
+    ],
+    "style_scores": {
+      "Fine Line": 1,
+      "Puntillismo": 1,
+      "Blackwork": 2,
+      "Botanica": 1,
+      "Geometrico": 1
+    },
+    "artist_id": "pipo",
+    "location": "Teodoro Schmidt"
+  },
+  "wentruart": {
+    "instagram_handle": "@wentruart",
+    "biography_snippet": "Wentruart - Tatuajes y arte tradicional en Temuco. Old school, neo tradicional y lettering.",
+    "detected_styles": [
+      "Old School",
+      "Lettering",
+      "Neotribal"
+    ],
+    "style_scores": {
+      "Lettering": 2,
+      "Neotribal": 1,
+      "Old School": 7
+    },
+    "artist_id": "wentruart",
+    "location": "Temuco"
+  },
+  "tattoopucon": {
+    "instagram_handle": "@tattoopucon",
+    "biography_snippet": "Tattoo Pucón. Realismo fotográfico, black and gray, acuarela y piezas tribales en el sur de Chile.",
+    "detected_styles": [
+      "Acuarela",
+      "Realismo",
+      "Black and Gray",
+      "Puntillismo"
+    ],
+    "style_scores": {
+      "Puntillismo": 1,
+      "Realismo": 3,
+      "Black and Gray": 2,
+      "Acuarela": 4
+    },
+    "artist_id": "tattoopucon",
+    "location": "Pucón"
+  },
+  "puertotinta": {
+    "instagram_handle": "@puertotinta",
+    "biography_snippet": "Puerto Tinta Saavedra. Arte botánico, criaturas marinas y estilo ornamental en la costa.",
+    "detected_styles": [
+      "Ornamental",
+      "Botanica",
+      "Blackwork",
+      "Fine Line Minimalista"
+    ],
+    "style_scores": {
+      "Blackwork": 1,
+      "Ornamental": 3,
+      "Fine Line Minimalista": 1,
+      "Botanica": 2
+    },
+    "artist_id": "puertotinta",
+    "location": "Saavedra"
+  }
+}
