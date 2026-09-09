@@ -130,13 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         "status": "Verificado"
             },
             {
-                        "id": "tatto_zimple",
-                        "name": "Tatto Zimple",
-                        "location": "Padre Las Casas",
-                        "plan": "Premium",
-                        "status": "Verificado"
-            },
-            {
                         "id": "majesus",
                         "name": "majesus.ink",
                         "location": "Villarrica",
@@ -144,29 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         "status": "Verificado"
             },
             {
-                        "id": "sasori",
-                        "name": "sasori.tattoo",
-                        "location": "Temuco",
-                        "plan": "Premium",
-                        "status": "Verificado"
-            },
-            {
                         "id": "milenkorn",
                         "name": "milenkorn",
-                        "location": "Puc\u00f3n",
-                        "plan": "Premium",
-                        "status": "Verificado"
-            },
-            {
-                        "id": "neblink",
-                        "name": "Neblink Tattoo",
-                        "location": "Temuco",
+                        "location": "Pucón",
                         "plan": "Premium",
                         "status": "Verificado"
             },
             {
                         "id": "anima",
-                        "name": "\u00c1nima Artist",
+                        "name": "Ánima Artist",
                         "location": "Angol",
                         "plan": "Premium",
                         "status": "Verificado"
@@ -180,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                         "id": "dulcedelimon",
-                        "name": "Dulce de Lim\u00f3n Ink",
+                        "name": "Dulce de Limón Ink",
                         "location": "Villarrica",
                         "plan": "Premium",
                         "status": "Verificado"
@@ -196,6 +175,216 @@ document.addEventListener('DOMContentLoaded', () => {
                         "id": "denussa",
                         "name": "Denussa Tatua",
                         "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tattoo_zimple",
+                        "name": "Tattoo Zimple",
+                        "location": "Padre Las Casas",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "sasori",
+                        "name": "Sasori Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "neblink",
+                        "name": "Neblink Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "danilobravo",
+                        "name": "Danilo Bravo Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "wentruart",
+                        "name": "Wentru Art",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "aflordepiel",
+                        "name": "A Flor de Piel Chile",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "andres_black",
+                        "name": "Andrés Black Tattoo Studios",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "rumel",
+                        "name": "Rumel Tatuajes",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "rodrigovilla",
+                        "name": "Rodrigo Villa Art",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "pablog",
+                        "name": "Pablo Gaete Tatuajes",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "medusa",
+                        "name": "Medusa Tattoo Chile",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "estudiothelake",
+                        "name": "Estudio The Lake",
+                        "location": "Pucón",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tattoopucon",
+                        "name": "Tattoo Pucón",
+                        "location": "Pucón",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "damiencarrasco",
+                        "name": "Damien Carrasco",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "francis_tattoo",
+                        "name": "Francis Tattoo Color",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "koteknt",
+                        "name": "Kote KNT",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tattoo_adictos",
+                        "name": "Abner Jacob Tattoo Adictos",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "gota_piedra",
+                        "name": "Gota de Piedra Tattoo",
+                        "location": "Victoria",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "puertotinta",
+                        "name": "Puerto Tinta",
+                        "location": "Puerto Saavedra",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tattoo_antu",
+                        "name": "Tattoo Antü",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tattooandroses",
+                        "name": "Tattoo and Roses",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "emilio_sf",
+                        "name": "Emilio SF Tattoos",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "blasphemy",
+                        "name": "Blasphemy Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "oskargutierrez",
+                        "name": "Oskar Gutiérrez Tattoos",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "danna_tattoo",
+                        "name": "Danna Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tatuajes_araucania",
+                        "name": "Tatuajes Araucanía",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "yesstattoo",
+                        "name": "Yess Tattoo",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "jacke_tattoos",
+                        "name": "Jacke Tattoos",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "nelsonvergara",
+                        "name": "Nelson Vergara Tatuajes",
+                        "location": "Temuco",
+                        "plan": "Premium",
+                        "status": "Verificado"
+            },
+            {
+                        "id": "tatto_zimple",
+                        "name": "Tattoo Zimple",
+                        "location": "Padre Las Casas",
                         "plan": "Premium",
                         "status": "Verificado"
             }
@@ -238,311 +427,3030 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let artistsDetails = {
         "pipo": {
-            "name": "Studio tatto pipo",
-            "location": "Teodoro Schmidt",
-            "bio": "Tatuador profesional en Teodoro Schmidt, La Araucanía. Especialista en Fine Line, Blackwork, Puntillismo, Botanica, Geometrico.",
-            "instagram": "https://www.instagram.com/pipo.tattooo/",
-            "handle": "@pipo.tattooo",
-            "avatar": PIPO_OFFICIAL_LOGO,
-            "coords": [-39.2045, -73.0538],
-            "experience": "5 años",
-            "price": "Intermedio",
-            "styles": ["Fine Line", "Blackwork", "Puntillismo", "Botanica", "Geometrico"],
-            "inks": "Dynamic Ink, Eternal Ink, Solid Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp",
-            "portfolio": [
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp", "title": "Trabajo Mano", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4595_wspfa6.webp", "title": "Diseño Geométrico Espalda", "style": "Blackwork" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_WhatsApp_Image_2026-07-07_at_10.14.53_PM_ntqzyz.webp", "title": "Tatuaje Líneas Continuas", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4314_kezisl.webp", "title": "Línea Fina Floral Pierna", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4495_bdmmfp.webp", "title": "Blackwork Abstracto Brazo", "style": "Blackwork" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4125_uuvbwh.webp", "title": "Trazos Continuos Delicados", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4144_fir9qv.webp", "title": "Tatuaje Ornamental Espalda", "style": "Blackwork" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_4075_mfide8.webp", "title": "Puntillismo Botánico Flor", "style": "Puntillismo" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3997_k5nt4b.webp", "title": "Composición Botánica Brazo", "style": "Botanica" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3861_wa3yyf.webp", "title": "Silueta Minimalista Torso", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3179_fvx7ev.webp", "title": "Tatuaje Lineal Manos", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3168_zcazow.webp", "title": "Diseño Lineal Fino Brazo", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2512_vwcl9a.webp", "title": "Blackwork Flor Pierna", "style": "Blackwork" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2638_klaumh.webp", "title": "Geometría Lineal Espalda", "style": "Geometrico" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2014_jxqfuj.webp", "title": "Ornamento Floral Brazo", "style": "Fine Line" },
-                { "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_brazo_bswodc.webp", "title": "Composición Completa Brazo", "style": "Fine Line" }
-            ]
-        },        "connaink": {
-            "name": "Connaink",
-            "location": "Temuco",
-            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
-            "instagram": "https://www.instagram.com/connaink/",
-            "handle": "@connaink",
-            "avatar": "assets/artists_real/connaink/avatar.jpg",
-            "coords": [-38.7396, -72.5984],
-            "experience": "Menos de 1 año",
-            "price": "Intermedio",
-            "styles": ["Fine Line", "Puntillismo"],
-            "inks": "Dynamic",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/connaink/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/connaink/tattoo_1.jpg", "title": "Composición Floral Delicada", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_2.jpg", "title": "Trazo Continuo y Sombra Fina", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_3.jpg", "title": "Diseño de Autor a Pedido", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_4.jpg", "title": "Puntillismo Botánico Fino", "style": "Puntillismo" },
-                { "src": "assets/artists_real/connaink/tattoo_5.jpg", "title": "Línea Minimalista en Brazo", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_6.jpg", "title": "Detalle Botánico en Pierna", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_7.jpg", "title": "Lirios Artísticos", "style": "Fine Line" },
-                { "src": "assets/artists_real/connaink/tattoo_8.jpg", "title": "Composición Fine Line", "style": "Fine Line" }
-            ]
+                "id": "pipo",
+                "name": "Studio tatto pipo",
+                "location": "Teodoro Schmidt",
+                "bio": "Tatuador profesional en Teodoro Schmidt, La Araucanía. Especialista en Fine Line, Blackwork, Puntillismo, Botanica, Geometrico.",
+                "instagram": "https://www.instagram.com/pipo.tattooo/",
+                "handle": "@pipo.tattooo",
+                "avatar": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp",
+                "coords": [
+                        -39.2045,
+                        -73.0538
+                ],
+                "experience": "5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Blackwork",
+                        "Puntillismo",
+                        "Botanica",
+                        "Geometrico"
+                ],
+                "inks": "Dynamic Ink, Eternal Ink, Solid Ink",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp",
+                "portfolio": [
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp",
+                                "title": "Trabajo Mano",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4595_wspfa6.webp",
+                                "title": "Diseño Geométrico Espalda",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_WhatsApp_Image_2026-07-07_at_10.14.53_PM_ntqzyz.webp",
+                                "title": "Tatuaje Líneas Continuas",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4314_kezisl.webp",
+                                "title": "Línea Fina Floral Pierna",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_IMG_4495_bdmmfp.webp",
+                                "title": "Blackwork Abstracto Brazo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4125_uuvbwh.webp",
+                                "title": "Trazos Continuos Delicados",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086758/compressed_IMG_4144_fir9qv.webp",
+                                "title": "Tatuaje Ornamental Espalda",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_4075_mfide8.webp",
+                                "title": "Puntillismo Botánico Flor",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3997_k5nt4b.webp",
+                                "title": "Composición Botánica Brazo",
+                                "style": "Botanica"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3861_wa3yyf.webp",
+                                "title": "Silueta Minimalista Torso",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3179_fvx7ev.webp",
+                                "title": "Tatuaje Lineal Manos",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086756/compressed_IMG_3168_zcazow.webp",
+                                "title": "Diseño Lineal Fino Brazo",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2512_vwcl9a.webp",
+                                "title": "Blackwork Flor Pierna",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2638_klaumh.webp",
+                                "title": "Geometría Lineal Espalda",
+                                "style": "Geometrico"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_IMG_2014_jxqfuj.webp",
+                                "title": "Ornamento Floral Brazo",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086755/compressed_brazo_bswodc.webp",
+                                "title": "Composición Completa Brazo",
+                                "style": "Fine Line"
+                        }
+                ]
+        },
+        "connaink": {
+                "id": "connaink",
+                "name": "Connaink",
+                "location": "Temuco",
+                "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
+                "instagram": "https://www.instagram.com/connaink/",
+                "handle": "@connaink",
+                "avatar": "assets/artists_real/connaink/avatar.jpg",
+                "coords": [
+                        -38.7396,
+                        -72.5984
+                ],
+                "experience": "Menos de 1 año",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/connaink/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_1.jpg",
+                                "title": "Composición Floral Delicada",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_2.jpg",
+                                "title": "Trazo Continuo y Sombra Fina",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_3.jpg",
+                                "title": "Diseño de Autor a Pedido",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_4.jpg",
+                                "title": "Puntillismo Botánico Fino",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_5.jpg",
+                                "title": "Línea Minimalista en Brazo",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_6.jpg",
+                                "title": "Detalle Botánico en Pierna",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_7.jpg",
+                                "title": "Lirios Artísticos",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/connaink/tattoo_8.jpg",
+                                "title": "Composición Fine Line",
+                                "style": "Fine Line"
+                        }
+                ]
         },
         "nowss": {
-            "name": "nowss.ttt",
-            "location": "Temuco",
-            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line, Realismo y Puntillismo.",
-            "instagram": "https://www.instagram.com/nowss.ttt/",
-            "handle": "@nowss.ttt",
-            "avatar": "assets/artists_real/nowss/avatar.jpg",
-            "coords": [-38.7346, -72.6024],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Fine Line", "Realismo", "Puntillismo"],
-            "inks": "Dynamic, Eternal Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/nowss/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/nowss/tattoo_1.jpg", "title": "Texturas y Contrastes en Blackwork", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_2.jpg", "title": "Puro Blackwork Geométrico", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_3.jpg", "title": "Sombreado Opaco Profundo", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_4.jpg", "title": "Pieza Blackwork en Brazo", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_5.jpg", "title": "Tatuaje Realista y Textura", "style": "Realismo" },
-                { "src": "assets/artists_real/nowss/tattoo_6.jpg", "title": "Detalle Dark Ornamental", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_7.jpg", "title": "Blackwork Pecho y Cuello", "style": "Blackwork" },
-                { "src": "assets/artists_real/nowss/tattoo_8.jpg", "title": "Composición Tonal Fina", "style": "Fine Line" }
-            ]
-        },
-        "tatto_zimple": {
-            "name": "Tatto Zimple",
-            "location": "Padre Las Casas",
-            "bio": "Tatuador profesional en Padre Las Casas, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line, Puntillismo.",
-            "instagram": "https://www.instagram.com/tatto_zimple/",
-            "handle": "@tatto_zimple",
-            "avatar": TINTA_CONECTADA_BRAND_LOGO,
-            "coords": [-38.7612, -72.5991],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Black and Gray", "Fine Line", "Puntillismo"],
-            "inks": "Dynamic, Solid Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "",
-            "portfolio": []
+                "id": "nowss",
+                "name": "nowss.ttt",
+                "location": "Temuco",
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line, Realismo y Puntillismo.",
+                "instagram": "https://www.instagram.com/nowss.ttt/",
+                "handle": "@nowss.ttt",
+                "avatar": "assets/artists_real/nowss/avatar.jpg",
+                "coords": [
+                        -38.7346,
+                        -72.6024
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Fine Line",
+                        "Realismo",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic, Eternal Ink",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/nowss/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_1.jpg",
+                                "title": "Texturas y Contrastes en Blackwork",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_2.jpg",
+                                "title": "Puro Blackwork Geométrico",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_3.jpg",
+                                "title": "Sombreado Opaco Profundo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_4.jpg",
+                                "title": "Pieza Blackwork en Brazo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_5.jpg",
+                                "title": "Tatuaje Realista y Textura",
+                                "style": "Realismo"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_6.jpg",
+                                "title": "Detalle Dark Ornamental",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_7.jpg",
+                                "title": "Blackwork Pecho y Cuello",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/nowss/tattoo_8.jpg",
+                                "title": "Composición Tonal Fina",
+                                "style": "Fine Line"
+                        }
+                ]
         },
         "majesus": {
-            "name": "majesus.ink",
-            "location": "Villarrica",
-            "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Fine Line y Lettering.",
-            "instagram": "https://www.instagram.com/majesus.ink/",
-            "handle": "@majesus.ink",
-            "avatar": "assets/artists_real/majesus/avatar.jpg",
-            "coords": [-39.2821, -72.2268],
-            "experience": "1–3 años",
-            "price": "Intermedio",
-            "styles": ["Fine Line", "Lettering"],
-            "inks": "Dynamic, Radiant",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/majesus/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/majesus/tattoo_1.jpg", "title": "Tatuaje Floral Delicado", "style": "Fine Line" },
-                { "src": "assets/artists_real/majesus/tattoo_2.jpg", "title": "Lettering Personalizado en Brazo", "style": "Lettering" },
-                { "src": "assets/artists_real/majesus/tattoo_3.jpg", "title": "Fine Line Botánico Clavícula", "style": "Fine Line" },
-                { "src": "assets/artists_real/majesus/tattoo_4.jpg", "title": "Trazos Finos y Sutiles", "style": "Fine Line" },
-                { "src": "assets/artists_real/majesus/tattoo_5.jpg", "title": "Tipografía Exclusiva Mano", "style": "Lettering" },
-                { "src": "assets/artists_real/majesus/tattoo_6.jpg", "title": "Ornamento Lineal en Espalda", "style": "Fine Line" },
-                { "src": "assets/artists_real/majesus/tattoo_7.jpg", "title": "Mini Tatuaje Lineal", "style": "Fine Line" },
-                { "src": "assets/artists_real/majesus/tattoo_8.jpg", "title": "Composición Fine Line Tobillo", "style": "Fine Line" }
-            ]
-        },
-        "sasori": {
-            "name": "sasori.tattoo",
-            "location": "Temuco",
-            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Neotribal, Cybersigilism, Dark Ornamental.",
-            "instagram": "https://www.instagram.com/sasori.tattoo.cl/",
-            "handle": "@sasori.tattoo.cl",
-            "avatar": TINTA_CONECTADA_BRAND_LOGO,
-            "coords": [-38.7312, -72.5854],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Neotribal", "Cybersigilism", "Dark Ornamental"],
-            "inks": "Dynamic, Eternal Ink, Radiant",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "",
-            "portfolio": []
+                "id": "majesus",
+                "name": "majesus.ink",
+                "location": "Villarrica",
+                "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Fine Line y Lettering.",
+                "instagram": "https://www.instagram.com/majesus.ink/",
+                "handle": "@majesus.ink",
+                "avatar": "assets/artists_real/majesus/avatar.jpg",
+                "coords": [
+                        -39.2821,
+                        -72.2268
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Lettering"
+                ],
+                "inks": "Dynamic, Radiant",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/majesus/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_1.jpg",
+                                "title": "Tatuaje Floral Delicado",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_2.jpg",
+                                "title": "Lettering Personalizado en Brazo",
+                                "style": "Lettering"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_3.jpg",
+                                "title": "Fine Line Botánico Clavícula",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_4.jpg",
+                                "title": "Trazos Finos y Sutiles",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_5.jpg",
+                                "title": "Tipografía Exclusiva Mano",
+                                "style": "Lettering"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_6.jpg",
+                                "title": "Ornamento Lineal en Espalda",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_7.jpg",
+                                "title": "Mini Tatuaje Lineal",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/majesus/tattoo_8.jpg",
+                                "title": "Composición Fine Line Tobillo",
+                                "style": "Fine Line"
+                        }
+                ]
         },
         "milenkorn": {
-            "name": "milenkorn",
-            "location": "Pucón",
-            "bio": "Tatuadora profesional en Pucón, La Araucanía. Especialista en Blackwork y Black and Gray.",
-            "instagram": "https://www.instagram.com/milenkorn/",
-            "handle": "@milenkorn",
-            "avatar": "assets/artists_real/milenkorn/avatar.jpg",
-            "coords": [-39.2789, -71.9754],
-            "experience": "1–3 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Black and Gray"],
-            "inks": "Dynamic",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/milenkorn/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/milenkorn/tattoo_1.jpg", "title": "Metal Gear Solid Arte Playstation", "style": "Blackwork" },
-                { "src": "assets/artists_real/milenkorn/tattoo_2.jpg", "title": "Blackwork Ilustrativo Espalda", "style": "Blackwork" },
-                { "src": "assets/artists_real/milenkorn/tattoo_3.jpg", "title": "Black and Gray Contrastes", "style": "Black and Gray" },
-                { "src": "assets/artists_real/milenkorn/tattoo_4.jpg", "title": "Ilustración Oscura en Brazo", "style": "Blackwork" },
-                { "src": "assets/artists_real/milenkorn/tattoo_5.jpg", "title": "Composición Blackwork Pierna", "style": "Blackwork" },
-                { "src": "assets/artists_real/milenkorn/tattoo_6.jpg", "title": "Sombreado Black and Gray", "style": "Black and Gray" },
-                { "src": "assets/artists_real/milenkorn/tattoo_7.jpg", "title": "Diseño de Personaje en Tinta", "style": "Blackwork" },
-                { "src": "assets/artists_real/milenkorn/tattoo_8.jpg", "title": "Pieza Completa Blackwork", "style": "Blackwork" }
-            ]
-        },
-        "neblink": {
-            "name": "Neblink Tattoo",
-            "location": "Temuco",
-            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line y Realismo.",
-            "instagram": "https://www.instagram.com/nebl.ink/",
-            "handle": "@nebl.ink",
-            "avatar": TINTA_CONECTADA_BRAND_LOGO,
-            "coords": [-38.7380, -72.5940],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Black and Gray", "Fine Line", "Realismo"],
-            "inks": "Dynamic, Solid Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "",
-            "portfolio": []
+                "id": "milenkorn",
+                "name": "milenkorn",
+                "location": "Pucón",
+                "bio": "Tatuadora profesional en Pucón, La Araucanía. Especialista en Blackwork y Black and Gray.",
+                "instagram": "https://www.instagram.com/milenkorn/",
+                "handle": "@milenkorn",
+                "avatar": "assets/artists_real/milenkorn/avatar.jpg",
+                "coords": [
+                        -39.2789,
+                        -71.9754
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Black and Gray"
+                ],
+                "inks": "Dynamic",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/milenkorn/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_1.jpg",
+                                "title": "Metal Gear Solid Arte Playstation",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_2.jpg",
+                                "title": "Blackwork Ilustrativo Espalda",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_3.jpg",
+                                "title": "Black and Gray Contrastes",
+                                "style": "Black and Gray"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_4.jpg",
+                                "title": "Ilustración Oscura en Brazo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_5.jpg",
+                                "title": "Composición Blackwork Pierna",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_6.jpg",
+                                "title": "Sombreado Black and Gray",
+                                "style": "Black and Gray"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_7.jpg",
+                                "title": "Diseño de Personaje en Tinta",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/milenkorn/tattoo_8.jpg",
+                                "title": "Pieza Completa Blackwork",
+                                "style": "Blackwork"
+                        }
+                ]
         },
         "anima": {
-            "name": "Ánima Artist",
-            "location": "Angol",
-            "bio": "Tatuador profesional en Angol, La Araucanía. Especialista en Blackwork, Fine Line y Ornamental.",
-            "instagram": "https://www.instagram.com/anima.artist/",
-            "handle": "@anima.artist",
-            "avatar": "assets/artists_real/anima/avatar.jpg",
-            "coords": [-37.7975, -72.7153],
-            "experience": "Más de 5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Fine Line", "Ornamental"],
-            "inks": "Dynamic, World Famous Tattoo Ink, Intenze, Radiant",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/anima/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/anima/tattoo_1.jpg", "title": "Composición Floral y Ornamental", "style": "Ornamental" },
-                { "src": "assets/artists_real/anima/tattoo_2.jpg", "title": "Ornamental en Antebrazo", "style": "Ornamental" },
-                { "src": "assets/artists_real/anima/tattoo_3.jpg", "title": "Fine Line y Textura Mística", "style": "Fine Line" },
-                { "src": "assets/artists_real/anima/tattoo_4.jpg", "title": "Patrón Ornamental Pecho", "style": "Ornamental" },
-                { "src": "assets/artists_real/anima/tattoo_5.jpg", "title": "Blackwork Botánico Delicado", "style": "Blackwork" },
-                { "src": "assets/artists_real/anima/tattoo_6.jpg", "title": "Diseño Ornamental Espalda", "style": "Ornamental" },
-                { "src": "assets/artists_real/anima/tattoo_7.jpg", "title": "Líneas Florales y Acentos", "style": "Fine Line" },
-                { "src": "assets/artists_real/anima/tattoo_8.jpg", "title": "Composición Artística Pierna", "style": "Blackwork" }
-            ]
+                "id": "anima",
+                "name": "Ánima Artist",
+                "location": "Angol",
+                "bio": "Tatuador profesional en Angol, La Araucanía. Especialista en Blackwork, Fine Line y Ornamental.",
+                "instagram": "https://www.instagram.com/anima.artist/",
+                "handle": "@anima.artist",
+                "avatar": "assets/artists_real/anima/avatar.jpg",
+                "coords": [
+                        -37.7975,
+                        -72.7153
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Fine Line",
+                        "Ornamental"
+                ],
+                "inks": "Dynamic, World Famous Tattoo Ink, Intenze, Radiant",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/anima/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/anima/tattoo_1.jpg",
+                                "title": "Composición Floral y Ornamental",
+                                "style": "Ornamental"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_2.jpg",
+                                "title": "Ornamental en Antebrazo",
+                                "style": "Ornamental"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_3.jpg",
+                                "title": "Fine Line y Textura Mística",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_4.jpg",
+                                "title": "Patrón Ornamental Pecho",
+                                "style": "Ornamental"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_5.jpg",
+                                "title": "Blackwork Botánico Delicado",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_6.jpg",
+                                "title": "Diseño Ornamental Espalda",
+                                "style": "Ornamental"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_7.jpg",
+                                "title": "Líneas Florales y Acentos",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/anima/tattoo_8.jpg",
+                                "title": "Composición Artística Pierna",
+                                "style": "Blackwork"
+                        }
+                ]
         },
         "balentina": {
-            "name": "balentina.ttt",
-            "location": "Temuco",
-            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Blackwork y Puntillismo.",
-            "instagram": "https://www.instagram.com/balentina.ttt/",
-            "handle": "@balentina.ttt",
-            "avatar": "assets/artists_real/balentina/avatar.jpg",
-            "coords": [-38.7456, -72.6034],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Puntillismo"],
-            "inks": "Dynamic",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/balentina/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/balentina/tattoo_1.jpg", "title": "Diseño de Autor en Puntillismo", "style": "Puntillismo" },
-                { "src": "assets/artists_real/balentina/tattoo_2.jpg", "title": "Blackwork Textura y Sombras", "style": "Blackwork" },
-                { "src": "assets/artists_real/balentina/tattoo_3.jpg", "title": "Puntillismo Botánico Detallado", "style": "Puntillismo" },
-                { "src": "assets/artists_real/balentina/tattoo_4.jpg", "title": "Ilustración en Blackwork", "style": "Blackwork" },
-                { "src": "assets/artists_real/balentina/tattoo_5.jpg", "title": "Pieza Floral con Puntillismo", "style": "Puntillismo" },
-                { "src": "assets/artists_real/balentina/tattoo_6.jpg", "title": "Composición en Brazo", "style": "Blackwork" },
-                { "src": "assets/artists_real/balentina/tattoo_7.jpg", "title": "Puntillismo Ornamental", "style": "Puntillismo" },
-                { "src": "assets/artists_real/balentina/tattoo_8.jpg", "title": "Diseño Personalizado en Pierna", "style": "Blackwork" }
-            ]
+                "id": "balentina",
+                "name": "balentina.ttt",
+                "location": "Temuco",
+                "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Blackwork y Puntillismo.",
+                "instagram": "https://www.instagram.com/balentina.ttt/",
+                "handle": "@balentina.ttt",
+                "avatar": "assets/artists_real/balentina/avatar.jpg",
+                "coords": [
+                        -38.7456,
+                        -72.6034
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/balentina/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_1.jpg",
+                                "title": "Diseño de Autor en Puntillismo",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_2.jpg",
+                                "title": "Blackwork Textura y Sombras",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_3.jpg",
+                                "title": "Puntillismo Botánico Detallado",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_4.jpg",
+                                "title": "Ilustración en Blackwork",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_5.jpg",
+                                "title": "Pieza Floral con Puntillismo",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_6.jpg",
+                                "title": "Composición en Brazo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_7.jpg",
+                                "title": "Puntillismo Ornamental",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/balentina/tattoo_8.jpg",
+                                "title": "Diseño Personalizado en Pierna",
+                                "style": "Blackwork"
+                        }
+                ]
         },
         "dulcedelimon": {
-            "name": "Dulce de Limón Ink",
-            "location": "Villarrica",
-            "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
-            "instagram": "https://www.instagram.com/dulcedelimon.ink/",
-            "handle": "@dulcedelimon.ink",
-            "avatar": "assets/artists_real/dulcedelimon/avatar.jpg",
-            "coords": [-39.2733, -72.2312],
-            "experience": "1–3 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Fine Line", "Puntillismo"],
-            "inks": "Dynamic",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/dulcedelimon/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/dulcedelimon/tattoo_1.jpg", "title": "Zapatito Outdoor Estilizado", "style": "Blackwork" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_2.jpg", "title": "Ave Fénix en Blackwork Fino", "style": "Blackwork" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_3.jpg", "title": "Puntillismo y Trazos Suaves", "style": "Puntillismo" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_4.jpg", "title": "Mini Ilustración en Tinta", "style": "Fine Line" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_5.jpg", "title": "Diseño Botánico Fine Line", "style": "Fine Line" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_6.jpg", "title": "Blackwork con Toque Divertido", "style": "Blackwork" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_7.jpg", "title": "Composición Fina en Tobillo", "style": "Fine Line" },
-                { "src": "assets/artists_real/dulcedelimon/tattoo_8.jpg", "title": "Ilustración Dulce de Limón", "style": "Fine Line" }
-            ]
+                "id": "dulcedelimon",
+                "name": "Dulce de Limón Ink",
+                "location": "Villarrica",
+                "bio": "Tatuadora profesional en Villarrica, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
+                "instagram": "https://www.instagram.com/dulcedelimon.ink/",
+                "handle": "@dulcedelimon.ink",
+                "avatar": "assets/artists_real/dulcedelimon/avatar.jpg",
+                "coords": [
+                        -39.2733,
+                        -72.2312
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/dulcedelimon/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_1.jpg",
+                                "title": "Zapatito Outdoor Estilizado",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_2.jpg",
+                                "title": "Ave Fénix en Blackwork Fino",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_3.jpg",
+                                "title": "Puntillismo y Trazos Suaves",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_4.jpg",
+                                "title": "Mini Ilustración en Tinta",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_5.jpg",
+                                "title": "Diseño Botánico Fine Line",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_6.jpg",
+                                "title": "Blackwork con Toque Divertido",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_7.jpg",
+                                "title": "Composición Fina en Tobillo",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/dulcedelimon/tattoo_8.jpg",
+                                "title": "Ilustración Dulce de Limón",
+                                "style": "Fine Line"
+                        }
+                ]
         },
         "pandetinta": {
-            "name": "Pan de Tinta",
-            "location": "Temuco",
-            "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
-            "instagram": "https://www.instagram.com/pan.detinta/",
-            "handle": "@pan.detinta",
-            "avatar": "assets/artists_real/pandetinta/avatar.jpg",
-            "coords": [-38.7366, -72.5914],
-            "experience": "Más de 5 años",
-            "price": "Intermedio",
-            "styles": ["Blackwork", "Fine Line", "Puntillismo"],
-            "inks": "Dynamic, World Famous Tattoo Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/pandetinta/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/pandetinta/tattoo_1.jpg", "title": "Ilustración Gráfica y Tinta Negra", "style": "Blackwork" },
-                { "src": "assets/artists_real/pandetinta/tattoo_2.jpg", "title": "Blackwork Conceptual Brazo", "style": "Blackwork" },
-                { "src": "assets/artists_real/pandetinta/tattoo_3.jpg", "title": "Puntillismo Texturizado", "style": "Puntillismo" },
-                { "src": "assets/artists_real/pandetinta/tattoo_4.jpg", "title": "Diseño Artístico de Autor", "style": "Fine Line" },
-                { "src": "assets/artists_real/pandetinta/tattoo_5.jpg", "title": "Pieza en Sombra y Contraste", "style": "Blackwork" },
-                { "src": "assets/artists_real/pandetinta/tattoo_6.jpg", "title": "Líneas Fuertes y Fondo Negro", "style": "Blackwork" },
-                { "src": "assets/artists_real/pandetinta/tattoo_7.jpg", "title": "Composición Gráfica en Pierna", "style": "Blackwork" },
-                { "src": "assets/artists_real/pandetinta/tattoo_8.jpg", "title": "Arte Original Pan de Tinta", "style": "Fine Line" }
-            ]
+                "id": "pandetinta",
+                "name": "Pan de Tinta",
+                "location": "Temuco",
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Fine Line y Puntillismo.",
+                "instagram": "https://www.instagram.com/pan.detinta/",
+                "handle": "@pan.detinta",
+                "avatar": "assets/artists_real/pandetinta/avatar.jpg",
+                "coords": [
+                        -38.7366,
+                        -72.5914
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic, World Famous Tattoo Ink",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/pandetinta/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_1.jpg",
+                                "title": "Ilustración Gráfica y Tinta Negra",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_2.jpg",
+                                "title": "Blackwork Conceptual Brazo",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_3.jpg",
+                                "title": "Puntillismo Texturizado",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_4.jpg",
+                                "title": "Diseño Artístico de Autor",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_5.jpg",
+                                "title": "Pieza en Sombra y Contraste",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_6.jpg",
+                                "title": "Líneas Fuertes y Fondo Negro",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_7.jpg",
+                                "title": "Composición Gráfica en Pierna",
+                                "style": "Blackwork"
+                        },
+                        {
+                                "src": "assets/artists_real/pandetinta/tattoo_8.jpg",
+                                "title": "Arte Original Pan de Tinta",
+                                "style": "Fine Line"
+                        }
+                ]
         },
         "denussa": {
-            "name": "Denussa Tatua",
-            "location": "Temuco",
-            "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
-            "instagram": "https://www.instagram.com/denussatatua/",
-            "handle": "@denussatatua",
-            "avatar": "assets/artists_real/denussa/avatar.jpg",
-            "coords": [-38.7446, -72.5964],
-            "experience": "3–5 años",
-            "price": "Intermedio",
-            "styles": ["Fine Line", "Puntillismo"],
-            "inks": "Dynamic, Panthera Black Ink",
-            "needles": "Kwadron, Cheyenne",
-            "coverImage": "assets/artists_real/denussa/tattoo_1.jpg",
-            "portfolio": [
-                { "src": "assets/artists_real/denussa/tattoo_1.jpg", "title": "Fine Line Floral y Sutil", "style": "Fine Line" },
-                { "src": "assets/artists_real/denussa/tattoo_2.jpg", "title": "Puntillismo Botánico en Brazo", "style": "Puntillismo" },
-                { "src": "assets/artists_real/denussa/tattoo_3.jpg", "title": "Trazos Finos en Clavícula", "style": "Fine Line" },
-                { "src": "assets/artists_real/denussa/tattoo_4.jpg", "title": "Composición Delicada de Autor", "style": "Fine Line" },
-                { "src": "assets/artists_real/denussa/tattoo_5.jpg", "title": "Ilustración Floral Lineal", "style": "Fine Line" },
-                { "src": "assets/artists_real/denussa/tattoo_6.jpg", "title": "Puntillismo Suave en Mano", "style": "Puntillismo" },
-                { "src": "assets/artists_real/denussa/tattoo_7.jpg", "title": "Detalle Botánico Pierna", "style": "Fine Line" },
-                { "src": "assets/artists_real/denussa/tattoo_8.jpg", "title": "Pieza Minimalista en Espalda", "style": "Fine Line" }
-            ]
+                "id": "denussa",
+                "name": "Denussa Tatua",
+                "location": "Temuco",
+                "bio": "Tatuadora profesional en Temuco, La Araucanía. Especialista en Fine Line y Puntillismo.",
+                "instagram": "https://www.instagram.com/denussatatua/",
+                "handle": "@denussatatua",
+                "avatar": "assets/artists_real/denussa/avatar.jpg",
+                "coords": [
+                        -38.7446,
+                        -72.5964
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "inks": "Dynamic, Panthera Black Ink",
+                "needles": "Kwadron, Cheyenne",
+                "coverImage": "assets/artists_real/denussa/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_1.jpg",
+                                "title": "Fine Line Floral y Sutil",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_2.jpg",
+                                "title": "Puntillismo Botánico en Brazo",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_3.jpg",
+                                "title": "Trazos Finos en Clavícula",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_4.jpg",
+                                "title": "Composición Delicada de Autor",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_5.jpg",
+                                "title": "Ilustración Floral Lineal",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_6.jpg",
+                                "title": "Puntillismo Suave en Mano",
+                                "style": "Puntillismo"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_7.jpg",
+                                "title": "Detalle Botánico Pierna",
+                                "style": "Fine Line"
+                        },
+                        {
+                                "src": "assets/artists_real/denussa/tattoo_8.jpg",
+                                "title": "Pieza Minimalista en Espalda",
+                                "style": "Fine Line"
+                        }
+                ]
+        },
+        "tattoo_zimple": {
+                "id": "tattoo_zimple",
+                "name": "Tattoo Zimple",
+                "handle": "@tattoo_zimple",
+                "instagram": "https://www.instagram.com/tattoo_zimple/",
+                "location": "Padre Las Casas",
+                "coords": [
+                        -38.7612,
+                        -72.5991
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Black and Gray",
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "avatar": "assets/artists_real/tattoo_zimple/avatar.jpg",
+                "coverImage": "assets/artists_real/tattoo_zimple/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_1.jpg",
+                                "title": "2 TATUAJES POR $35.000 CLP ud83dudd8bufe0fud83dudda4nnQuer",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_2.jpg",
+                                "title": "u201cResilienciau201dnnTrabajo hecho a domicilio ud83dude98",
+                                "style": "Black and Gray",
+                                "shortcode": "DcmhZz0iySD",
+                                "post_url": "https://www.instagram.com/p/DcmhZz0iySD/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_3.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_4.jpg",
+                                "title": "u201cSonniau201dnnu0040saezz.allenn_16 gracias por la confia",
+                                "style": "Puntillismo",
+                                "shortcode": "DcUlYpZNWjQ",
+                                "post_url": "https://www.instagram.com/p/DcUlYpZNWjQ/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_5.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_6.jpg",
+                                "title": "u201c Tuu2019 burni u201cnnTatuaje de hermanas ud83dudc6d",
+                                "style": "Black and Gray",
+                                "shortcode": "DbZW6L4Dajr",
+                                "post_url": "https://www.instagram.com/p/DbZW6L4Dajr/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_7.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Fine Line",
+                                "shortcode": "DbZW6XIjbjN",
+                                "post_url": "https://www.instagram.com/p/DbZW6XIjbjN/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_8.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Padre Las Casas, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "sasori": {
+                "id": "sasori",
+                "name": "Sasori Tattoo",
+                "handle": "@sasori.tattoo",
+                "instagram": "https://www.instagram.com/sasori.tattoo/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7312,
+                        -72.5854
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Neotribal",
+                        "Cybersigilism",
+                        "Dark Ornamental"
+                ],
+                "avatar": "assets/artists_real/sasori/avatar.jpg",
+                "coverImage": "assets/artists_real/sasori/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_1.jpg",
+                                "title": "solo fluyo entre las masasud83eudd78ud83euddb6n.n.n.n.n",
+                                "style": "Blackwork",
+                                "shortcode": "Da1bKJxuFno",
+                                "post_url": "https://www.instagram.com/p/Da1bKJxuFno/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_2.jpg",
+                                "title": "Tatuaje por Sasori Tattoo",
+                                "style": "Neotribal",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_3.jpg",
+                                "title": "de verdad agradezco quienes apau00f1an en ideas tan bonitas :3n",
+                                "style": "Cybersigilism",
+                                "shortcode": "DYdATHDhZ02",
+                                "post_url": "https://www.instagram.com/p/DYdATHDhZ02/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_4.jpg",
+                                "title": "Tatuaje por Sasori Tattoo",
+                                "style": "Dark Ornamental",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_5.jpg",
+                                "title": "si te quieres aplicar algo asu00ed hu00e1blamelo y du00e9mosle",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_6.jpg",
+                                "title": "rayoncito neotridark ud83dudde3ufe0fu203cufe0fn.n.n.n.n",
+                                "style": "Neotribal",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_7.jpg",
+                                "title": "momento roblox ud83euddcdn.n.nfinalmente e vuelto a tatuar y",
+                                "style": "Cybersigilism",
+                                "shortcode": "DYIS_IqjmYz",
+                                "post_url": "https://www.instagram.com/p/DYIS_IqjmYz/"
+                        },
+                        {
+                                "src": "assets/artists_real/sasori/tattoo_8.jpg",
+                                "title": "Tatuaje por Sasori Tattoo",
+                                "style": "Dark Ornamental",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Neotribal, Cybersigilism.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "neblink": {
+                "id": "neblink",
+                "name": "Neblink Tattoo",
+                "handle": "@neblink.tattoo",
+                "instagram": "https://www.instagram.com/neblink.tattoo/",
+                "location": "Temuco",
+                "coords": [
+                        -38.738,
+                        -72.594
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Black and Gray",
+                        "Fine Line",
+                        "Realismo"
+                ],
+                "avatar": "assets/artists_real/neblink/avatar.jpg",
+                "coverImage": "assets/artists_real/neblink/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_1.jpg",
+                                "title": "Pokemon tipo ud83dudc7bnGastly nMimikyunDuskull",
+                                "style": "Blackwork",
+                                "shortcode": "DVrI-ICEVwA",
+                                "post_url": "https://www.instagram.com/p/DVrI-ICEVwA/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_2.jpg",
+                                "title": "Tatuaje por Neblink Tattoo",
+                                "style": "Black and Gray",
+                                "shortcode": "DVrI-ICkScI",
+                                "post_url": "https://www.instagram.com/p/DVrI-ICkScI/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_3.jpg",
+                                "title": "Tatuaje por Neblink Tattoo",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_4.jpg",
+                                "title": "Flash disponible u270dufe0fnTamau00f1os pequeu00f1os / med",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_5.jpg",
+                                "title": "Tattoo reciente u270dufe0fnAgenda abierta esta semananDM para",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_6.jpg",
+                                "title": "Banda geomu00e9trica en blackworknLu00edneas su00f3lidas y do",
+                                "style": "Black and Gray",
+                                "shortcode": "DTgoq-sjWLS",
+                                "post_url": "https://www.instagram.com/p/DTgoq-sjWLS/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_7.jpg",
+                                "title": "Tatuaje por Neblink Tattoo",
+                                "style": "Fine Line",
+                                "shortcode": "DTgoq-wDQD8",
+                                "post_url": "https://www.instagram.com/p/DTgoq-wDQD8/"
+                        },
+                        {
+                                "src": "assets/artists_real/neblink/tattoo_8.jpg",
+                                "title": "Tatuaje por Neblink Tattoo",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "danilobravo": {
+                "id": "danilobravo",
+                "name": "Danilo Bravo Tattoo",
+                "handle": "@danilobravotattoo",
+                "instagram": "https://www.instagram.com/danilobravotattoo/",
+                "location": "Temuco",
+                "coords": [
+                        -38.735,
+                        -72.59
+                ],
+                "experience": "Más de 10 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Realismo",
+                        "Black and Gray",
+                        "Color"
+                ],
+                "avatar": "assets/artists_real/danilobravo/avatar.jpg",
+                "coverImage": "assets/artists_real/danilobravo/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_1.webp",
+                                "title": "Tatuaje Realista Brazo Completo",
+                                "style": "Realismo",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_2.webp",
+                                "title": "Composición Black and Gray Detallada",
+                                "style": "Black and Gray",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_3.webp",
+                                "title": "Retrato Realista Sombras y Textura",
+                                "style": "Color",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_4.jpg",
+                                "title": "Tatuaje Gran Formato Espalda",
+                                "style": "Realismo",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_5.webp",
+                                "title": "Diseño Realista Escultura",
+                                "style": "Black and Gray",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_6.webp",
+                                "title": "Pieza Black and Gray Textura Suave",
+                                "style": "Color",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_7.jpg",
+                                "title": "Tatuaje de Autor Danilo Bravo",
+                                "style": "Realismo",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        },
+                        {
+                                "src": "assets/artists_real/danilobravo/tattoo_8.jpg",
+                                "title": "Composición Artística en Pierna",
+                                "style": "Black and Gray",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danilobravotattoo/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Realismo, Black and Gray, Color.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "wentruart": {
+                "id": "wentruart",
+                "name": "Wentru Art",
+                "handle": "@wentruart",
+                "instagram": "https://www.instagram.com/wentruart/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7385,
+                        -72.601
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Ilustración",
+                        "Fine Line"
+                ],
+                "avatar": "assets/artists_real/wentruart/avatar.jpg",
+                "coverImage": "assets/artists_real/wentruart/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_1.jpg",
+                                "title": "Sueu00f1os relatados nTatuaje por Francisco Contreras",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_2.jpg",
+                                "title": "Avanzando en este brazo lleno de significadonMuy contento con el",
+                                "style": "Ilustración",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_3.jpg",
+                                "title": "Desfragmentaciu00f3n de la emociu00f3n nnPor Francisco Contre",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_4.jpg",
+                                "title": "Sesiu00f3n tatuaje color.nnGracias gente por confiarme sus rit",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_5.jpg",
+                                "title": "Un agrado en laburar en personas que confu00edan en el proceso",
+                                "style": "Ilustración",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/wentruart/tattoo_6.jpg",
+                                "title": "Mango de fuego y rosa npor Francisco Contreras nnAgenda abiert",
+                                "style": "Fine Line",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/wentruart/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Ilustración, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "aflordepiel": {
+                "id": "aflordepiel",
+                "name": "A Flor de Piel Chile",
+                "handle": "@aflordepielchile",
+                "instagram": "https://www.instagram.com/aflordepielchile/",
+                "location": "Temuco",
+                "coords": [
+                        -38.742,
+                        -72.595
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Botánica",
+                        "Color"
+                ],
+                "avatar": "assets/artists_real/aflordepiel/avatar.jpg",
+                "coverImage": "assets/artists_real/aflordepiel/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_1.jpg",
+                                "title": "u270cud83cudffc asi es como se arma el tattoo con referencias",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_2.jpg",
+                                "title": "Poema que me envio mi cliente luego de que confiara en mi y me co",
+                                "style": "Botánica",
+                                "shortcode": "DcaKdbFtiBa",
+                                "post_url": "https://www.instagram.com/p/DcaKdbFtiBa/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_3.jpg",
+                                "title": "Tatuaje por A Flor de Piel Chile",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_4.jpg",
+                                "title": "Tatuajes u2764ufe0f Agosto ud83cudf3f Si te gusta mi trabajo",
+                                "style": "Fine Line",
+                                "shortcode": "DcIUUGCtBdU",
+                                "post_url": "https://www.instagram.com/p/DcIUUGCtBdU/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_5.jpg",
+                                "title": "Tatuaje por A Flor de Piel Chile",
+                                "style": "Botánica",
+                                "shortcode": "DcIUUNfJW_0",
+                                "post_url": "https://www.instagram.com/p/DcIUUNfJW_0/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_6.jpg",
+                                "title": "Tatuaje por A Flor de Piel Chile",
+                                "style": "Color",
+                                "shortcode": "DcIUUTlpD6D",
+                                "post_url": "https://www.instagram.com/p/DcIUUTlpD6D/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_7.jpg",
+                                "title": "Tatuaje por A Flor de Piel Chile",
+                                "style": "Fine Line",
+                                "shortcode": "DcIUUT0pV89",
+                                "post_url": "https://www.instagram.com/p/DcIUUT0pV89/"
+                        },
+                        {
+                                "src": "assets/artists_real/aflordepiel/tattoo_8.jpg",
+                                "title": "Tatuaje por A Flor de Piel Chile",
+                                "style": "Botánica",
+                                "shortcode": "DcIUUVhp2LJ",
+                                "post_url": "https://www.instagram.com/p/DcIUUVhp2LJ/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Botánica, Color.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "andres_black": {
+                "id": "andres_black",
+                "name": "Andrés Black Tattoo Studios",
+                "handle": "@andres_blacktattoostudios",
+                "instagram": "https://www.instagram.com/andres_blacktattoostudios/",
+                "location": "Temuco",
+                "coords": [
+                        -38.737,
+                        -72.592
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Realismo",
+                        "Black and Gray"
+                ],
+                "avatar": "assets/artists_real/andres_black/avatar.jpg",
+                "coverImage": "assets/artists_real/andres_black/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_1.jpg",
+                                "title": "Asu00ed trabaja nuestro Lu00e1ser de Borrado de Tattoos. nDivi",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_2.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Realismo",
+                                "shortcode": "DaBX6eYkbkY",
+                                "post_url": "https://www.instagram.com/p/DaBX6eYkbkY/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_3.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Black and Gray",
+                                "shortcode": "DaBX6Y9RMyK",
+                                "post_url": "https://www.instagram.com/p/DaBX6Y9RMyK/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_4.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Blackwork",
+                                "shortcode": "DaBX6huRbVu",
+                                "post_url": "https://www.instagram.com/p/DaBX6huRbVu/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_5.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Realismo",
+                                "shortcode": "DaBX6ypEfY3",
+                                "post_url": "https://www.instagram.com/p/DaBX6ypEfY3/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_6.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Black and Gray",
+                                "shortcode": "DaBX6poxWzZ",
+                                "post_url": "https://www.instagram.com/p/DaBX6poxWzZ/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_7.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/andres_black/tattoo_8.jpg",
+                                "title": "Tatuaje por Andrés Black Tattoo Studios",
+                                "style": "Realismo",
+                                "shortcode": "DZnoVWaR0_-",
+                                "post_url": "https://www.instagram.com/p/DZnoVWaR0_-/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Realismo, Black and Gray.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "rumel": {
+                "id": "rumel",
+                "name": "Rumel Tatuajes",
+                "handle": "@rumel_tatuajes",
+                "instagram": "https://www.instagram.com/rumel_tatuajes/",
+                "location": "Temuco",
+                "coords": [
+                        -38.74,
+                        -72.605
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Neotradicional",
+                        "Puntillismo"
+                ],
+                "avatar": "assets/artists_real/rumel/avatar.jpg",
+                "coverImage": "assets/artists_real/rumel/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_1.jpg",
+                                "title": "Cuidadito Wazowski ud83dudc41ud83dudc9a",
+                                "style": "Blackwork",
+                                "shortcode": "DZ3mWC5o-q7",
+                                "post_url": "https://www.instagram.com/p/DZ3mWC5o-q7/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_2.jpg",
+                                "title": "Tatuaje por Rumel Tatuajes",
+                                "style": "Neotradicional",
+                                "shortcode": "DZ3mWHrofWL",
+                                "post_url": "https://www.instagram.com/p/DZ3mWHrofWL/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_3.jpg",
+                                "title": "Tatuaje por Rumel Tatuajes",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_4.jpg",
+                                "title": "Cobertura en dos sesiones ud83dude43u2698ufe0fnAgenda abiert",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_5.jpg",
+                                "title": "Recuerdos de mi segunda defi con puros vu00edos ud83dudcaaud8",
+                                "style": "Neotradicional",
+                                "shortcode": "DYNNfXQCJZS",
+                                "post_url": "https://www.instagram.com/p/DYNNfXQCJZS/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_6.jpg",
+                                "title": "Tatuaje por Rumel Tatuajes",
+                                "style": "Puntillismo",
+                                "shortcode": "DYNNflPiJlT",
+                                "post_url": "https://www.instagram.com/p/DYNNflPiJlT/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_7.jpg",
+                                "title": "Tatuaje por Rumel Tatuajes",
+                                "style": "Blackwork",
+                                "shortcode": "DYNNfr-iOqH",
+                                "post_url": "https://www.instagram.com/p/DYNNfr-iOqH/"
+                        },
+                        {
+                                "src": "assets/artists_real/rumel/tattoo_8.jpg",
+                                "title": "Tatuaje por Rumel Tatuajes",
+                                "style": "Neotradicional",
+                                "shortcode": "DYNNf05CAxE",
+                                "post_url": "https://www.instagram.com/p/DYNNf05CAxE/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Neotradicional, Puntillismo.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "rodrigovilla": {
+                "id": "rodrigovilla",
+                "name": "Rodrigo Villa Art",
+                "handle": "@rodrigovilla_art",
+                "instagram": "https://www.instagram.com/rodrigovilla_art/",
+                "location": "Temuco",
+                "coords": [
+                        -38.733,
+                        -72.597
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Realismo",
+                        "Black and Gray",
+                        "Retrato"
+                ],
+                "avatar": "assets/artists_real/rodrigovilla/avatar.jpg",
+                "coverImage": "assets/artists_real/rodrigovilla/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_1.jpg",
+                                "title": "Realizado en 2 sesiones nnu25aaufe0fAgenda abierta ud83dudd",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_2.webp",
+                                "title": "Angel guerrero para Carlos.nRealizado en 2 sesiones consecutivas",
+                                "style": "Black and Gray",
+                                "shortcode": "Dc9uu23qm2U",
+                                "post_url": "https://www.instagram.com/p/Dc9uu23qm2U/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_3.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Retrato",
+                                "shortcode": "Dc9uu1dquIP",
+                                "post_url": "https://www.instagram.com/p/Dc9uu1dquIP/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_4.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Realismo",
+                                "shortcode": "Dc9uu6Jqopl",
+                                "post_url": "https://www.instagram.com/p/Dc9uu6Jqopl/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_5.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Black and Gray",
+                                "shortcode": "Dc9uu_HqnVq",
+                                "post_url": "https://www.instagram.com/p/Dc9uu_HqnVq/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_6.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Retrato",
+                                "shortcode": "Dc9uu7HqSW5",
+                                "post_url": "https://www.instagram.com/p/Dc9uu7HqSW5/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_7.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Realismo",
+                                "shortcode": "Dc9uvA2qU1q",
+                                "post_url": "https://www.instagram.com/p/Dc9uvA2qU1q/"
+                        },
+                        {
+                                "src": "assets/artists_real/rodrigovilla/tattoo_8.webp",
+                                "title": "Tatuaje por Rodrigo Villa Art",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Realismo, Black and Gray, Retrato.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "pablog": {
+                "id": "pablog",
+                "name": "Pablo Gaete Tatuajes",
+                "handle": "@Pablog_tatuajes",
+                "instagram": "https://www.instagram.com/Pablog_tatuajes/",
+                "location": "Temuco",
+                "coords": [
+                        -38.736,
+                        -72.608
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Black and Gray",
+                        "Puntillismo",
+                        "Geométrico"
+                ],
+                "avatar": "assets/artists_real/pablog/avatar.jpg",
+                "coverImage": "assets/artists_real/pablog/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_1.jpg",
+                                "title": "Lionel Messi con su mu00edtica celebraciu00f3n en el Santiago B",
+                                "style": "Black and Gray",
+                                "shortcode": "DIkjDdjM2N8",
+                                "post_url": "https://www.instagram.com/p/DIkjDdjM2N8/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_2.jpg",
+                                "title": "Tatuaje por Pablo Gaete Tatuajes",
+                                "style": "Puntillismo",
+                                "shortcode": "DIkjDdlsIv2",
+                                "post_url": "https://www.instagram.com/p/DIkjDdlsIv2/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_3.jpg",
+                                "title": "Tatuaje por Pablo Gaete Tatuajes",
+                                "style": "Geométrico",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_4.jpg",
+                                "title": "Medusa ud83dudc0dud83dudc0d n.n.n.n",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_5.jpg",
+                                "title": "Lionel Andres Messi campeu00f3n del mundo ud83cudf0d u26bduf",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_6.jpg",
+                                "title": "Lionel Messi campeu00f3n del mundo Qatar 2022nPara Brayan ud83",
+                                "style": "Geométrico",
+                                "shortcode": "DHPOQPByK5P",
+                                "post_url": "https://www.instagram.com/p/DHPOQPByK5P/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_7.jpg",
+                                "title": "Tatuaje por Pablo Gaete Tatuajes",
+                                "style": "Black and Gray",
+                                "shortcode": "DHPOQO6y7QW",
+                                "post_url": "https://www.instagram.com/p/DHPOQO6y7QW/"
+                        },
+                        {
+                                "src": "assets/artists_real/pablog/tattoo_8.jpg",
+                                "title": "Tatuaje por Pablo Gaete Tatuajes",
+                                "style": "Puntillismo",
+                                "shortcode": "DHPOQOxS8Jt",
+                                "post_url": "https://www.instagram.com/p/DHPOQOxS8Jt/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Black and Gray, Puntillismo, Geométrico.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "medusa": {
+                "id": "medusa",
+                "name": "Medusa Tattoo Chile",
+                "handle": "@medusatattoochile",
+                "instagram": "https://www.instagram.com/medusatattoochile/",
+                "location": "Temuco",
+                "coords": [
+                        -38.739,
+                        -72.593
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Blackwork",
+                        "Lettering"
+                ],
+                "avatar": "assets/artists_real/medusa/avatar.jpg",
+                "coverImage": "assets/artists_real/medusa/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_1.webp",
+                                "title": "E d w a r d-n n",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_2.webp",
+                                "title": "Tatuate! Tengo horas disponibles dentro de estos du00edas!n",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_3.webp",
+                                "title": "u2661 haz lo que amas y nunca dejes que te apaguen",
+                                "style": "Lettering",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_4.webp",
+                                "title": "Rosa tradicional para mi hermanou2661 gracias x confiar en mi",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_5.webp",
+                                "title": "u25cfK I N G B O Ou25cfn",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_6.jpg",
+                                "title": "u2022C h r o l l ou2022nu2022Hunter x Hunteru2022nn",
+                                "style": "Lettering",
+                                "shortcode": "CEKaCDQJlsq",
+                                "post_url": "https://www.instagram.com/p/CEKaCDQJlsq/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_7.jpg",
+                                "title": "Tatuaje por Medusa Tattoo Chile",
+                                "style": "Fine Line",
+                                "shortcode": "CEKaCDPp_e0",
+                                "post_url": "https://www.instagram.com/p/CEKaCDPp_e0/"
+                        },
+                        {
+                                "src": "assets/artists_real/medusa/tattoo_8.jpg",
+                                "title": "Tatuaje por Medusa Tattoo Chile",
+                                "style": "Blackwork",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/medusatattoochile/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Blackwork, Lettering.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "estudiothelake": {
+                "id": "estudiothelake",
+                "name": "Estudio The Lake",
+                "handle": "@estudio.thelake",
+                "instagram": "https://www.instagram.com/estudio.thelake/",
+                "location": "Pucón",
+                "coords": [
+                        -39.276,
+                        -71.978
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Blackwork",
+                        "Color"
+                ],
+                "avatar": "assets/artists_real/estudiothelake/avatar.jpg",
+                "coverImage": "assets/artists_real/estudiothelake/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_1.jpg",
+                                "title": "Del 1 al 10 cuu00e1nto te doliu00f3 tu piercing?nnHoy nuestra",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_2.jpg",
+                                "title": "Hay tendencias de tatuajes que simplemente NO podemos defender u",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_3.jpg",
+                                "title": "Presentando a las responsables de que The Lake Ink funcioneu2026",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_4.jpg",
+                                "title": "Hay historias que no comienzan con tintau2026 comienzan con un r",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_5.jpg",
+                                "title": "Piercing realizado de forma profesional, cuidando cada detalle de",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_6.jpg",
+                                "title": "Shenlong cobrando vida en la piel.nnUna pieza con caru00e1cter",
+                                "style": "Color",
+                                "shortcode": "Dch1MSityL-",
+                                "post_url": "https://www.instagram.com/p/Dch1MSityL-/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_7.jpg",
+                                "title": "Tatuaje por Estudio The Lake",
+                                "style": "Fine Line",
+                                "shortcode": "Dch1McsNiF9",
+                                "post_url": "https://www.instagram.com/p/Dch1McsNiF9/"
+                        },
+                        {
+                                "src": "assets/artists_real/estudiothelake/tattoo_8.jpg",
+                                "title": "Tatuaje por Estudio The Lake",
+                                "style": "Blackwork",
+                                "shortcode": "Dch1MmstuEm",
+                                "post_url": "https://www.instagram.com/p/Dch1MmstuEm/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Pucón, La Araucanía. Especialista en Fine Line, Blackwork, Color.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tattoopucon": {
+                "id": "tattoopucon",
+                "name": "Tattoo Pucón",
+                "handle": "@tattoopucon",
+                "instagram": "https://www.instagram.com/tattoopucon/",
+                "location": "Pucón",
+                "coords": [
+                        -39.2795,
+                        -71.974
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Puntillismo",
+                        "Geométrico"
+                ],
+                "avatar": "assets/artists_real/tattoopucon/avatar.jpg",
+                "coverImage": "assets/artists_real/tattoopucon/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_1.jpg",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Blackwork",
+                                "shortcode": "C5Et3tBOm6v",
+                                "post_url": "https://www.instagram.com/p/C5Et3tBOm6v/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_2.jpg",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_3.webp",
+                                "title": "Segunda sesiu00f3n para u0040bran.doly estilo  ud83d",
+                                "style": "Geométrico",
+                                "shortcode": "Cy4th9NuscD",
+                                "post_url": "https://www.instagram.com/p/Cy4th9NuscD/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_4.webp",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Blackwork",
+                                "shortcode": "Cy4th9NuoUa",
+                                "post_url": "https://www.instagram.com/p/Cy4th9NuoUa/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_5.webp",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_6.jpg",
+                                "title": "Hoy les dejo un adelanto de un gran diseu00f1o estilo",
+                                "style": "Geométrico",
+                                "shortcode": "CxwNL-Zu83a",
+                                "post_url": "https://www.instagram.com/p/CxwNL-Zu83a/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_7.jpg",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Blackwork",
+                                "shortcode": "CxwNL-WOyg-",
+                                "post_url": "https://www.instagram.com/p/CxwNL-WOyg-/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoopucon/tattoo_8.jpg",
+                                "title": "Tatuaje por Tattoo Pucón",
+                                "style": "Puntillismo",
+                                "shortcode": "CxwNL-Zuz71",
+                                "post_url": "https://www.instagram.com/p/CxwNL-Zuz71/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Pucón, La Araucanía. Especialista en Blackwork, Puntillismo, Geométrico.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "damiencarrasco": {
+                "id": "damiencarrasco",
+                "name": "Damien Carrasco",
+                "handle": "@damien.carrasco",
+                "instagram": "https://www.instagram.com/damien.carrasco/",
+                "location": "Temuco",
+                "coords": [
+                        -38.741,
+                        -72.6
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Dark Art",
+                        "Fine Line"
+                ],
+                "avatar": "assets/artists_real/damiencarrasco/avatar.jpg",
+                "coverImage": "assets/artists_real/damiencarrasco/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_1.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_2.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Dark Art",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_3.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_4.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_5.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Dark Art",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/damiencarrasco/tattoo_6.webp",
+                                "title": "Tatuaje por Damien Carrasco",
+                                "style": "Fine Line",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/damien.carrasco/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Dark Art, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "francis_tattoo": {
+                "id": "francis_tattoo",
+                "name": "Francis Tattoo Color",
+                "handle": "@francis_tattoo_color",
+                "instagram": "https://www.instagram.com/francis_tattoo_color/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7355,
+                        -72.5965
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Color",
+                        "Acuarela",
+                        "Fine Line"
+                ],
+                "avatar": "assets/artists_real/francis_tattoo/avatar.jpg",
+                "coverImage": "assets/artists_real/francis_tattoo/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_1.jpg",
+                                "title": "ud83dudd25ud83dudd25",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_2.jpg",
+                                "title": "hermosa Pieza de Espalda, Excelente aguante u0040aemohio_ ud83e",
+                                "style": "Acuarela",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_3.jpg",
+                                "title": "ud83eudd77",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_4.jpg",
+                                "title": "Dragon ud83dudc09",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_5.jpg",
+                                "title": "Tatuaje por Francis Tattoo Color",
+                                "style": "Acuarela",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/francis_tattoo/tattoo_6.jpg",
+                                "title": "Tatuaje por Francis Tattoo Color",
+                                "style": "Fine Line",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/francis_tattoo_color/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Color, Acuarela, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "koteknt": {
+                "id": "koteknt",
+                "name": "Kote KNT",
+                "handle": "@koteknt",
+                "instagram": "https://www.instagram.com/koteknt/",
+                "location": "Temuco",
+                "coords": [
+                        -38.743,
+                        -72.598
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Lettering",
+                        "Chicano"
+                ],
+                "avatar": "assets/artists_real/koteknt/avatar.jpg",
+                "coverImage": "assets/artists_real/koteknt/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_1.jpg",
+                                "title": "Agenda abierta para tuauajes en Cunco ud83dudccdn",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_2.jpg",
+                                "title": "Agenda tu tatuaje en Cunco ud83dudccd nTengo disponibilidad to",
+                                "style": "Lettering",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_3.jpg",
+                                "title": "Blesssed u2728",
+                                "style": "Chicano",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_4.jpg",
+                                "title": "Es una familia numerosa y se me ocurriu00f3 hacerla una pulsera",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_5.jpg",
+                                "title": "Para una madre y una hija fanu00e1ticas de Bts u2764ufe0fnDe",
+                                "style": "Lettering",
+                                "shortcode": "DcJlmTokQ9M",
+                                "post_url": "https://www.instagram.com/p/DcJlmTokQ9M/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_6.jpg",
+                                "title": "Tatuaje por Kote KNT",
+                                "style": "Chicano",
+                                "shortcode": "DcJlnVHkWD0",
+                                "post_url": "https://www.instagram.com/p/DcJlnVHkWD0/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_7.jpg",
+                                "title": "Tatuaje por Kote KNT",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/koteknt/tattoo_8.jpg",
+                                "title": "ud83dudc9c n",
+                                "style": "Lettering",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/koteknt/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Lettering, Chicano.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tattoo_adictos": {
+                "id": "tattoo_adictos",
+                "name": "Abner Jacob Tattoo Adictos",
+                "handle": "@tattoo_adictos_",
+                "instagram": "https://www.instagram.com/tattoo_adictos_/",
+                "location": "Temuco",
+                "coords": [
+                        -38.738,
+                        -72.603
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Realismo",
+                        "Black and Gray",
+                        "Color"
+                ],
+                "avatar": "assets/artists_real/tattoo_adictos/avatar.jpg",
+                "coverImage": "assets/artists_real/tattoo_adictos/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_1.jpg",
+                                "title": "ud83eudef6n",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_2.jpg",
+                                "title": "ud83dudd25n",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_3.jpg",
+                                "title": "ud83eudef6nu00f1a",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_4.jpg",
+                                "title": "Loica stickern",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_5.jpg",
+                                "title": "Loican    u00f1o",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_adictos/tattoo_6.jpg",
+                                "title": "Leon bebeud83eudef6nu00f3n",
+                                "style": "Color",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/tattoo_adictos_/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Realismo, Black and Gray, Color.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "gota_piedra": {
+                "id": "gota_piedra",
+                "name": "Gota de Piedra Tattoo",
+                "handle": "@gota_piedra_tatoo_victoria",
+                "instagram": "https://www.instagram.com/gota_piedra_tatoo_victoria/",
+                "location": "Victoria",
+                "coords": [
+                        -38.2325,
+                        -72.3341
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Tradicional",
+                        "Puntillismo"
+                ],
+                "avatar": "assets/artists_real/gota_piedra/avatar.jpg",
+                "coverImage": "assets/artists_real/gota_piedra/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_1.jpg",
+                                "title": "Cliente feliz y resultado brutal ud83dudc1fud83cudf38nDiseu",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_2.jpg",
+                                "title": "Trabajando agendando horas nPara la pru00f3xima semana",
+                                "style": "Tradicional",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_3.jpg",
+                                "title": "Siempre es buen tiempo para un tattoo n.nn.n",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_4.jpg",
+                                "title": "Horas disponibles en Victoria nYa estoy atendiendo por esta lind",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_5.jpg",
+                                "title": "Trabajando para el cuento del ratu00f3n ud83dude09",
+                                "style": "Tradicional",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/gota_piedra/tattoo_6.jpg",
+                                "title": "Trabajo terminadonn",
+                                "style": "Puntillismo",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/gota_piedra_tatoo_victoria/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Victoria, La Araucanía. Especialista en Blackwork, Tradicional, Puntillismo.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "puertotinta": {
+                "id": "puertotinta",
+                "name": "Puerto Tinta",
+                "handle": "@puertotinta",
+                "instagram": "https://www.instagram.com/puertotinta/",
+                "location": "Puerto Saavedra",
+                "coords": [
+                        -38.789,
+                        -73.398
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Fine Line",
+                        "Ilustración"
+                ],
+                "avatar": "assets/artists_real/puertotinta/avatar.jpg",
+                "coverImage": "assets/artists_real/puertotinta/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_1.jpg",
+                                "title": "Tatuaje para madre y sus hijas desde carahuito, siempre agradecie",
+                                "style": "Blackwork",
+                                "shortcode": "DdAPYmdO50L",
+                                "post_url": "https://www.instagram.com/p/DdAPYmdO50L/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_2.jpg",
+                                "title": "Tatuaje por Puerto Tinta",
+                                "style": "Fine Line",
+                                "shortcode": "DdAPYsguoBu",
+                                "post_url": "https://www.instagram.com/p/DdAPYsguoBu/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_3.jpg",
+                                "title": "Tatuaje por Puerto Tinta",
+                                "style": "Ilustración",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_4.jpg",
+                                "title": "De pisciano a pisciano ud83eudd1dud83cudffbn",
+                                "style": "Blackwork",
+                                "shortcode": "Dcg53ZshvNp",
+                                "post_url": "https://www.instagram.com/p/Dcg53ZshvNp/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_5.jpg",
+                                "title": "Tatuaje por Puerto Tinta",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_6.jpg",
+                                "title": "* Colibri - (Cover/up) n* (tapando otro tatuaje) nSol cicatri",
+                                "style": "Ilustración",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_7.jpg",
+                                "title": "Trueque nn*Consultas por mensaje o WhatsApp",
+                                "style": "Blackwork",
+                                "shortcode": "DbtmXvGBndv",
+                                "post_url": "https://www.instagram.com/p/DbtmXvGBndv/"
+                        },
+                        {
+                                "src": "assets/artists_real/puertotinta/tattoo_8.jpg",
+                                "title": "Tatuaje por Puerto Tinta",
+                                "style": "Fine Line",
+                                "shortcode": "DbtmX1nBlNc",
+                                "post_url": "https://www.instagram.com/p/DbtmX1nBlNc/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Puerto Saavedra, La Araucanía. Especialista en Blackwork, Fine Line, Ilustración.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tattoo_antu": {
+                "id": "tattoo_antu",
+                "name": "Tattoo Antü",
+                "handle": "@tattoo_antu",
+                "instagram": "https://www.instagram.com/tattoo_antu/",
+                "location": "Temuco",
+                "coords": [
+                        -38.734,
+                        -72.591
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Puntillismo",
+                        "Floral"
+                ],
+                "avatar": "assets/artists_real/tattoo_antu/avatar.jpg",
+                "coverImage": "assets/artists_real/tattoo_antu/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_1.webp",
+                                "title": "Dragon black and grey ud83dudda4",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_2.webp",
+                                "title": "ud83dudda4ud83eudd1cud83cudffbud83eudd1bud83cudffb",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_3.webp",
+                                "title": "ud83dudda4",
+                                "style": "Floral",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_4.webp",
+                                "title": "ud83dudda4",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_5.webp",
+                                "title": "ud83dudda4",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_antu/tattoo_6.webp",
+                                "title": "ud83dudda4",
+                                "style": "Floral",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/tattoo_antu/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Puntillismo, Floral.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tattooandroses": {
+                "id": "tattooandroses",
+                "name": "Tattoo and Roses",
+                "handle": "@tattooandroses",
+                "instagram": "https://www.instagram.com/tattooandroses/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7375,
+                        -72.5995
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Realismo",
+                        "Black and Gray"
+                ],
+                "avatar": "assets/artists_real/tattooandroses/avatar.jpg",
+                "coverImage": "assets/artists_real/tattooandroses/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_1.webp",
+                                "title": "Un nuevo animal y otros cicatrizados, ha sido increu00edble real",
+                                "style": "Fine Line",
+                                "shortcode": "Dc4q99yAWtA",
+                                "post_url": "https://www.instagram.com/p/Dc4q99yAWtA/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_2.webp",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Realismo",
+                                "shortcode": "Dc4q-IwADKK",
+                                "post_url": "https://www.instagram.com/p/Dc4q-IwADKK/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_3.webp",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Black and Gray",
+                                "shortcode": "Dc4sHJyAKC0",
+                                "post_url": "https://www.instagram.com/p/Dc4sHJyAKC0/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_4.jpg",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Fine Line",
+                                "shortcode": "Dc4sEQIgKXJ",
+                                "post_url": "https://www.instagram.com/p/Dc4sEQIgKXJ/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_5.jpg",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Realismo",
+                                "shortcode": "Dc4q-ONgH-R",
+                                "post_url": "https://www.instagram.com/p/Dc4q-ONgH-R/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_6.webp",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Black and Gray",
+                                "shortcode": "Dc4q-TEgiks",
+                                "post_url": "https://www.instagram.com/p/Dc4q-TEgiks/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_7.webp",
+                                "title": "Tatuaje por Tattoo and Roses",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattooandroses/tattoo_8.webp",
+                                "title": "Reportan un tigre en Lonquimay ud83dudc05 nnSiempre feliz de",
+                                "style": "Realismo",
+                                "shortcode": "Db1zcFigdmt",
+                                "post_url": "https://www.instagram.com/p/Db1zcFigdmt/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Realismo, Black and Gray.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "emilio_sf": {
+                "id": "emilio_sf",
+                "name": "Emilio SF Tattoos",
+                "handle": "@emili0_sf_t4tt0s_",
+                "instagram": "https://www.instagram.com/emili0_sf_t4tt0s_/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7445,
+                        -72.6015
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Lettering",
+                        "Cyberpunk"
+                ],
+                "avatar": "assets/artists_real/emilio_sf/avatar.jpg",
+                "coverImage": "assets/artists_real/emilio_sf/tattoo_1.webp",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_1.webp",
+                                "title": "Vuelve promociu00f3n la misma del au00f1o pasadoud83dude4cud",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_2.webp",
+                                "title": "El mejor regalo no se envuelve, se tatu00faaud83eudef6ud83cu",
+                                "style": "Lettering",
+                                "shortcode": "Dc4lIcZgLnk",
+                                "post_url": "https://www.instagram.com/p/Dc4lIcZgLnk/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_3.webp",
+                                "title": "Tatuaje por Emilio SF Tattoos",
+                                "style": "Cyberpunk",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_4.webp",
+                                "title": "Tatuaje en la Clavu00edcula por segunda vez al cliente de Pitruf",
+                                "style": "Blackwork",
+                                "shortcode": "DcolXFFRT-s",
+                                "post_url": "https://www.instagram.com/p/DcolXFFRT-s/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_5.jpg",
+                                "title": "Tatuaje por Emilio SF Tattoos",
+                                "style": "Lettering",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_6.webp",
+                                "title": "Este usuario hace tatuajes y escucha chismes jakshjau270cud83c",
+                                "style": "Cyberpunk",
+                                "shortcode": "Dcjt7bipUnL",
+                                "post_url": "https://www.instagram.com/p/Dcjt7bipUnL/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_7.webp",
+                                "title": "Tatuaje por Emilio SF Tattoos",
+                                "style": "Blackwork",
+                                "shortcode": "Dcjt7i9pbZJ",
+                                "post_url": "https://www.instagram.com/p/Dcjt7i9pbZJ/"
+                        },
+                        {
+                                "src": "assets/artists_real/emilio_sf/tattoo_8.webp",
+                                "title": "Tatuaje por Emilio SF Tattoos",
+                                "style": "Lettering",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Lettering, Cyberpunk.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "blasphemy": {
+                "id": "blasphemy",
+                "name": "Blasphemy Tattoo",
+                "handle": "@blasphemy_tattoo",
+                "instagram": "https://www.instagram.com/blasphemy_tattoo/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7325,
+                        -72.589
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Dark Art",
+                        "Neotribal"
+                ],
+                "avatar": "assets/artists_real/blasphemy/avatar.jpg",
+                "coverImage": "assets/artists_real/blasphemy/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_1.jpg",
+                                "title": "Sirius y Pantera ud83dudc96nTatuaje terminado hace un par de s",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_2.jpg",
+                                "title": "Algunos tatuajes hechos este u00faltimo tiempo u2728 Agenda 202",
+                                "style": "Dark Art",
+                                "shortcode": "DTG2TE3AGfu",
+                                "post_url": "https://www.instagram.com/p/DTG2TE3AGfu/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_3.jpg",
+                                "title": "Tatuaje por Blasphemy Tattoo",
+                                "style": "Neotribal",
+                                "shortcode": "DTG2TEzAEGN",
+                                "post_url": "https://www.instagram.com/p/DTG2TEzAEGN/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_4.jpg",
+                                "title": "Tatuaje por Blasphemy Tattoo",
+                                "style": "Blackwork",
+                                "shortcode": "DTG2TEzAFOJ",
+                                "post_url": "https://www.instagram.com/p/DTG2TEzAFOJ/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_5.jpg",
+                                "title": "Tatuaje por Blasphemy Tattoo",
+                                "style": "Dark Art",
+                                "shortcode": "DTG2TFBgARg",
+                                "post_url": "https://www.instagram.com/p/DTG2TFBgARg/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_6.jpg",
+                                "title": "Tatuaje por Blasphemy Tattoo",
+                                "style": "Neotribal",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_7.jpg",
+                                "title": "u2728Esta Navidad te llevas un Tatuaje de Regalo u2728nnYa qu",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/blasphemy/tattoo_8.jpg",
+                                "title": "Tatuaje de Momo u2728 gracias por la confianza nuevamente u0040",
+                                "style": "Dark Art",
+                                "shortcode": "DQX_Rc6ABBF",
+                                "post_url": "https://www.instagram.com/p/DQX_Rc6ABBF/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Dark Art, Neotribal.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "oskargutierrez": {
+                "id": "oskargutierrez",
+                "name": "Oskar Gutiérrez Tattoos",
+                "handle": "@oskargutierrez.tattoos",
+                "instagram": "https://www.instagram.com/oskargutierrez.tattoos/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7395,
+                        -72.604
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Realismo",
+                        "Black and Gray",
+                        "Retrato"
+                ],
+                "avatar": "assets/artists_real/oskargutierrez/avatar.jpg",
+                "coverImage": "assets/artists_real/oskargutierrez/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_1.jpg",
+                                "title": "Lautaro en proceso u2026nnTatuaje realizado en u0040maiputerr",
+                                "style": "Realismo",
+                                "shortcode": "Dc_zNDCmBBM",
+                                "post_url": "https://www.instagram.com/p/Dc_zNDCmBBM/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_2.jpg",
+                                "title": "Tatuaje por Oskar Gutiérrez Tattoos",
+                                "style": "Black and Gray",
+                                "shortcode": "Dc_zNDFmLEv",
+                                "post_url": "https://www.instagram.com/p/Dc_zNDFmLEv/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_3.jpg",
+                                "title": "Tatuaje por Oskar Gutiérrez Tattoos",
+                                "style": "Retrato",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_4.jpg",
+                                "title": "Cover Up u267bufe0fnnSi tienes un tatuaje que no te gusta o y",
+                                "style": "Realismo",
+                                "shortcode": "DcMeRiBmCjy",
+                                "post_url": "https://www.instagram.com/p/DcMeRiBmCjy/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_5.jpg",
+                                "title": "Tatuaje por Oskar Gutiérrez Tattoos",
+                                "style": "Black and Gray",
+                                "shortcode": "DcMeRh-mFgD",
+                                "post_url": "https://www.instagram.com/p/DcMeRh-mFgD/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_6.jpg",
+                                "title": "Tatuaje por Oskar Gutiérrez Tattoos",
+                                "style": "Retrato",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_7.jpg",
+                                "title": "Portrait nnud83euddf8 Santino nu0040gabobinastattoo nnud",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/oskargutierrez/tattoo_8.jpg",
+                                "title": "Santi do BossonnPara mi bro u0040gabobinastattoo ud83eudd1d",
+                                "style": "Black and Gray",
+                                "shortcode": "DcCWkwkNWvN",
+                                "post_url": "https://www.instagram.com/p/DcCWkwkNWvN/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Realismo, Black and Gray, Retrato.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "danna_tattoo": {
+                "id": "danna_tattoo",
+                "name": "Danna Tattoo",
+                "handle": "@danna.tattoo_",
+                "instagram": "https://www.instagram.com/danna.tattoo_/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7415,
+                        -72.5975
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Microrealismo",
+                        "Floral"
+                ],
+                "avatar": "assets/artists_real/danna_tattoo/avatar.jpg",
+                "coverImage": "assets/artists_real/danna_tattoo/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_1.jpg",
+                                "title": "Estu00e1 pequeu00f1a ud83dudc22 de 5 cm la hicimos el otro d",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_2.jpg",
+                                "title": "Preciosa, gracias por volver! Hoy tatuamos estos pequeu00f1os fi",
+                                "style": "Microrealismo",
+                                "shortcode": "Dbn8qiXutvN",
+                                "post_url": "https://www.instagram.com/p/Dbn8qiXutvN/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_3.jpg",
+                                "title": "Tatuaje por Danna Tattoo",
+                                "style": "Floral",
+                                "shortcode": "Dbn8qleO-qE",
+                                "post_url": "https://www.instagram.com/p/Dbn8qleO-qE/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_4.jpg",
+                                "title": "Tatuaje por Danna Tattoo",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_5.jpg",
+                                "title": "Tatuaje de hoy! De 15 cm, espero que sea el primero de muchos, mu",
+                                "style": "Microrealismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_6.jpg",
+                                "title": "40 cm de largo por 2,27 de ancho, gracias por venir ud83dudc96",
+                                "style": "Floral",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_7.jpg",
+                                "title": "Gracias por venir ud83dudc96u2728 & por la buena compau00f1u",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/danna_tattoo/tattoo_8.jpg",
+                                "title": "Un pequeu00f1o que hice hoy, este tatuaje lleva un gran signific",
+                                "style": "Microrealismo",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/danna.tattoo_/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Microrealismo, Floral.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tatuajes_araucania": {
+                "id": "tatuajes_araucania",
+                "name": "Tatuajes Araucanía",
+                "handle": "@tatuajes_araucania",
+                "instagram": "https://www.instagram.com/tatuajes_araucania/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7365,
+                        -72.5945
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Color",
+                        "Tradicional"
+                ],
+                "avatar": "assets/artists_real/tatuajes_araucania/avatar.jpg",
+                "coverImage": "assets/artists_real/tatuajes_araucania/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_1.jpg",
+                                "title": "CUBRE O DISIMULA LA CICATRIZ QUE QUIERAS u2764ufe0fu200dud83e",
+                                "style": "Blackwork",
+                                "shortcode": "DbHguHYDmSD",
+                                "post_url": "https://www.instagram.com/p/DbHguHYDmSD/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_2.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Color",
+                                "shortcode": "DbHgtYdjogP",
+                                "post_url": "https://www.instagram.com/p/DbHgtYdjogP/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_3.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Tradicional",
+                                "shortcode": "DbHgvjGDvjT",
+                                "post_url": "https://www.instagram.com/p/DbHgvjGDvjT/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_4.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Blackwork",
+                                "shortcode": "DbHgvCBDqus",
+                                "post_url": "https://www.instagram.com/p/DbHgvCBDqus/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_5.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_6.jpg",
+                                "title": "RANITA EN LA NUBE ud83dudc38 n+56994173710nSiempre en MELIPEU",
+                                "style": "Tradicional",
+                                "shortcode": "DYdbvstOreG",
+                                "post_url": "https://www.instagram.com/p/DYdbvstOreG/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_7.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Blackwork",
+                                "shortcode": "DYdbv7UuVBm",
+                                "post_url": "https://www.instagram.com/p/DYdbv7UuVBm/"
+                        },
+                        {
+                                "src": "assets/artists_real/tatuajes_araucania/tattoo_8.jpg",
+                                "title": "Tatuaje por Tatuajes Araucanía",
+                                "style": "Color",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Color, Tradicional.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "yesstattoo": {
+                "id": "yesstattoo",
+                "name": "Yess Tattoo",
+                "handle": "@yesstattoo._",
+                "instagram": "https://www.instagram.com/yesstattoo._/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7405,
+                        -72.5925
+                ],
+                "experience": "1–3 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Fine Line",
+                        "Anime",
+                        "Color"
+                ],
+                "avatar": "assets/artists_real/yesstattoo/avatar.jpg",
+                "coverImage": "assets/artists_real/yesstattoo/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_1.jpg",
+                                "title": "Despuu00e9s de mucho tiempo sin hacer un Reels. ud83cudfa5nAc",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_2.webp",
+                                "title": "Hola gentecita ud83dudc4bud83cudffcu2728nAcu00e1 subiendo",
+                                "style": "Anime",
+                                "shortcode": "DbCN3SdtL2I",
+                                "post_url": "https://www.instagram.com/p/DbCN3SdtL2I/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_3.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Color",
+                                "shortcode": "DbCN3b9tdjM",
+                                "post_url": "https://www.instagram.com/p/DbCN3b9tdjM/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_4.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Fine Line",
+                                "shortcode": "DbCN3g6tEFA",
+                                "post_url": "https://www.instagram.com/p/DbCN3g6tEFA/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_5.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Anime",
+                                "shortcode": "DbCN3lGtOPz",
+                                "post_url": "https://www.instagram.com/p/DbCN3lGtOPz/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_6.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Color",
+                                "shortcode": "DbCN3p2tjH2",
+                                "post_url": "https://www.instagram.com/p/DbCN3p2tjH2/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_7.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Fine Line",
+                                "shortcode": "DbCN31nNevi",
+                                "post_url": "https://www.instagram.com/p/DbCN31nNevi/"
+                        },
+                        {
+                                "src": "assets/artists_real/yesstattoo/tattoo_8.webp",
+                                "title": "Tatuaje por Yess Tattoo",
+                                "style": "Anime",
+                                "shortcode": "DbCOFDCN7Xc",
+                                "post_url": "https://www.instagram.com/p/DbCOFDCN7Xc/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Fine Line, Anime, Color.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "jacke_tattoos": {
+                "id": "jacke_tattoos",
+                "name": "Jacke Tattoos",
+                "handle": "@jacke_tattoos",
+                "instagram": "https://www.instagram.com/jacke_tattoos/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7388,
+                        -72.5988
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Puntillismo",
+                        "Ornamental"
+                ],
+                "avatar": "assets/artists_real/jacke_tattoos/avatar.jpg",
+                "coverImage": "assets/artists_real/jacke_tattoos/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_1.jpg",
+                                "title": "Piercings bellos para clientas fuertes u2764ufe0fu200dud83du",
+                                "style": "Blackwork",
+                                "shortcode": "DdAB2YvjCfe",
+                                "post_url": "https://www.instagram.com/p/DdAB2YvjCfe/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_2.jpg",
+                                "title": "Tatuaje por Jacke Tattoos",
+                                "style": "Puntillismo",
+                                "shortcode": "DdAB2RsMCMd",
+                                "post_url": "https://www.instagram.com/p/DdAB2RsMCMd/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_3.jpg",
+                                "title": "Tatuaje por Jacke Tattoos",
+                                "style": "Ornamental",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_4.jpg",
+                                "title": "LLEGAMOS A LA GRAN FINAL DEL TOP 10! ud83cudfc6nnu200bPrimer",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_5.jpg",
+                                "title": "Philtrum/Medusa ud83eudebc nRealizado hace unos du00edas",
+                                "style": "Puntillismo",
+                                "shortcode": "DchTsb0RaGO",
+                                "post_url": "https://www.instagram.com/p/DchTsb0RaGO/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_6.jpg",
+                                "title": "Tatuaje por Jacke Tattoos",
+                                "style": "Ornamental",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_7.jpg",
+                                "title": "Coverup de Y nTuvimos un par de saltos en la sesion ya que le di",
+                                "style": "Blackwork",
+                                "shortcode": "DcbSyokxtBP",
+                                "post_url": "https://www.instagram.com/p/DcbSyokxtBP/"
+                        },
+                        {
+                                "src": "assets/artists_real/jacke_tattoos/tattoo_8.jpg",
+                                "title": "Tatuaje por Jacke Tattoos",
+                                "style": "Puntillismo",
+                                "shortcode": "DcbSzTxR7UN",
+                                "post_url": "https://www.instagram.com/p/DcbSzTxR7UN/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Blackwork, Puntillismo, Ornamental.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "nelsonvergara": {
+                "id": "nelsonvergara",
+                "name": "Nelson Vergara Tatuajes",
+                "handle": "@nelsonvergaratatuajes",
+                "instagram": "https://www.instagram.com/nelsonvergaratatuajes/",
+                "location": "Temuco",
+                "coords": [
+                        -38.7345,
+                        -72.5955
+                ],
+                "experience": "Más de 5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Realismo",
+                        "Black and Gray",
+                        "Fine Line"
+                ],
+                "avatar": "assets/artists_real/nelsonvergara/avatar.jpg",
+                "coverImage": "assets/artists_real/nelsonvergara/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_1.jpg",
+                                "title": "Amor de padre ud83dudc2fud83dudc2f ...cobertura",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_2.jpg",
+                                "title": "Segunda parte de esta serie de dinosaurios ud83eudef0ud83eude",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_3.jpg",
+                                "title": "U. De Chile (chuncho)",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_4.jpg",
+                                "title": "El angel cau00eddo",
+                                "style": "Realismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_5.jpg",
+                                "title": "Mi hijo Luciano u2728",
+                                "style": "Black and Gray",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/nelsonvergara/tattoo_6.jpg",
+                                "title": "The witch ud83dudc80",
+                                "style": "Fine Line",
+                                "shortcode": "",
+                                "post_url": "https://www.instagram.com/nelsonvergaratatuajes/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Temuco, La Araucanía. Especialista en Realismo, Black and Gray, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
+        },
+        "tatto_zimple": {
+                "id": "tatto_zimple",
+                "name": "Tattoo Zimple",
+                "handle": "@tattoo_zimple",
+                "instagram": "https://www.instagram.com/tattoo_zimple/",
+                "location": "Padre Las Casas",
+                "coords": [
+                        -38.7612,
+                        -72.5991
+                ],
+                "experience": "3–5 años",
+                "price": "Intermedio",
+                "styles": [
+                        "Blackwork",
+                        "Black and Gray",
+                        "Fine Line",
+                        "Puntillismo"
+                ],
+                "avatar": "assets/artists_real/tattoo_zimple/avatar.jpg",
+                "coverImage": "assets/artists_real/tattoo_zimple/tattoo_1.jpg",
+                "portfolio": [
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_1.jpg",
+                                "title": "2 TATUAJES POR $35.000 CLP ud83dudd8bufe0fud83dudda4nnQuer",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_2.jpg",
+                                "title": "u201cResilienciau201dnnTrabajo hecho a domicilio ud83dude98",
+                                "style": "Black and Gray",
+                                "shortcode": "DcmhZz0iySD",
+                                "post_url": "https://www.instagram.com/p/DcmhZz0iySD/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_3.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Fine Line",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_4.jpg",
+                                "title": "u201cSonniau201dnnu0040saezz.allenn_16 gracias por la confia",
+                                "style": "Puntillismo",
+                                "shortcode": "DcUlYpZNWjQ",
+                                "post_url": "https://www.instagram.com/p/DcUlYpZNWjQ/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_5.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Blackwork",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_6.jpg",
+                                "title": "u201c Tuu2019 burni u201cnnTatuaje de hermanas ud83dudc6d",
+                                "style": "Black and Gray",
+                                "shortcode": "DbZW6L4Dajr",
+                                "post_url": "https://www.instagram.com/p/DbZW6L4Dajr/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_7.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Fine Line",
+                                "shortcode": "DbZW6XIjbjN",
+                                "post_url": "https://www.instagram.com/p/DbZW6XIjbjN/"
+                        },
+                        {
+                                "src": "assets/artists_real/tattoo_zimple/tattoo_8.jpg",
+                                "title": "Tatuaje por Tattoo Zimple",
+                                "style": "Puntillismo",
+                                "shortcode": "__typename",
+                                "post_url": "https://www.instagram.com/p/__typename/"
+                        }
+                ],
+                "bio": "Tatuador profesional en Padre Las Casas, La Araucanía. Especialista en Blackwork, Black and Gray, Fine Line.",
+                "inks": "Dynamic, Solid Ink, Kwadron",
+                "needles": "Kwadron, Cheyenne"
         }
-    };
+};
     window.artistsDetails = artistsDetails;
 
     let artistCoordinates = {
@@ -558,25 +3466,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 -38.7346,
                 -72.6024
         ],
-        "tatto_zimple": [
-                -38.7667,
-                -72.6
-        ],
         "majesus": [
-                -39.2783,
-                -72.2272
-        ],
-        "sasori": [
-                -38.7436,
-                -72.5924
+                -39.2821,
+                -72.2268
         ],
         "milenkorn": [
-                -39.2736,
-                -71.9744
-        ],
-        "neblink": [
-                -38.7326,
-                -72.5934
+                -39.2789,
+                -71.9754
         ],
         "anima": [
                 -37.7975,
@@ -597,6 +3493,126 @@ document.addEventListener('DOMContentLoaded', () => {
         "denussa": [
                 -38.7446,
                 -72.5964
+        ],
+        "tattoo_zimple": [
+                -38.7612,
+                -72.5991
+        ],
+        "sasori": [
+                -38.7312,
+                -72.5854
+        ],
+        "neblink": [
+                -38.738,
+                -72.594
+        ],
+        "danilobravo": [
+                -38.735,
+                -72.59
+        ],
+        "wentruart": [
+                -38.7385,
+                -72.601
+        ],
+        "aflordepiel": [
+                -38.742,
+                -72.595
+        ],
+        "andres_black": [
+                -38.737,
+                -72.592
+        ],
+        "rumel": [
+                -38.74,
+                -72.605
+        ],
+        "rodrigovilla": [
+                -38.733,
+                -72.597
+        ],
+        "pablog": [
+                -38.736,
+                -72.608
+        ],
+        "medusa": [
+                -38.739,
+                -72.593
+        ],
+        "estudiothelake": [
+                -39.276,
+                -71.978
+        ],
+        "tattoopucon": [
+                -39.2795,
+                -71.974
+        ],
+        "damiencarrasco": [
+                -38.741,
+                -72.6
+        ],
+        "francis_tattoo": [
+                -38.7355,
+                -72.5965
+        ],
+        "koteknt": [
+                -38.743,
+                -72.598
+        ],
+        "tattoo_adictos": [
+                -38.738,
+                -72.603
+        ],
+        "gota_piedra": [
+                -38.2325,
+                -72.3341
+        ],
+        "puertotinta": [
+                -38.789,
+                -73.398
+        ],
+        "tattoo_antu": [
+                -38.734,
+                -72.591
+        ],
+        "tattooandroses": [
+                -38.7375,
+                -72.5995
+        ],
+        "emilio_sf": [
+                -38.7445,
+                -72.6015
+        ],
+        "blasphemy": [
+                -38.7325,
+                -72.589
+        ],
+        "oskargutierrez": [
+                -38.7395,
+                -72.604
+        ],
+        "danna_tattoo": [
+                -38.7415,
+                -72.5975
+        ],
+        "tatuajes_araucania": [
+                -38.7365,
+                -72.5945
+        ],
+        "yesstattoo": [
+                -38.7405,
+                -72.5925
+        ],
+        "jacke_tattoos": [
+                -38.7388,
+                -72.5988
+        ],
+        "nelsonvergara": [
+                -38.7345,
+                -72.5955
+        ],
+        "tatto_zimple": [
+                -38.7612,
+                -72.5991
         ]
 };
     window.artistCoordinates = artistCoordinates;
@@ -2251,13 +5267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             avatarImg.src = details.avatar;
             avatarImg.alt = details.name;
             avatarImg.style.filter = '';
-            const isBrandBadge = !details.portfolio || details.portfolio.length === 0 || 
-                (typeof details.avatar === 'string' && (details.avatar.includes('compressed_Group_5') || details.avatar.includes('logo_pipo')));
-            if (isBrandBadge) {
-                avatarImg.classList.add('is-brand-badge');
-            } else {
-                avatarImg.classList.remove('is-brand-badge');
-            }
+            avatarImg.classList.remove('is-brand-badge');
         }
 
         const nameEl = document.getElementById('ficha-artist-name');
@@ -2483,13 +5493,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profAvatar) {
             profAvatar.src = details.avatar;
             profAvatar.alt = details.name;
-            const isBrandBadge = !details.portfolio || details.portfolio.length === 0 || 
-                (typeof details.avatar === 'string' && (details.avatar.includes('compressed_Group_5') || details.avatar.includes('logo_pipo')));
-            if (isBrandBadge) {
-                profAvatar.classList.add('is-brand-badge');
-            } else {
-                profAvatar.classList.remove('is-brand-badge');
-            }
+            profAvatar.classList.remove('is-brand-badge');
         }
 
         // Instagram Link
