@@ -6705,10 +6705,14 @@ h5 {
 .events-modal-body {
     padding: 24px;
     overflow-y: auto;
-    flex-grow: 1;
+    flex: 1 1 0;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 22px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
 }
 
 /* Featured Event inside popup */
@@ -7424,25 +7428,78 @@ h5 {
     
     .popup-featured-event {
         grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 14px;
     }
 
     .popup-featured-poster {
-        max-width: 220px;
+        max-width: 150px;
         margin: 0 auto;
     }
 
+    .events-modal-overlay {
+        padding: 8px !important;
+        align-items: center !important;
+    }
+
     .events-modal-window {
-        max-height: 92vh;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 92vh !important;
+        max-height: 92vh !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        border-radius: 16px !important;
+    }
+
+    .events-modal-header {
+        padding: 10px 14px !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .events-modal-badge {
+        font-size: 0.72rem !important;
+        padding: 3px 8px !important;
+    }
+
+    .events-modal-subbadge {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+    }
+
+    .events-modal-body {
+        padding: 14px !important;
+        flex: 1 1 0 !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        overscroll-behavior-y: contain !important;
+        gap: 16px !important;
     }
 
     .events-modal-footer {
-        flex-direction: column-reverse;
+        display: flex !important;
+        flex-direction: row !important;
+        padding: 8px 12px !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
     }
 
     .events-modal-footer .btn {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
+        flex: 1 !important;
+        width: auto !important;
+        padding: 8px 10px !important;
+        font-size: 0.8rem !important;
+        height: 38px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
     }
 }
 

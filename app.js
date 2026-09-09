@@ -9891,7 +9891,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!modal) return;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
     window.openUpcomingEventsModal = openUpcomingEventsModal;
 
@@ -9919,7 +9921,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
 
     function closeEventsLightbox() {
