@@ -7911,9 +7911,8 @@ h5 {
 
 .style-row-card {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
+    flex-direction: column;
+    padding: 0;
     background-color: #ffffff;
     border: 2px solid #000000;
     box-shadow: 2.5px 2.5px 0px #000000;
@@ -7921,6 +7920,30 @@ h5 {
     cursor: pointer;
     transition: all 0.15s ease;
     user-select: none;
+    overflow: hidden;
+}
+
+.style-row-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.style-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-style-edu-toggle {
+    display: none; /* Oculto en desktop */
+}
+
+.style-row-accordion {
+    display: none; /* Oculto por defecto */
 }
 
 .style-row-card:hover {
@@ -8242,31 +8265,121 @@ h5 {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive Mobile Bottom Sheet */
+/* Responsive Mobile Bottom Sheet (Maximized Scrolling Space & Inline Educational Accordion) */
 @media (max-width: 768px) {
     .styles-modal-overlay {
-        padding: 0;
-        align-items: flex-end;
+        padding: 0 !important;
+        align-items: flex-end !important;
     }
 
     .styles-modal-window {
-        max-width: 100%;
-        max-height: 90vh;
-        border-radius: 20px 20px 0 0;
-        border-bottom: none;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 94vh !important;
+        max-height: 94vh !important;
+        min-height: 0 !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        box-shadow: 0 -4px 0px #000000 !important;
+    }
+
+    .styles-modal-header {
+        padding: 10px 14px !important;
+        flex-shrink: 0 !important;
+        gap: 10px !important;
+    }
+
+    .styles-modal-title-group {
+        gap: 10px !important;
+    }
+
+    .styles-modal-icon-badge {
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 8px !important;
+    }
+
+    .styles-modal-icon-badge i,
+    .styles-modal-icon-badge svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .styles-modal-title {
+        font-size: 1.02rem !important;
+    }
+
+    .styles-modal-subtitle {
+        font-size: 0.72rem !important;
+    }
+
+    .styles-modal-close {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .styles-modal-close .btn-close-svg-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .styles-modal-search-row {
+        padding: 8px 12px !important;
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    .styles-search-input-wrapper {
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        padding: 6px 10px !important;
+    }
+
+    .styles-search-input-wrapper input {
+        font-size: 0.82rem !important;
+    }
+
+    .styles-quick-actions {
+        flex-shrink: 0 !important;
+        display: flex !important;
+        gap: 6px !important;
+    }
+
+    .btn-styles-action-quick {
+        padding: 6px 8px !important;
+        font-size: 0.72rem !important;
+        white-space: nowrap !important;
+    }
+
+    .styles-modal-mobile-hint {
+        display: none !important;
     }
 
     .styles-modal-body {
-        grid-template-columns: 1fr;
-        max-height: 62vh;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 0 !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: 100% !important;
+        overflow: hidden !important;
     }
 
     .styles-list-column {
-        border-right: none;
-        border-bottom: none;
-        max-height: 58vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        flex: 1 1 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        border-right: none !important;
+        border-bottom: none !important;
+        padding: 8px 12px 28px 12px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .styles-list-column::-webkit-scrollbar {
@@ -8277,31 +8390,125 @@ h5 {
         display: none !important;
     }
 
-    .styles-modal-header {
-        padding: 14px 18px;
+    .btn-style-edu-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 4px;
+        background-color: #FFFDF7;
+        border: 1.5px solid #000000;
+        box-shadow: 1.5px 1.5px 0px #000000;
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-family: 'Syne', sans-serif !important;
+        font-weight: 800 !important;
+        font-size: 0.72rem;
+        color: #000000;
+        cursor: pointer;
+        transition: all 0.15s ease;
     }
 
-    .styles-modal-title {
-        font-size: 1.15rem;
+    .btn-style-edu-toggle:active,
+    .btn-style-edu-toggle.active {
+        background-color: #7B4AD8 !important;
+        color: #ffffff !important;
+        transform: translate(1px, 1px);
+        box-shadow: 0.5px 0.5px 0px #000000;
     }
 
-    .styles-modal-search-row {
-        padding: 10px 18px;
+    .btn-style-edu-toggle i {
+        width: 13px;
+        height: 13px;
+    }
+
+    .style-row-accordion {
+        background-color: #FFFDF7;
+        border-top: 2px solid #000000;
+        padding: 10px 12px;
+        animation: fadeInModal 0.2s ease-out;
+    }
+
+    .accordion-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .accordion-edu-block {
+        background: #ffffff;
+        border: 1.5px solid #000000;
+        border-radius: 8px;
+        padding: 8px 10px;
+        box-shadow: 1.5px 1.5px 0px #000000;
+    }
+
+    .accordion-edu-title {
+        font-family: 'Syne', sans-serif !important;
+        font-size: 0.8rem;
+        font-weight: 800 !important;
+        color: #000000;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+
+    .accordion-edu-title i {
+        width: 13px;
+        height: 13px;
+        color: #7B4AD8;
+    }
+
+    .accordion-edu-text {
+        font-family: 'Outfit', sans-serif !important;
+        font-size: 0.82rem;
+        line-height: 1.45;
+        color: #2d3748;
+        margin: 0;
+    }
+
+    .accordion-edu-artists {
+        font-size: 0.76rem;
+        color: #4b5563;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding-top: 2px;
+    }
+
+    .accordion-edu-artists i {
+        width: 13px;
+        height: 13px;
+        color: #7B4AD8;
+        flex-shrink: 0;
     }
 
     .styles-modal-footer {
-        padding: 12px 18px;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        padding: 8px 14px !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .styles-selected-summary {
+        font-size: 0.82rem !important;
+        flex-shrink: 0 !important;
     }
 
     .styles-modal-actions {
-        width: 100%;
+        display: flex !important;
+        gap: 8px !important;
+        flex: 1 !important;
+        justify-content: flex-end !important;
     }
 
     .styles-modal-actions .btn {
-        flex: 1;
+        padding: 8px 14px !important;
+        font-size: 0.82rem !important;
+        height: 38px !important;
+        flex: 0 1 auto !important;
+        white-space: nowrap !important;
     }
 }
 

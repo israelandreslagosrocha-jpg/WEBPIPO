@@ -4533,16 +4533,66 @@ document.addEventListener('DOMContentLoaded', () => {
             card.setAttribute('aria-checked', isSelected ? 'true' : 'false');
 
             card.innerHTML = `
-                <div class="style-row-info">
-                    <span class="style-row-title">${style.name}</span>
-                    <span class="style-row-subtitle">${style.subtitle}</span>
+                <div class="style-row-main">
+                    <div class="style-row-info">
+                        <span class="style-row-title">${escapeHTML(style.name)}</span>
+                        <span class="style-row-subtitle">${escapeHTML(style.subtitle)}</span>
+                    </div>
+                    <div class="style-row-actions">
+                        <button type="button" class="btn-style-edu-toggle" data-style="${escapeHTML(style.name)}" title="Ver explicación y técnica">
+                            <span class="btn-edu-label">Guía</span>
+                            <i data-lucide="help-circle"></i>
+                        </button>
+                        <div class="style-row-checkbox">
+                            <i data-lucide="check"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="style-row-checkbox">
-                    <i data-lucide="check"></i>
+                <div class="style-row-accordion" id="accordion-${escapeHTML(style.id)}" style="display: none;">
+                    <div class="accordion-inner">
+                        <div class="accordion-edu-block">
+                            <div class="accordion-edu-title">
+                                <i data-lucide="book-open"></i> ¿Qué significa este estilo?
+                            </div>
+                            <p class="accordion-edu-text">${escapeHTML(style.meaning)}</p>
+                        </div>
+                        <div class="accordion-edu-block">
+                            <div class="accordion-edu-title">
+                                <i data-lucide="sparkles"></i> ¿Cómo se aplica en la piel?
+                            </div>
+                            <p class="accordion-edu-text">${escapeHTML(style.application)}</p>
+                        </div>
+                        ${style.artists && style.artists.length > 0 ? `
+                        <div class="accordion-edu-artists">
+                            <i data-lucide="map-pin"></i> <span><strong>Exponentes en La Araucanía:</strong> ${escapeHTML(style.artists.join(', '))}</span>
+                        </div>` : ''}
+                    </div>
                 </div>
             `;
 
-            // Hover / Focus: Live educational preview
+            const accordion = card.querySelector('.style-row-accordion');
+            const eduToggleBtn = card.querySelector('.btn-style-edu-toggle');
+
+            function toggleAccordion(forceState) {
+                if (!accordion) return;
+                const willShow = (typeof forceState === 'boolean') ? forceState : (accordion.style.display === 'none');
+                accordion.style.display = willShow ? 'block' : 'none';
+                if (eduToggleBtn) {
+                    eduToggleBtn.classList.toggle('active', willShow);
+                    const label = eduToggleBtn.querySelector('.btn-edu-label');
+                    if (label) label.textContent = willShow ? 'Cerrar' : 'Guía';
+                }
+            }
+
+            if (eduToggleBtn) {
+                eduToggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleAccordion();
+                    updateEducationalPanel(style);
+                });
+            }
+
+            // Hover / Focus: Live educational preview on desktop
             const onFocusHover = () => {
                 document.querySelectorAll('.style-row-card').forEach(c => c.classList.remove('highlighted'));
                 card.classList.add('highlighted');
@@ -4552,16 +4602,24 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('mouseenter', onFocusHover);
             card.addEventListener('focus', onFocusHover);
 
-            // Click: Toggle selection
-            card.addEventListener('click', () => {
+            // Click: Toggle selection & on mobile expand inline guide
+            card.querySelector('.style-row-main').addEventListener('click', (e) => {
+                if (e.target.closest('.btn-style-edu-toggle')) return;
+
                 if (tempSelectedStyles.has(style.name)) {
                     tempSelectedStyles.delete(style.name);
                     card.classList.remove('selected');
                     card.setAttribute('aria-checked', 'false');
+                    if (window.innerWidth <= 768) {
+                        toggleAccordion(false);
+                    }
                 } else {
                     tempSelectedStyles.add(style.name);
                     card.classList.add('selected');
                     card.setAttribute('aria-checked', 'true');
+                    if (window.innerWidth <= 768) {
+                        toggleAccordion(true);
+                    }
                 }
                 updateModalCountDisplay();
                 updateEducationalPanel(style);
@@ -4571,14 +4629,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === ' ' || e.key === 'Enter') {
                     e.preventDefault();
-                    card.click();
+                    card.querySelector('.style-row-main').click();
                 }
             });
 
             stylesListGrid.appendChild(card);
         });
 
-        lucide.createIcons();
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
 
     function openStylesModal() {
@@ -4596,7 +4656,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         stylesModalOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (stylesSearchInput) setTimeout(() => stylesSearchInput.focus(), 150);
+        if (stylesSearchInput && window.innerWidth > 768) {
+            setTimeout(() => stylesSearchInput.focus(), 150);
+        }
     }
 
     function closeStylesModal() {
@@ -4618,6 +4680,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const count = state.activeFilters.styles.size;
         showToast(count > 0 ? `${count} estilo(s) seleccionado(s)` : 'Mostrando todos los estilos');
+
+        // Smoothly scroll to the legend card on mobile
+        if (count > 0 && window.innerWidth <= 768) {
+            setTimeout(() => {
+                const legendEl = document.getElementById('mobile-style-legend-card');
+                if (legendEl) {
+                    legendEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 120);
+        }
     }
 
     function updateStylesTriggerBadge() {
