@@ -4008,36 +4008,66 @@ document.addEventListener('DOMContentLoaded', () => {
             title: "1. El origen de la palabra",
             icon: "help-circle",
             colorClass: "yellow",
+            image: "assets/cultura/sabias_tatau.jpg",
+            caption: "Ceremonia tradicional de Tatau en Samoa utilizando herramientas ancestrales de hueso y madera.",
+            videoId: "MYn15yDBvxM",
+            videoTitle: "The History of Tattoos - Addison Anderson (TED-Ed)",
+            videoSource: "TED-Ed",
             body: `La palabra "tatuaje" proviene del término samoano <strong>"tatau"</strong>, que significa "marcar" o "golpear dos veces" (en referencia al sonido rítmico de las herramientas tradicionales de golpeteo). El explorador James Cook la introdujo en el idioma inglés como "tattoo" en el siglo XVIII después de sus expediciones a la Polinesia. Históricamente, este término describe no solo la alteración de la piel, sino todo el ritual social y espiritual que acompañaba al proceso en las islas del Pacífico, donde el tatuaje marcaba el estatus, valor y linaje de una persona.`
         },
         {
             title: "2. La momia de Ötzi y la acupuntura antigua",
             icon: "history",
             colorClass: "red",
+            image: "assets/cultura/sabias_otzi.jpg",
+            caption: "Ötzi el Hombre de Hielo (3300 a.C.) preservado en el Museo Arqueológico del Tirol del Sur (Bolzano, Italia).",
+            videoId: "1NcBEEAKXEI",
+            videoTitle: "Ötzi the Iceman: 61 Tattoos in the Ice (Documental)",
+            videoSource: "Faces Unearthed",
             body: `Ötzi, la momia humana natural más antigua descubierta (cerca del 3300 a.C. en los Alpes), cuenta con 61 tatuajes en su cuerpo. Se trata de grupos de líneas y cruces situados en articulaciones y la espalda baja, coincidiendo exactamente con puntos de acupuntura terapéutica moderna, sugiriendo un uso medicinal más que estético. Los escaneos detallados revelaron que Ötzi sufría de artrosis en las zonas tatuadas, lo que refuerza la teoría de que estos cortes rellenos de carbón vegetal tenían un propósito puramente analgésico y de alivio del dolor crónico.`
         },
         {
             title: "3. Tintas modernas y veganismo",
             icon: "shield-check",
             colorClass: "purple",
+            image: "assets/cultura/sabias_vegan.jpg",
+            caption: "Pigmentos botánicos y minerales contemporáneos 100% libres de aglutinantes de origen animal o carbón de hueso.",
+            videoId: "DMuBif1mJz0",
+            videoTitle: "What makes tattoos permanent? - Claudia Aguirre (TED-Ed)",
+            videoSource: "TED-Ed",
             body: `En el pasado, muchas tintas utilizaban aglutinantes de origen animal, como gelatina o glicerina, o pigmentos basados en carbón de huesos quemados. Actualmente, la gran mayoría de los artistas de vanguardia emplean tintas 100% veganas y cruelty-free, elaboradas a base de glicerina vegetal y pigmentos minerales de alta pureza. Estas tintas no solo protegen la vida animal, sino que también reducen notablemente el riesgo de reacciones alérgicas y cicatrizaciones defectuosas, siendo mucho más seguras para el organismo.`
         },
         {
             title: "4. ¿Por qué el tatuaje es permanente?",
             icon: "hourglass",
             colorClass: "blue",
+            image: "assets/cultura/sabias_dermis.jpg",
+            caption: "Diagrama histológico de la piel: la tinta se deposita en la dermis y los macrófagos la encapsulan permanentemente.",
+            videoId: "DMuBif1mJz0",
+            videoTitle: "What makes tattoos permanent? - Claudia Aguirre (TED-Ed)",
+            videoSource: "TED-Ed",
             body: `La tinta no se inyecta en la capa externa de la piel (epidermis), sino en la dermis intermedia, cuyas células son sumamente estables. Cuando las agujas depositan la tinta, el cuerpo activa glóbulos blancos (macrófagos) que engullen el pigmento para intentar removerlo, pero al no poder destruirlo, quedan suspendidos en la dermis con el color intacto. A medida que las células de la dermis mueren y se renuevan, son reemplazadas por nuevas células que absorben el mismo pigmento, perpetuando el diseño de por vida.`
         },
         {
             title: "5. El registro arqueológico chileno",
             icon: "map-pin",
             colorClass: "green",
+            image: "assets/cultura/sabias_chinchorro.jpg",
+            caption: "Momia Chinchorro Negra (Arica, Chile), testimonio del tatuaje más antiguo documentado en el continente americano.",
+            videoId: "Q-M69NAwdy8",
+            videoTitle: "Cultura Chinchorro: Las Momias y Modificaciones Más Antiguas del Mundo",
+            videoSource: "Austerra Society",
             body: `En el norte de Chile se conserva la evidencia física de tatuajes más antigua de toda América: la momia del cementerio El Morro en Arica (cultura Chinchorro, aprox. 2500 a.C.), que presenta un sutil tatuaje en forma de puntos alineados que forman un bigote falso en el labio superior de un hombre adulto. Este hallazgo demuestra que los pueblos prehispánicos de la costa andina ya utilizaban la modificación corporal permanente con fines identitarios o rituales milenios antes de la llegada de los colonizadores europeos.`
         },
         {
             title: "6. La invención de la máquina eléctrica",
             icon: "zap",
             colorClass: "orange",
+            image: "assets/cultura/sabias_maquina.jpg",
+            caption: "Dermógrafo histórico rotativo y sistema electromagnético patentado en Nueva York por Samuel O'Reilly (1891).",
+            videoId: "R3z0_y1yf4Q",
+            videoTitle: "The Tattoo Machine: History, Function & Origin - Samuel O'Reilly",
+            videoSource: "Skin & Story",
             body: `En 1891, el artista neoyorquino Samuel O'Reilly patentó la primera máquina de tatuar eléctrica. Para lograrlo, modificó un invento previo de Thomas Edison: la pluma rotativa para calcar documentos de oficina, agregándole un sistema de bobinas y un tubo portaagujas para inyectar tinta velozmente. Esta innovación revolucionó la industria del tatuaje al permitir realizar diseños mucho más complejos, precisos y rápidos en comparación con los métodos manuales ancestrales.`
         }
     ];
@@ -4095,6 +4125,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEl = document.getElementById('detail-title');
                 const bodyEl = document.getElementById('detail-body');
                 const iconWrapper = document.getElementById('detail-icon-wrapper');
+                const imgEl = document.getElementById('detail-img');
+                const captionEl = document.getElementById('detail-caption');
+                const videoBtn = document.getElementById('detail-video-btn');
+                const videoAction = document.getElementById('detail-video-action');
                 
                 if (titleEl) titleEl.textContent = data.title;
                 if (bodyEl) bodyEl.innerHTML = data.body;
@@ -4104,8 +4138,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     iconWrapper.innerHTML = `<i data-lucide="${data.icon}"></i>`;
                 }
 
+                if (imgEl && data.image) {
+                    imgEl.src = data.image;
+                    imgEl.alt = data.title;
+                }
+                if (captionEl && data.caption) {
+                    captionEl.innerHTML = `<i data-lucide="camera"></i> ${data.caption}`;
+                }
+
+                if (videoBtn && data.videoId) {
+                    videoBtn.setAttribute('data-video-id', data.videoId);
+                    videoBtn.setAttribute('data-video-title', data.videoTitle || data.title);
+                    videoBtn.setAttribute('data-video-source', data.videoSource || 'YouTube');
+                    if (videoAction) videoAction.style.display = 'flex';
+                } else if (videoAction) {
+                    videoAction.style.display = 'none';
+                }
+
                 // Re-create lucide icons for the newly injected icon
-                lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
             }
         });
     });
@@ -4126,6 +4177,79 @@ document.addEventListener('DOMContentLoaded', () => {
             slideContainer.scrollBy({ left: 340, behavior: 'smooth' });
         });
     }
+
+    // ==========================================================================
+    // CONTROLADOR DE MODAL EDUCATIVO DE VIDEOS YOUTUBE (PUNTO 15)
+    // ==========================================================================
+    const ytModal = document.getElementById('youtube-video-modal');
+    const ytIframeContainer = document.getElementById('yt-iframe-container');
+    const ytModalTitle = document.getElementById('yt-modal-title');
+    const ytModalSource = document.getElementById('yt-modal-source');
+    const btnCloseYtModal = document.getElementById('btn-close-yt-modal');
+
+    function openYouTubeModal(videoId, title, source = 'YouTube Oficial') {
+        if (!ytModal || !ytIframeContainer || !videoId) return;
+
+        if (ytModalTitle) ytModalTitle.textContent = title || 'Documental Educativo';
+        if (ytModalSource) ytModalSource.textContent = source || 'YouTube';
+
+        // Inyecta iframe responsive con autoplay=1&rel=0
+        ytIframeContainer.innerHTML = `
+            <iframe 
+                src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" 
+                title="${title || 'Reproductor de video educativo'}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        `;
+
+        ytModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function closeYouTubeModal() {
+        if (!ytModal) return;
+        ytModal.style.display = 'none';
+        document.body.style.overflow = '';
+        if (ytIframeContainer) {
+            ytIframeContainer.innerHTML = ''; // Destruye el iframe: detiene reproducción y ahorra RAM/datos
+        }
+    }
+
+    if (btnCloseYtModal) {
+        btnCloseYtModal.addEventListener('click', closeYouTubeModal);
+    }
+
+    if (ytModal) {
+        ytModal.addEventListener('click', (e) => {
+            if (e.target === ytModal) {
+                closeYouTubeModal();
+            }
+        });
+    }
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && ytModal && ytModal.style.display !== 'none') {
+            closeYouTubeModal();
+        }
+    });
+
+    // Delegación de eventos para todos los botones de video (línea de tiempo + curiosidades)
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-timeline-video');
+        if (btn) {
+            e.preventDefault();
+            const videoId = btn.getAttribute('data-video-id');
+            const title = btn.getAttribute('data-video-title');
+            const source = btn.getAttribute('data-video-source');
+            if (videoId) {
+                openYouTubeModal(videoId, title, source);
+            }
+        }
+    });
 
 
     
