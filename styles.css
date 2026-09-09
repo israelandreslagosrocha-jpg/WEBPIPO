@@ -6705,14 +6705,10 @@ h5 {
 .events-modal-body {
     padding: 24px;
     overflow-y: auto;
-    flex: 1 1 0;
-    min-height: 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 22px;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    touch-action: pan-y;
 }
 
 /* Featured Event inside popup */
@@ -7428,100 +7424,25 @@ h5 {
     
     .popup-featured-event {
         grid-template-columns: 1fr;
-        padding: 14px;
-        gap: 14px;
     }
 
     .popup-featured-poster {
-        max-width: 150px;
+        max-width: 220px;
         margin: 0 auto;
-    }
-
-    .events-modal-overlay {
-        padding: 10px !important;
-        align-items: center !important;
-        justify-content: center !important;
-        touch-action: pan-y;
     }
 
     .events-modal-window {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        max-height: 90vh !important;
-        max-height: min(90dvh, calc(100vh - 28px)) !important;
-        min-height: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-        border-radius: 16px !important;
-        box-shadow: 5px 5px 0px #000000 !important;
-    }
-
-    .events-modal-header {
-        padding: 10px 14px !important;
-        gap: 8px !important;
-        flex-shrink: 0 !important;
-    }
-
-    .events-modal-badge {
-        font-size: 0.72rem !important;
-        padding: 3px 8px !important;
-    }
-
-    .events-modal-subbadge {
-        font-size: 0.65rem !important;
-        padding: 2px 6px !important;
-    }
-
-    .events-modal-body {
-        padding: 14px !important;
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
-        max-height: none !important;
-        height: auto !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-        overscroll-behavior-y: contain !important;
-        gap: 14px !important;
-    }
-
-    .popup-event-title {
-        font-size: 1.35rem !important;
-        line-height: 1.15 !important;
-    }
-
-    .popup-event-desc {
-        font-size: 0.82rem !important;
-        line-height: 1.4 !important;
-    }
-
-    .popup-featured-poster {
-        max-width: 140px !important;
-        margin: 0 auto;
+        max-height: 92vh;
     }
 
     .events-modal-footer {
-        display: flex !important;
-        flex-direction: row !important;
-        padding: 8px 12px !important;
-        gap: 8px !important;
-        flex-shrink: 0 !important;
-        background-color: #ffffff !important;
-        border-top: 2.5px solid #000000 !important;
-        z-index: 2 !important;
+        flex-direction: column-reverse;
     }
 
     .events-modal-footer .btn {
-        flex: 1 !important;
-        width: auto !important;
-        padding: 8px 10px !important;
-        font-size: 0.8rem !important;
-        height: 40px !important;
-        text-align: center !important;
-        justify-content: center !important;
-        white-space: nowrap !important;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
     }
 }
 
