@@ -24,7 +24,7 @@
         }
     </script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=58">
+    <link rel="stylesheet" href="styles.css?v=59">
     <!-- Unconditional Tattoo Machine Cursor Styles -->
     <style>
         html, body, *, *::before, *::after {
@@ -302,6 +302,11 @@
                                 <div class="search-icon-wrapper-new">
                                     <i data-lucide="search"></i>
                                 </div>
+                            </div>
+
+                            <!-- MOBILE INLINE STYLE EDUCATIONAL LEGEND (SOLO MÓVIL) -->
+                            <div class="mobile-style-legend-card" id="mobile-style-legend-card" style="display: none;" role="region" aria-label="Guía educativa del estilo seleccionado">
+                                <!-- Populated dynamically by JavaScript -->
                             </div>
 
                             <!-- Artist Grid -->
@@ -3109,6 +3114,12 @@
                 </div>
             </div>
 
+            <!-- Mobile Educational Legend Notice (Visible only on mobile) -->
+            <div class="styles-modal-mobile-hint">
+                <i data-lucide="sparkles"></i>
+                <span>En móvil, al seleccionar y aplicar tu estilo verás su leyenda educativa y técnica directamente sobre la cartelera.</span>
+            </div>
+
             <!-- Modal Content: 2-Column Responsive Layout -->
             <div class="styles-modal-body">
                 <!-- Left: Scrollable 21 styles list -->
@@ -3354,6 +3365,6 @@
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App Logic -->
-    <script src="app.js?v=58"></script>
+    <script src="app.js?v=59"></script>
 </body>
 </html>

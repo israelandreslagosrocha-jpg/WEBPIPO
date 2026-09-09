@@ -4610,6 +4610,10 @@ document.addEventListener('DOMContentLoaded', () => {
         closeStylesModal();
         updateStylesTriggerBadge();
         renderActiveChips();
+        const firstStyle = tempSelectedStyles.size > 0 ? tempSelectedStyles.values().next().value : null;
+        if (firstStyle) {
+            currentMobileLegendStyle = firstStyle;
+        }
         applyFilters();
 
         const count = state.activeFilters.styles.size;
@@ -4625,6 +4629,151 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 btnQuickAllStyles.classList.remove('active');
             }
+        }
+    }
+
+    // ==========================================================================
+    // LEYENDA EDUCATIVA DE ESTILO EN SECCIÓN TATUADORES (EXCLUSIVO MÓVIL)
+    // ==========================================================================
+    let currentMobileLegendStyle = null;
+    let isMobileLegendCollapsed = false;
+
+    function normalizeStyleKey(str) {
+        if (!str) return '';
+        return str
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/&/g, 'and')
+            .replace(/grey/g, 'gray')
+            .replace(/[^a-z0-9]/g, '');
+    }
+
+    function findStyleInCatalogo(styleName) {
+        if (!styleName) return null;
+        const targetNorm = normalizeStyleKey(styleName);
+        return ESTILOS_CATALOGO.find(s => 
+            normalizeStyleKey(s.name) === targetNorm || 
+            normalizeStyleKey(s.id) === targetNorm
+        ) || null;
+    }
+
+    function updateMobileStyleLegend(preferredStyle) {
+        const container = document.getElementById('mobile-style-legend-card');
+        if (!container) return;
+
+        const activeStyles = Array.from(state.activeFilters.styles || []);
+        if (activeStyles.length === 0) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+            currentMobileLegendStyle = null;
+            return;
+        }
+
+        // Determine which style to showcase
+        if (preferredStyle && activeStyles.includes(preferredStyle)) {
+            currentMobileLegendStyle = preferredStyle;
+        } else if (!currentMobileLegendStyle || !activeStyles.includes(currentMobileLegendStyle)) {
+            currentMobileLegendStyle = activeStyles[0];
+        }
+
+        const styleData = findStyleInCatalogo(currentMobileLegendStyle);
+        const displayName = styleData ? styleData.name : currentMobileLegendStyle;
+        const subtitle = (styleData && styleData.subtitle) ? styleData.subtitle : '';
+        const meaning = (styleData && styleData.meaning) ? styleData.meaning : 'Información sobre este estilo y su concepto visual en el arte corporal.';
+        const application = (styleData && styleData.application) ? styleData.application : 'Técnica de aplicación especializada en piel realizada por artistas profesionales.';
+        const artists = (styleData && Array.isArray(styleData.artists)) ? styleData.artists : [];
+
+        // Build pills row if multiple styles are active
+        let pillsHtml = '';
+        if (activeStyles.length > 1) {
+            pillsHtml = `
+                <div class="mobile-legend-pills-row" role="tablist" aria-label="Estilos seleccionados">
+                    ${activeStyles.map(st => {
+                        const isActive = st === currentMobileLegendStyle;
+                        return `<button type="button" class="mobile-legend-pill ${isActive ? 'active' : ''}" data-legend-style="${escapeHTML(st)}" role="tab" aria-selected="${isActive}">${escapeHTML(st)}</button>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        container.innerHTML = `
+            <div class="mobile-legend-header">
+                <div class="mobile-legend-badge-row">
+                    <span class="mobile-legend-badge"><i data-lucide="book-open"></i> GUÍA DE ESTILO</span>
+                    <span class="mobile-legend-active-name">${escapeHTML(displayName)}</span>
+                </div>
+                <button type="button" class="btn-toggle-mobile-legend" id="btn-toggle-mobile-legend" aria-expanded="${!isMobileLegendCollapsed}">
+                    <span>${isMobileLegendCollapsed ? 'Ver detalles' : 'Ocultar'}</span>
+                    <i data-lucide="${isMobileLegendCollapsed ? 'chevron-down' : 'chevron-up'}"></i>
+                </button>
+            </div>
+            ${pillsHtml}
+            <div class="mobile-legend-body" id="mobile-legend-body" style="${isMobileLegendCollapsed ? 'display: none;' : 'display: block;'}">
+                <div class="mobile-legend-title-group">
+                    <h4 class="mobile-legend-title">${escapeHTML(displayName)}</h4>
+                    ${subtitle ? `<span class="mobile-legend-subtitle">${escapeHTML(subtitle)}</span>` : ''}
+                </div>
+                <div class="mobile-legend-box">
+                    <div class="mobile-legend-box-heading">
+                        <i data-lucide="info"></i> ¿Qué significa este estilo?
+                    </div>
+                    <p class="mobile-legend-box-text">${escapeHTML(meaning)}</p>
+                </div>
+                <div class="mobile-legend-box">
+                    <div class="mobile-legend-box-heading">
+                        <i data-lucide="sparkles"></i> ¿Cómo se aplica en la piel?
+                    </div>
+                    <p class="mobile-legend-box-text">${escapeHTML(application)}</p>
+                </div>
+                ${artists.length > 0 ? `
+                <div class="mobile-legend-footer-note">
+                    <i data-lucide="map-pin"></i>
+                    <span><strong>Exponentes en La Araucanía:</strong> ${escapeHTML(artists.join(', '))}</span>
+                </div>
+                ` : ''}
+            </div>
+        `;
+
+        container.style.display = 'block';
+
+        // Toggle button listener
+        const toggleBtn = container.querySelector('#btn-toggle-mobile-legend');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isMobileLegendCollapsed = !isMobileLegendCollapsed;
+                const body = container.querySelector('#mobile-legend-body');
+                const span = toggleBtn.querySelector('span');
+                const icon = toggleBtn.querySelector('i');
+                toggleBtn.setAttribute('aria-expanded', !isMobileLegendCollapsed);
+
+                if (body) {
+                    body.style.display = isMobileLegendCollapsed ? 'none' : 'block';
+                }
+                if (span) {
+                    span.textContent = isMobileLegendCollapsed ? 'Ver detalles' : 'Ocultar';
+                }
+                if (icon) {
+                    icon.setAttribute('data-lucide', isMobileLegendCollapsed ? 'chevron-down' : 'chevron-up');
+                    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                        window.lucide.createIcons();
+                    }
+                }
+            });
+        }
+
+        // Pill clicks
+        container.querySelectorAll('[data-legend-style]').forEach(pillBtn => {
+            pillBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const chosenStyle = pillBtn.getAttribute('data-legend-style');
+                updateMobileStyleLegend(chosenStyle);
+            });
+        });
+
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
         }
     }
 
@@ -5137,6 +5286,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        // Update inline educational legend for mobile view
+        if (typeof updateMobileStyleLegend === 'function') {
+            updateMobileStyleLegend();
+        }
     }
 
 
@@ -5203,6 +5357,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 switchView('artist-view');
                 loadArtistProfile(artistId);
+                return;
+            }
+
+            const tagEl = e.target.closest('.tag:not(.tag-count)');
+            if (tagEl) {
+                e.stopPropagation();
+                const rawStyle = tagEl.textContent.trim();
+                if (rawStyle) {
+                    const matched = findStyleInCatalogo(rawStyle);
+                    const styleToFilter = matched ? matched.name : rawStyle;
+                    state.activeFilters.styles = new Set([styleToFilter]);
+                    currentMobileLegendStyle = styleToFilter;
+                    updateStylesTriggerBadge();
+                    renderActiveChips();
+                    applyFilters();
+                    showToast(`Filtrado por: ${styleToFilter}`);
+                    const legendEl = document.getElementById('mobile-style-legend-card');
+                    if (legendEl && window.innerWidth <= 768) {
+                        legendEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }
                 return;
             }
 
@@ -7751,6 +7926,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 switchView('artist-view');
                 loadArtistProfile(safeId);
+                return;
+            }
+
+            const tagEl = e.target.closest('.tag:not(.tag-count)');
+            if (tagEl) {
+                e.stopPropagation();
+                const rawStyle = tagEl.textContent.trim();
+                if (rawStyle) {
+                    const matched = findStyleInCatalogo(rawStyle);
+                    const styleToFilter = matched ? matched.name : rawStyle;
+                    state.activeFilters.styles = new Set([styleToFilter]);
+                    currentMobileLegendStyle = styleToFilter;
+                    updateStylesTriggerBadge();
+                    renderActiveChips();
+                    applyFilters();
+                    showToast(`Filtrado por: ${styleToFilter}`);
+                    const legendEl = document.getElementById('mobile-style-legend-card');
+                    if (legendEl && window.innerWidth <= 768) {
+                        legendEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }
                 return;
             }
 
