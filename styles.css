@@ -1292,10 +1292,10 @@ button, input, select, textarea {
 }
 
 .ficha-cover-wrapper {
-    height: 180px;
-    background-color: #121214;
+    height: 220px;
+    background-color: #0c0c0e;
     position: relative;
-    border-bottom: 3px solid #000000;
+    border-bottom: 3.5px solid #000000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1303,11 +1303,26 @@ button, input, select, textarea {
 }
 
 .ficha-avatar-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    padding: 16px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    padding: 0;
     transition: transform 0.3s ease;
+}
+
+.ficha-avatar-img.is-brand-badge {
+    object-fit: contain !important;
+    padding: 24px !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 80% !important;
+    max-height: 80% !important;
+}
+
+.ficha-cover-wrapper:hover .ficha-avatar-img:not(.is-brand-badge) {
+    transform: scale(1.05);
 }
 
 .ficha-status-dots {
@@ -3904,20 +3919,38 @@ body:has(#app-container.landing-active) {
 }
 
 .avatar-border {
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
-    border: 3px solid var(--primary-color);
-    padding: 4px;
-    background-color: white;
-    box-shadow: var(--shadow-sm);
+    border: 3.5px solid #000000;
+    padding: 0;
+    background-color: #0c0c0e;
+    box-shadow: 4px 4px 0px #000000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-avatar-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     border-radius: 50%;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.profile-avatar-img.is-brand-badge {
+    width: 70% !important;
+    height: 70% !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+}
+
+.avatar-border:hover .profile-avatar-img:not(.is-brand-badge) {
+    transform: scale(1.08);
 }
 
 .profile-name {
@@ -4086,102 +4119,439 @@ body:has(#app-container.landing-active) {
 }
 
 .tattooswizard-gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     padding-bottom: 40px;
 }
 
-.tattooswizard-card {
-    background-color: #ffffff;
-    border: 3.5px solid #000000;
-    border-radius: 16px;
-    box-shadow: 4px 6px 0px #000000;
-    overflow: hidden;
-    position: relative;
-    cursor: zoom-in;
-    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+.portfolio-publication-wrapper {
+    width: 100%;
+    max-width: 540px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.tattooswizard-card:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 7px 9px 0px #000000;
-}
-
-.tattooswizard-card-img-wrap {
-    position: relative;
+.portfolio-publication-card {
     width: 100%;
-    height: 380px;
+    background-color: #ffffff;
+    border: 3.5px solid #000000;
+    border-radius: 18px;
+    box-shadow: 6px 6px 0px #000000;
     overflow: hidden;
-    background-color: #111111;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.tattooswizard-card-img-wrap img {
+.portfolio-publication-card:hover {
+    box-shadow: 8px 8px 0px #000000;
+}
+
+/* Header */
+.pub-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background-color: #ffffff;
+    border-bottom: 3px solid #000000;
+    gap: 12px;
+}
+
+.pub-artist-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.pub-avatar-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2.5px solid #000000;
+    box-shadow: 2px 2px 0px #000000;
+    overflow: hidden;
+    background-color: #0c0c0e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pub-avatar-circle img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.35s ease;
     display: block;
 }
 
-.tattooswizard-card:hover .tattooswizard-card-img-wrap img {
-    transform: scale(1.06);
+.pub-artist-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
-.tattooswizard-badge-style {
-    position: absolute;
-    top: 14px;
-    left: 14px;
+.pub-artist-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.96rem;
+    color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pub-artist-handle {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pub-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.pub-style-badge {
     background-color: #FFC82C;
     color: #000000;
     border: 2px solid #000000;
     box-shadow: 2px 2px 0px #000000;
-    padding: 6px 14px;
+    padding: 4px 12px;
     border-radius: 50px;
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    z-index: 2;
+    letter-spacing: 0.4px;
 }
 
-.tattooswizard-card-info {
+.pub-counter-badge {
+    background-color: #000000;
+    color: #ffffff;
+    border: 2px solid #000000;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+}
+
+/* Stage & Carousel Controls */
+.pub-stage-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 480px;
+    background-color: #0c0c0e;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.pub-img-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: zoom-in;
+}
+
+.pub-main-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.22s ease;
+}
+
+.pub-zoom-indicator {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+}
+
+.pub-img-container:hover .pub-zoom-indicator {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Carousel Buttons (Official Pipo SVGs) */
+.pub-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #FFC82C;
+    border: 2.5px solid #000000;
+    box-shadow: 3px 3px 0px #000000;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.15s ease;
+}
+
+.pub-nav-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 4px 4px 0px #000000;
+}
+
+.pub-nav-btn:active {
+    transform: translateY(-50%) scale(0.94);
+    box-shadow: 1px 1px 0px #000000;
+}
+
+.pub-nav-btn img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
+}
+
+.pub-nav-prev {
+    left: 12px;
+}
+
+.pub-nav-next {
+    right: 12px;
+}
+
+/* Dots Bar */
+.pub-dots-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #f8fafc;
+    border-top: 2.5px solid #000000;
+    border-bottom: 2.5px solid #000000;
+}
+
+.pub-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #cbd5e1;
+    border: 1.5px solid #000000;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.pub-dot:hover {
+    background-color: #64748b;
+    transform: scale(1.25);
+}
+
+.pub-dot.active {
+    width: 22px;
+    border-radius: 8px;
+    background-color: #FFC82C;
+    box-shadow: 1.5px 1.5px 0px #000000;
+}
+
+/* Caption & Actions */
+.pub-card-footer {
     padding: 14px 18px;
     background-color: #ffffff;
-    border-top: 2.5px solid #000000;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     gap: 12px;
 }
 
-.tattooswizard-card-title {
+.pub-caption-title-row {
     font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    font-size: 0.92rem;
-    color: #000000;
-    margin: 0;
-    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #1e293b;
 }
 
-.tattooswizard-zoom-btn {
+.pub-caption-author {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.92rem;
+    color: #000000;
+    margin-right: 8px;
+}
+
+.pub-caption-text {
+    font-weight: 500;
+}
+
+.pub-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1.5px solid #e2e8f0;
+}
+
+.pub-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-size: 0.78rem;
-    color: #7B4AD8;
-    background: none;
-    border: none;
-    cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.4px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 50px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pub-btn-zoom {
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid #000000;
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.pub-btn-zoom:hover {
+    background-color: #f1f5f9;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px #000000;
+}
+
+.pub-btn-insta {
+    background-color: #7B4AD8;
+    color: #ffffff;
+    border: 2px solid #000000;
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.pub-btn-insta:hover {
+    background-color: #6a3bc7;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px #000000;
+}
+
+/* Thumbnails Strip */
+.pub-thumbs-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    width: 100%;
+    padding: 6px 4px 10px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #FFC82C transparent;
+    justify-content: flex-start;
+}
+
+.pub-thumbs-strip::-webkit-scrollbar {
+    height: 6px;
+}
+
+.pub-thumbs-strip::-webkit-scrollbar-thumb {
+    background-color: #FFC82C;
+    border-radius: 4px;
+    border: 1px solid #000000;
+}
+
+.pub-thumb-item {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    border-radius: 10px;
+    border: 2.5px solid #000000;
+    background-color: #0c0c0e;
+    overflow: hidden;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px #000000;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     flex-shrink: 0;
+}
+
+.pub-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.65;
+    transition: opacity 0.15s ease;
+}
+
+.pub-thumb-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0px #000000;
+}
+
+.pub-thumb-item:hover img {
+    opacity: 0.9;
+}
+
+.pub-thumb-item.active {
+    border-color: #000000;
+    outline: 2.5px solid #FFC82C;
+    outline-offset: 1px;
+    box-shadow: 3px 3px 0px #000000;
+    transform: translateY(-2px);
+}
+
+.pub-thumb-item.active img {
+    opacity: 1;
+}
+
+@media (max-width: 640px) {
+    .portfolio-publication-wrapper {
+        max-width: 100%;
+    }
+    .pub-stage-wrapper {
+        aspect-ratio: 1 / 1;
+        max-height: 380px;
+    }
+    .pub-nav-btn {
+        width: 38px;
+        height: 38px;
+    }
+    .pub-nav-btn img {
+        width: 22px;
+        height: 22px;
+    }
 }
 
 .portfolio-subtitle {

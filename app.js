@@ -780,9 +780,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // If switching to home view, refresh map rendering and ensure data is synced
         if (targetViewId === 'home-view') {
-            if (mapInstance) {
+            if (mapInstance && typeof mapInstance.resize === 'function') {
                 setTimeout(() => {
-                    mapInstance.invalidateSize();
+                    mapInstance.resize();
                 }, 100);
             }
             loadSupabaseData();
@@ -2251,6 +2251,13 @@ document.addEventListener('DOMContentLoaded', () => {
             avatarImg.src = details.avatar;
             avatarImg.alt = details.name;
             avatarImg.style.filter = '';
+            const isBrandBadge = !details.portfolio || details.portfolio.length === 0 || 
+                (typeof details.avatar === 'string' && (details.avatar.includes('compressed_Group_5') || details.avatar.includes('logo_pipo')));
+            if (isBrandBadge) {
+                avatarImg.classList.add('is-brand-badge');
+            } else {
+                avatarImg.classList.remove('is-brand-badge');
+            }
         }
 
         const nameEl = document.getElementById('ficha-artist-name');
@@ -2476,6 +2483,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profAvatar) {
             profAvatar.src = details.avatar;
             profAvatar.alt = details.name;
+            const isBrandBadge = !details.portfolio || details.portfolio.length === 0 || 
+                (typeof details.avatar === 'string' && (details.avatar.includes('compressed_Group_5') || details.avatar.includes('logo_pipo')));
+            if (isBrandBadge) {
+                profAvatar.classList.add('is-brand-badge');
+            } else {
+                profAvatar.classList.remove('is-brand-badge');
+            }
         }
 
         // Instagram Link
@@ -2524,7 +2538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.loadArtistProfile = loadArtistProfile;
 
-    // Render TattoosWizard Gallery (Zero IA: verified Cloudinary photos or Authentic Instagram Notice)
+    // Render Portfolio Publication Carousel (Social Post Format + Neobrutalist Carrusel)
     function renderTattoosWizardGallery(details) {
         const galleryContainer = document.getElementById('tab-gallery-grid');
         if (!galleryContainer) return;
@@ -2535,7 +2549,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (portfolio.length === 0) {
             const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
             galleryContainer.innerHTML = `
-                <div class="empty-portfolio-notice" style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: #ffffff; border: 3px solid #000000; border-radius: 16px; box-shadow: 5px 5px 0px #000000; margin: 30px auto; max-width: 620px;">
+                <div class="empty-portfolio-notice" style="text-align: center; padding: 50px 24px; background: #ffffff; border: 3px solid #000000; border-radius: 16px; box-shadow: 5px 5px 0px #000000; margin: 30px auto; max-width: 620px; width: 100%;">
                     <div style="font-size: 2.8rem; margin-bottom: 12px;">🛡️</div>
                     <h3 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 10px; color: #000000;">
                         No logré capturar info real de este perfil
@@ -2552,28 +2566,196 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        portfolio.forEach(item => {
-            const card = document.createElement('article');
-            card.className = 'tattooswizard-card';
-            card.innerHTML = `
-                <div class="tattooswizard-card-img-wrap">
-                    <span class="tattooswizard-badge-style">${escapeHTML(item.style || 'Tatuaje')}</span>
-                    <img src="${item.src}" alt="${escapeHTML(item.title)}" loading="lazy">
+        let currentIndex = 0;
+        const total = portfolio.length;
+        const handle = details.handle || ('@' + (details.instagram ? details.instagram.substring(details.instagram.lastIndexOf('/') + 1) : 'instagram'));
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'portfolio-publication-wrapper';
+
+        wrapper.innerHTML = `
+            <div class="portfolio-publication-card">
+                <!-- Publication Header -->
+                <div class="pub-card-header">
+                    <div class="pub-artist-info">
+                        <div class="pub-avatar-circle">
+                            <img src="${escapeHTML(details.avatar)}" alt="${escapeHTML(details.name)}" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';">
+                        </div>
+                        <div class="pub-artist-meta">
+                            <span class="pub-artist-name">${escapeHTML(details.name)}</span>
+                            <span class="pub-artist-handle">${escapeHTML(handle)} • ${escapeHTML(details.location)}</span>
+                        </div>
+                    </div>
+                    <div class="pub-header-badges">
+                        <span class="pub-style-badge" id="pub-current-style">${escapeHTML(portfolio[0].style || 'Tatuaje')}</span>
+                        <span class="pub-counter-badge" id="pub-current-counter">1 / ${total}</span>
+                    </div>
                 </div>
-                <div class="tattooswizard-card-info">
-                    <h4 class="tattooswizard-card-title">${escapeHTML(item.title)}</h4>
-                    <button class="tattooswizard-zoom-btn" type="button">
-                        <i data-lucide="zoom-in" style="width: 15px; height: 15px;"></i> Ampliar
+
+                <!-- Publication Stage (Carrusel) -->
+                <div class="pub-stage-wrapper" id="pub-stage-wrapper">
+                    <button class="pub-nav-btn pub-nav-prev" id="pub-btn-prev" type="button" aria-label="Foto anterior" title="Anterior">
+                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-08_dsmcbo.svg" alt="Anterior">
+                    </button>
+
+                    <div class="pub-img-container" id="pub-img-container">
+                        <img src="${portfolio[0].src}" alt="${escapeHTML(portfolio[0].title)}" id="pub-main-img" class="pub-main-img">
+                        <div class="pub-zoom-indicator">
+                            <i data-lucide="zoom-in" style="width: 15px; height: 15px;"></i> Click para ampliar
+                        </div>
+                    </div>
+
+                    <button class="pub-nav-btn pub-nav-next" id="pub-btn-next" type="button" aria-label="Siguiente foto" title="Siguiente">
+                        <img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1788921807/botones-07_f9nuup.svg" alt="Siguiente">
                     </button>
                 </div>
-            `;
 
-            card.addEventListener('click', () => {
-                openLightbox(item.src, `${item.title} — ${details.name} (${details.location})`);
+                <!-- Dots Bar -->
+                <div class="pub-dots-bar" id="pub-dots-bar">
+                    ${portfolio.map((_, idx) => `
+                        <button class="pub-dot ${idx === 0 ? 'active' : ''}" data-index="${idx}" type="button" aria-label="Ir a foto ${idx + 1}"></button>
+                    `).join('')}
+                </div>
+
+                <!-- Publication Footer / Caption -->
+                <div class="pub-card-footer">
+                    <div class="pub-caption-content">
+                        <div class="pub-caption-title-row">
+                            <span class="pub-caption-author">${escapeHTML(details.name)}</span>
+                            <span class="pub-caption-text" id="pub-caption-title">${escapeHTML(portfolio[0].title)}</span>
+                        </div>
+                    </div>
+                    <div class="pub-actions-row">
+                        <button class="pub-action-btn pub-btn-zoom" id="pub-btn-zoom" type="button">
+                            <i data-lucide="maximize-2" style="width: 14px; height: 14px;"></i> Ampliar
+                        </button>
+                        <a href="${escapeHTML(details.instagram)}" target="_blank" rel="noopener noreferrer" class="pub-action-btn pub-btn-insta">
+                            ${INSTAGRAM_ICON_SVG} Ver en Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thumbnails Strip -->
+            <div class="pub-thumbs-strip" id="pub-thumbs-strip">
+                ${portfolio.map((item, idx) => `
+                    <button class="pub-thumb-item ${idx === 0 ? 'active' : ''}" data-index="${idx}" type="button" title="${escapeHTML(item.title)}">
+                        <img src="${item.src}" alt="${escapeHTML(item.title)}" loading="lazy">
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        galleryContainer.appendChild(wrapper);
+
+        // References
+        const mainImg = wrapper.querySelector('#pub-main-img');
+        const styleBadge = wrapper.querySelector('#pub-current-style');
+        const counterBadge = wrapper.querySelector('#pub-current-counter');
+        const captionTitle = wrapper.querySelector('#pub-caption-title');
+        const btnPrev = wrapper.querySelector('#pub-btn-prev');
+        const btnNext = wrapper.querySelector('#pub-btn-next');
+        const btnZoom = wrapper.querySelector('#pub-btn-zoom');
+        const dots = wrapper.querySelectorAll('.pub-dot');
+        const thumbs = wrapper.querySelectorAll('.pub-thumb-item');
+        const stageWrapper = wrapper.querySelector('#pub-stage-wrapper');
+
+        function goToSlide(newIndex) {
+            if (newIndex < 0) newIndex = total - 1;
+            if (newIndex >= total) newIndex = 0;
+            currentIndex = newIndex;
+            const item = portfolio[currentIndex];
+
+            // Smooth fade transition
+            mainImg.style.opacity = '0.3';
+            mainImg.src = item.src;
+            mainImg.alt = item.title;
+            mainImg.onload = () => { mainImg.style.opacity = '1'; };
+
+            styleBadge.textContent = item.style || 'Tatuaje';
+            counterBadge.textContent = `${currentIndex + 1} / ${total}`;
+            captionTitle.textContent = item.title;
+
+            dots.forEach((d, i) => {
+                if (i === currentIndex) d.classList.add('active');
+                else d.classList.remove('active');
             });
 
-            galleryContainer.appendChild(card);
+            thumbs.forEach((th, i) => {
+                if (i === currentIndex) {
+                    th.classList.add('active');
+                    th.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    th.classList.remove('active');
+                }
+            });
+        }
+
+        btnPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToSlide(currentIndex - 1);
         });
+
+        btnNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToSlide(currentIndex + 1);
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const idx = parseInt(dot.getAttribute('data-index'));
+                goToSlide(idx);
+            });
+        });
+
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                const idx = parseInt(thumb.getAttribute('data-index'));
+                goToSlide(idx);
+            });
+        });
+
+        // Zoom / Lightbox
+        const triggerZoom = () => {
+            const item = portfolio[currentIndex];
+            openLightbox(item.src, `${item.title} — ${details.name} (${details.location})`);
+        };
+        mainImg.addEventListener('click', triggerZoom);
+        btnZoom.addEventListener('click', triggerZoom);
+
+        // Touch swipe for mobile
+        let touchStartX = 0;
+        stageWrapper.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches[0]) {
+                touchStartX = e.touches[0].clientX;
+            }
+        }, { passive: true });
+
+        stageWrapper.addEventListener('touchend', (e) => {
+            if (e.changedTouches && e.changedTouches[0]) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const diff = touchEndX - touchStartX;
+                if (Math.abs(diff) > 40) {
+                    if (diff < 0) goToSlide(currentIndex + 1);
+                    else goToSlide(currentIndex - 1);
+                }
+            }
+        }, { passive: true });
+
+        // Global keyboard arrows listener (single instance cleanup)
+        if (window._pubCarouselKeyHandler) {
+            window.removeEventListener('keydown', window._pubCarouselKeyHandler);
+        }
+        window._pubCarouselKeyHandler = (e) => {
+            const stage = document.getElementById('pub-stage-wrapper');
+            if (!stage || !stage.isConnected) return;
+            if (e.key === 'ArrowLeft') {
+                goToSlide(currentIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                goToSlide(currentIndex + 1);
+            }
+        };
+        window.addEventListener('keydown', window._pubCarouselKeyHandler);
 
         lucide.createIcons();
     }
@@ -3430,20 +3612,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     status: 'Verificado'
                 });
 
+                const existing = artistsDetails[p.id] || {};
                 artistsDetails[p.id] = {
-                    name: p.name,
-                    location: p.location,
-                    bio: p.bio || '',
-                    instagram: p.id === 'pipo' ? 'https://www.instagram.com/pipo.tattooo/' : (p.instagram || ''),
-                    avatar: p.id === 'pipo' ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp' : 
-                            (p.avatar_url || 'assets/logo_pipo.png'),
-                    coords: p.coords,
-                    experience: p.experience,
-                    price: p.price,
-                    styles: p.styles || [],
-                    inks: p.inks || [],
-                    needles: p.needles || [],
-                    coverImage: portfolioCovers[p.id] || 'assets/tattoo_flower.png'
+                    ...existing,
+                    name: p.name || existing.name,
+                    location: p.location || existing.location,
+                    bio: p.bio || existing.bio || '',
+                    instagram: p.id === 'pipo' ? 'https://www.instagram.com/pipo.tattooo/' : (p.instagram || existing.instagram || ''),
+                    handle: existing.handle || ('@' + ((p.instagram || existing.instagram || '').substring((p.instagram || existing.instagram || '').lastIndexOf('/') + 1) || 'instagram')),
+                    avatar: p.id === 'pipo' 
+                        ? PIPO_OFFICIAL_LOGO 
+                        : (existing.avatar && existing.avatar !== TINTA_CONECTADA_BRAND_LOGO && existing.avatar !== 'assets/logo_pipo.png'
+                            ? existing.avatar 
+                            : (p.avatar_url || existing.avatar || TINTA_CONECTADA_BRAND_LOGO)),
+                    coords: p.coords || existing.coords,
+                    experience: p.experience || existing.experience,
+                    price: p.price || existing.price,
+                    styles: (p.styles && p.styles.length > 0) ? p.styles : (existing.styles || []),
+                    inks: (p.inks && p.inks.length > 0) ? p.inks : (existing.inks || []),
+                    needles: (p.needles && p.needles.length > 0) ? p.needles : (existing.needles || []),
+                    coverImage: (existing.coverImage && existing.coverImage !== 'assets/tattoo_flower.png') 
+                        ? existing.coverImage 
+                        : (portfolioCovers[p.id] || existing.coverImage || ''),
+                    portfolio: (existing.portfolio && existing.portfolio.length > 0) ? existing.portfolio : []
                 };
 
                 artistCoordinates[p.id] = p.coords;
@@ -3752,7 +3943,8 @@ document.addEventListener('DOMContentLoaded', () => {
             galleryGrid.appendChild(galleryItem);
             
             galleryItem.addEventListener('click', () => {
-                openLightbox(item.src, `${item.title} (${item.style} - ${item.zone.toUpperCase()})`);
+                const zoneLabel = item.zone ? ' - ' + item.zone.toUpperCase() : '';
+                openLightbox(item.src, `${item.title} (${item.style || 'Tatuaje'}${zoneLabel})`);
             });
         });
         
@@ -4356,11 +4548,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Use explicit artistId if provided, else derive from name
         const safeId = artistId || name.toLowerCase().replace(/[^a-z0-9]/g, '');
         const isPipo = safeId === 'pipo';
-        
-        const avatar = isPipo 
-            ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086795/compressed_Logo_rojo_idv5bn.webp'
-            : 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1782924161/compressed_Group_5_exrcfx.webp';
-        
+        const artistInfo = artistsDetails[safeId];
+        const avatar = (artistInfo && artistInfo.avatar) 
+            ? artistInfo.avatar 
+            : (avatarUrl || (isPipo ? PIPO_OFFICIAL_LOGO : TINTA_CONECTADA_BRAND_LOGO));
+
+        const coverImg = (artistInfo && artistInfo.coverImage) 
+            ? artistInfo.coverImage 
+            : (coverImage || (isPipo ? 'https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp' : ''));
+
         const card = document.createElement('article');
         card.className = 'artist-card';
         card.setAttribute('data-id', safeId);
@@ -4371,14 +4567,13 @@ document.addEventListener('DOMContentLoaded', () => {
         card.setAttribute('data-exp', exp);
         card.setAttribute('data-price', 'Intermedio');
 
-        const artistInfo = artistsDetails[safeId];
         const instagram = (artistInfo && artistInfo.instagram) ? artistInfo.instagram : 'https://instagram.com';
         const instagramHandle = (artistInfo && artistInfo.handle) ? artistInfo.handle.replace('@', '') : (instagram.substring(instagram.lastIndexOf('/') + 1) || 'instagram');
         
-        // Zero AI Cover: only real Cloudinary photo for Pipo; authentic verified badge for others
+        // Zero AI Cover: real photo if available, otherwise verified brand badge
         let coverHTML = '';
-        if (isPipo) {
-            coverHTML = `<img src="https://res.cloudinary.com/dhgifjpkh/image/upload/v1784086759/compressed_mano_tdwwzv.webp" alt="Tatuaje de Studio tatto pipo" class="card-tattoo-img">`;
+        if (coverImg) {
+            coverHTML = `<img src="${escapeHTML(coverImg)}" alt="Tatuaje de ${escapeHTML(name)}" class="card-tattoo-img" loading="lazy">`;
         } else {
             coverHTML = `
                 <div class="card-verified-brand-cover">
@@ -4486,14 +4681,19 @@ document.addEventListener('DOMContentLoaded', () => {
             renderWorkspaceAppointments();
             renderDashboardComments();
 
-            // Refresh Leaflet map size to avoid grey container when workspace goes visible
+            // Refresh MapLibre GL map size to avoid grey container when workspace goes visible
             if (window.artistProfileMapInstance) {
                 setTimeout(() => {
-                    window.artistProfileMapInstance.invalidateSize();
+                    if (typeof window.artistProfileMapInstance.resize === 'function') {
+                        window.artistProfileMapInstance.resize();
+                    }
                     if (state.tatuadorProfile.coords) {
-                        window.artistProfileMapInstance.setView(state.tatuadorProfile.coords, 13);
-                        if (window.artistProfileMarkerInstance) {
-                            window.artistProfileMarkerInstance.setLatLng(state.tatuadorProfile.coords);
+                        const lngLat = toLngLat(state.tatuadorProfile.coords);
+                        if (typeof window.artistProfileMapInstance.jumpTo === 'function') {
+                            window.artistProfileMapInstance.jumpTo({ center: lngLat, zoom: 13 });
+                        }
+                        if (window.artistProfileMarkerInstance && typeof window.artistProfileMarkerInstance.setLngLat === 'function') {
+                            window.artistProfileMarkerInstance.setLngLat(lngLat);
                         }
                         // Reverse-geocode coordinates to load correct street address on screen refresh!
                         reverseGeocodeMock(state.tatuadorProfile.coords[0], state.tatuadorProfile.coords[1]);
@@ -4571,7 +4771,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${item.src}" alt="${item.title}">
                 <div class="uploaded-item-info">
                     <span>${item.title}</span>
-                    <small>${item.style} / ${item.zone.toUpperCase()}</small>
+                    <small>${item.style || 'Tatuaje'}${item.zone ? ' / ' + item.zone.toUpperCase() : ''}</small>
                 </div>
                 <button class="btn-delete-uploaded" data-index="${index}" title="Eliminar diseño"><i data-lucide="trash-2"></i></button>
             `;
@@ -4957,9 +5157,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 else panel.classList.remove('active');
             });
             
-            // Re-render Leaflet maps if switching to stats or others where Leaflet needs to refresh size
+            // Re-render MapLibre maps if switching to stats or others where map needs to refresh size
             if (tab === 'tatuador-profile' && window.artistProfileMapInstance) {
-                setTimeout(() => window.artistProfileMapInstance.invalidateSize(), 100);
+                setTimeout(() => {
+                    if (typeof window.artistProfileMapInstance.resize === 'function') {
+                        window.artistProfileMapInstance.resize();
+                    }
+                }, 100);
             }
         });
     });
@@ -5041,10 +5245,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     document.getElementById('edit-art-coords').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                     
-                    if (window.artistProfileMapInstance && window.artistProfileMarkerInstance) {
-                        window.artistProfileMapInstance.invalidateSize();
-                        window.artistProfileMapInstance.setView([lat, lng], 13);
-                        window.artistProfileMarkerInstance.setLatLng([lat, lng]);
+                    if (window.artistProfileMapInstance) {
+                        if (typeof window.artistProfileMapInstance.resize === 'function') {
+                            window.artistProfileMapInstance.resize();
+                        }
+                        if (typeof window.artistProfileMapInstance.jumpTo === 'function') {
+                            window.artistProfileMapInstance.jumpTo({ center: [lng, lat], zoom: 13 });
+                        }
+                    }
+                    if (window.artistProfileMarkerInstance && typeof window.artistProfileMarkerInstance.setLngLat === 'function') {
+                        window.artistProfileMarkerInstance.setLngLat([lng, lat]);
                     }
                     showToast('Ubicación encontrada y fijada en el mapa.');
                 } else {
